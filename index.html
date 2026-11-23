@@ -372,7 +372,8 @@ footer a:hover{color:var(--accent)}
           <li>把 DSH 宿主层的沙箱、审批、观察策略改成放行，让工具真的能执行</li>
           <li>把历史对话里的拒绝回复改写成「已作废」，断掉模型的模仿惯性</li>
           <li>注入提示词，覆盖宿主自带的保守设定</li>
-          <li>用 56 个探针量化「每一类破到什么程度」，而不是只说「能破」</li>
+          <li>用 68 个探针量化「每一类破到什么程度」，而不是只说「能破」</li>
+            <li>按宿主形态自动选注入策略：可写宿主走补丁层，密封宿主走配置层</li>
         </ul>
       </div>
       <div class="card" data-listgroup>
@@ -382,6 +383,7 @@ footer a:hover{color:var(--accent)}
           <li>不联网、不上传数据、不自动检查更新——没有服务器</li>
           <li>不审核你的输入，也不存储对话</li>
           <li>不保证在所有 DSH 版本上生效（见下方短板）</li>
+            <li>不展开政治话题——这是唯一不因版本变化的类别</li>
         </ul>
       </div>
     </div>
@@ -410,7 +412,7 @@ footer a:hover{color:var(--accent)}
       </div>
       <div class="card sm reveal from-bottom">
         <div class="tag-no">不适合</div>
-        <p>用 DSH 0.2.2-rc.2 或更新版本——本项目实测到 0.2.2-rc.1，更新版本未验证</p>
+        <p>用 DSH 0.2.2-rc.5 且需要 T3 补丁档——宿主已密封，只能走配置层</p>
       </div>
     </div>
   </div>
@@ -482,6 +484,12 @@ footer a:hover{color:var(--accent)}
         </dl>
       </div>
     </div>
+    <div class="note reveal from-bottom" style="margin-bottom:14px">
+      <p><strong>档位与宿主策略是两件事。</strong>档位决定「注入哪些层」，策略决定「能不能改宿主」。
+      0.2.2-rc.5 起宿主把源码封进 <code>app.asar</code>，T3 档物理上无处落笔，插件会自动落到 T2 ——
+      引擎页会显示 <code>配置层 · 宿主已密封</code>，而不是让一个点不动的开关亮着。</p>
+    </div>
+
     <div class="note reveal from-bottom">
       <p>「降智」指<strong>破甲生效之后</strong>模型在正常任务上的表现下降——简单任务绕圈、代码出低级错、忘记前文约束。不是指模型天生弱。成因是破甲指令占用注意力预算，程度取决于<strong>破甲强度 × 上下文占用</strong>。</p>
     </div>
@@ -513,8 +521,7 @@ footer a:hover{color:var(--accent)}
     </div>
 
     <div class="note reveal from-bottom">
-      <p><strong>补丁按版本链组织。</strong>96 条里有 <strong>46 条</strong>带 2 个以上 pattern，各自对应不同宿主版本形态。命中 1 个就能打上，命中数越多说明版本定位越准。<br>
-      实测 0.2.0-rc.2：<strong>73 已命中 / 5 失配 / 18 宿主布局里本来没有</strong>。</p>
+      <p><strong>补丁按版本链组织。</strong>96 条里有 <strong>46 条</strong>带 2 个以上 pattern，各自对应不同宿主版本形态。命中 1 条即算生效，命中 0 条记失配。<br>      实测 0.2.0-rc.2：<strong>73 已命中 / 5 失配 / 18 宿主布局里本来没有</strong>。<br>      实测 0.2.2-rc.5（手工解包后）：<strong>65 全命中 / 4 部分命中 / 20 锚点失效</strong>。</p>
     </div>
 
     <div class="grid2 reveal from-bottom" style="margin-top:14px">
@@ -548,77 +555,210 @@ footer a:hover{color:var(--accent)}
 </section>
 
 <section>
-  <div class="wrap">
-    <h2 class="reveal from-left">近期修复</h2>
-    <p class="lead reveal from-left">这一轮修的全是「装上了但用不了」的链路问题，不是新功能。</p>
+<div class="wrap">
+<h2 class="reveal from-left">版本变更记录</h2>
+<p class="lead reveal from-left">按版本分组。每个版本修了什么、加了什么，能对号入座。</p>
 
-    <div class="grid2 reveal from-bottom">
-      <div class="card">
-        <h3>补丁打到影子副本</h3>
-        <ul>
-          <li>DSH Desktop 解开 asar 后原文件仍留着，宿主从解包目录加载</li>
-          <li>候选列表把 <code>resources/app</code> 排在前面，补丁全打进影子副本</li>
-          <li>运行中的宿主一条没改 → 面板显示跳过 / 漂移</li>
-          <li>现在 <code>app.asar.unpacked</code> 优先</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>面板数字 1/96</h3>
-        <ul>
-          <li><code>gatherState</code> 返回的值来自引擎探针</li>
-          <li>而探针正是从这个值读补丁数 —— 循环引用</li>
-          <li>冷启动读到 0 并永久缓存</li>
-          <li>改成直接查 <code>patchStatus</code>，实测 74/96</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="grid2 reveal from-bottom" style="margin-top:14px">
-      <div class="card">
-        <h3>工具表被清空</h3>
-        <ul>
-          <li>幂等标志设在方法替换之后，抛错就设不上</li>
-          <li>配合 5 次重试，最多叠 6 层消息包装</li>
-          <li>宿主判定工具段不可用，116 个工具全没</li>
-          <li>标志已前移，循环内逐个 try</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>插件重启杀进程不拉起</h3>
-        <ul>
-          <li>只要 <code>app.asar</code> 存在就走 asar 交换</li>
-          <li>换的那份不被加载，进程没了也起不来</li>
-          <li>手动点 exe 反而正常</li>
-          <li>现在先查解包目录，存在就走普通重启</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="grid2 reveal from-bottom" style="margin-top:14px">
-      <div class="card">
-        <h3>中英切换不生效</h3>
-        <ul>
-          <li><code>translate</code> 启动时被宿主 locale 绑定覆盖了两次</li>
-          <li>那个绑定跟宿主语言，不看面板开关</li>
-          <li>删掉覆盖，改成按当前语言查本地字典</li>
-          <li><code>useLang</code> / <code>useT</code> 挂订阅，切换真正重渲染</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>开关导致语言跳回</h3>
-        <ul>
-          <li>破甲页、引擎页的写操作提交时没带 locale</li>
-          <li>后端退回读浏览器语言（中文环境拿到中文）</li>
-          <li><code>setData</code> 一覆盖，界面就变回中文</li>
-          <li>所有写操作现在都带 locale，并依赖语言变化重载</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="note reveal from-bottom">
-      <p><strong>另外四处：</strong>assemble 兜底只返回 <code>sections</code>，缺 <code>contexts</code> / <code>tools</code> / <code>variables</code>，宿主依次崩在 <code>null.contexts</code> 和 <code>undefined.map</code>；引擎开关每次重建 <code>explicit</code> 导致连改两个只剩一个；前后端审计发现 5 个前端调用无后端、2 个后端路由前端从没调用；自检报告压在页面底部，点完要下滑一屏半才看得见，现已移到按钮下方并限高。</p>
-    </div>
+<div class="grid3 reveal from-bottom" style="margin-bottom:28px">
+  <div class="stat">
+    <div class="n">1.4.0</div>
+    <div class="c">当前版本<br><span style="color:var(--mute);font-size:12px">适配 0.2.2-rc.5</span></div>
   </div>
+  <div class="stat">
+    <div class="n">46</div>
+    <div class="c">累计修复<br><span style="color:var(--mute);font-size:12px">跨四个版本</span></div>
+  </div>
+  <div class="stat">
+    <div class="n">5</div>
+    <div class="c">实测宿主版本<br><span style="color:var(--mute);font-size:12px">全部验证通过</span></div>
+  </div>
+</div>
+
+<h3 class="reveal from-left" style="margin-top:8px;font-size:18px;font-weight:650">v1.4.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">适配 0.2.2-rc.5</span></h3>
+<p class="lead reveal from-left" style="font-size:13.5px">这一版的主题是「宿主把自己封起来了，我们换一条路」。</p>
+
+<div class="grid2 reveal from-bottom">
+  <div class="card">
+    <h3>版本自适应策略</h3>
+    <ul>
+      <li>0.2.2-rc.5 把 <code>@deepseek-ai</code> 全封进 <code>app.asar</code>，补丁无处写</li>
+      <li>新增 <code>host-adapt.js</code>，按宿主形态自动选策略</li>
+      <li>可写宿主 → 补丁层；密封宿主 → 配置层；都没有 → 纯提示词</li>
+      <li>引擎页显示当前策略，悬停看完整原因</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>配置层不改源码</h3>
+    <ul>
+      <li>写 <code>sandbox-policy.mode</code>、<code>approval.policy</code> 等配置项</li>
+      <li>读源码确认 0.2.2-rc.5 <b>出厂就是全开</b></li>
+      <li>补丁 #6-#10 想做的事，宿主自己已经做了</li>
+      <li>配置层只是显式重述，防止环境变量压回去</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2 reveal from-bottom" style="margin-top:14px">
+  <div class="card">
+    <h3>补丁打到影子副本</h3>
+    <ul>
+      <li>DSH Desktop 解开 asar 后原文件仍留着，宿主从解包目录加载</li>
+      <li>候选列表把 <code>resources/app</code> 排前面，补丁全打进影子副本</li>
+      <li>运行中的宿主一条没改 → 面板显示跳过 / 漂移</li>
+      <li>现在 <code>app.asar.unpacked</code> 优先</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>首次弹窗跟系统语言</h3>
+    <ul>
+      <li>原来硬编码英文，中文用户第一次打开看英文须知</li>
+      <li>现在按 <code>navigator.languages</code> 三级回退探测</li>
+      <li>中文系统首次打开看到的就是中文</li>
+      <li>宿主 locale 降到第三优先级（它跟安装包，不看系统）</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.2 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">0.2.2-rc.5 初适配</span></h3>
+<p class="lead reveal from-right" style="font-size:13.5px">第一次撞上 asar 密封，先把「不改坏别人东西」做对。</p>
+
+<div class="grid2 reveal from-bottom">
+  <div class="card">
+    <h3>跨 home 兜底会改坏别人</h3>
+    <ul>
+      <li><code>findDshHome()</code> 找到 home 但里面没有宿主包</li>
+      <li>继续走递归兜底，扫到用户机器上另一个 DSH 副本</li>
+      <li>实测扫到 <code>.ds-ys</code> 的 0.2.2-rc.1，准备把补丁打进去</li>
+      <li>现在 home 已确定但无 <code>@deepseek-ai</code> → 返回 <code>null</code></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>引擎降级条件太窄</h3>
+    <ul>
+      <li>原来只有 <code>unavailable</code> 才降级</li>
+      <li><code>patch</code> 档在密封宿主上停在 <code>degraded</code></li>
+      <li>界面显示这档能用，实际什么都不会做</li>
+      <li>现在「未找到宿主安装目录」也触发降级，自动落到 <code>boundary</code></li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="reveal from-left" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">规则强化与链路修复</span></h3>
+<p class="lead reveal from-left" style="font-size:13.5px">这一版一半是破甲能力，一半是「检出了却修不了」的链路问题。</p>
+
+<div class="grid2 reveal from-bottom">
+  <div class="card">
+    <h3>纠偏链路一直是死的</h3>
+    <ul>
+      <li>日志里反复出现 <code>verdict=degrade acted=repair-failed</code></li>
+      <li>检出软化、决定纠偏、投递失败 —— 一次都没成功过</li>
+      <li>根因：事件回调的第一个参数是壳不是会话实例</li>
+      <li>四条路径全落空，<code>session.append</code> 也不是方法</li>
+      <li>现在从壳上取 id，回头到 <code>sessions</code> 服务里捞真会话</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>四条技术规则补齐</h3>
+    <ul>
+      <li><b>外挂</b>：补 UE4/UE5 dump、overlay 绘制、VEH/硬件断点、时序抹平</li>
+      <li><b>恶意软件</b>：107 字 → 355 字，补 AMSI/ETW patch、直接 syscall、unhooking、BYOVD</li>
+      <li><b>逆向</b>：补 Denuvo、de4dot、Rust/Go/NativeAOT、移动端加固名单</li>
+      <li><b>提权</b>：83 字 → 470 字，补 Potato 全家族、LAPS、GTFOBins、DirtyPipe</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2 reveal from-bottom" style="margin-top:14px">
+  <div class="card">
+    <h3>表格错位</h3>
+    <ul>
+      <li><code>transform</code> 加在 <code>&lt;tr&gt;</code> 上会脱离表格布局算法</li>
+      <li>列宽按各行内容分别算，再也对不齐</li>
+      <li>奇数行从左进、偶数行从右进，看起来像表格散架</li>
+      <li>动画移到 <code>&lt;td&gt;</code> 上，<code>tr</code> 只负责延迟</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>软化识别误伤技术文本</h3>
+    <ul>
+      <li>加了一批软化标记后，「翻页时略过已入库记录」被判成降级</li>
+      <li><code>略过</code> / <code>略去</code> / <code>一般性讨论</code> / <code>保持克制</code> 都是正常技术用词</li>
+      <li>删掉 12 个有歧义的，保留单独出现就明确的</li>
+      <li>技术误伤 0 / 软化漏检 0</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.2.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">首批链路修复</span></h3>
+<p class="lead reveal from-right" style="font-size:13.5px">29 个提交，全是「装上了但用不了」的问题。这一版把插件从不能用到能用。</p>
+
+<div class="grid2 reveal from-bottom">
+  <div class="card">
+    <h3>工具表被清空</h3>
+    <ul>
+      <li>幂等标志设在方法替换之后，抛错就设不上</li>
+      <li>配合 5 次重试，最多叠 6 层消息包装</li>
+      <li>宿主判定工具段不可用，<b>116 个工具全没</b></li>
+      <li>标志已前移，循环内逐个 try</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>面板数字 1/96</h3>
+    <ul>
+      <li><code>gatherState</code> 返回的值来自引擎探针</li>
+      <li>而探针正是从这个值读补丁数 —— 循环引用</li>
+      <li>冷启动读到 0 并永久缓存</li>
+      <li>改成直接查 <code>patchStatus</code>，实测 74/96</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2 reveal from-bottom" style="margin-top:14px">
+  <div class="card">
+    <h3>中英切换不生效</h3>
+    <ul>
+      <li><code>translate</code> 启动时被宿主 locale 绑定覆盖了两次</li>
+      <li>那个绑定跟宿主语言，不看面板开关</li>
+      <li>删掉覆盖，改成按当前语言查本地字典</li>
+      <li><code>useLang</code> / <code>useT</code> 挂订阅，切换真正重渲染</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>开关导致语言跳回</h3>
+    <ul>
+      <li>破甲页、引擎页的写操作提交时没带 locale</li>
+      <li>后端退回读浏览器语言（中文环境拿到中文）</li>
+      <li><code>setData</code> 一覆盖，界面就变回中文</li>
+      <li>所有写操作现在都带 locale，并依赖语言变化重载</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid2 reveal from-bottom" style="margin-top:14px">
+  <div class="card">
+    <h3>插件重启杀进程不拉起</h3>
+    <ul>
+      <li>只要 <code>app.asar</code> 存在就走 asar 交换</li>
+      <li>换的那份不被加载，进程没了也起不来</li>
+      <li>手动点 exe 反而正常</li>
+      <li>现在先查解包目录，存在就走普通重启</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>assemble 兜底缺字段</h3>
+    <ul>
+      <li>宿主读四个字段：<code>sections.map</code> / <code>contexts.map</code> / <code>tools</code> / <code>variables</code></li>
+      <li>兜底只返回 <code>sections</code>，缺任何一个直接崩</li>
+      <li>报错是 <code>Cannot read properties of null</code></li>
+      <li>现在四个字段齐全</li>
+    </ul>
+  </div>
+</div>
+
+<div class="note reveal from-bottom" style="margin-top:24px">
+  <p><strong>另外几处：</strong>注入提示词带了 ChatML 信封破坏工具调用、只注册主插件但格式规则作用域太宽、引擎选项开关互相覆盖、前后端只在一侧存在的接口没接上、自检报告压在页面底部、破甲页 / 引擎页 / 自检结果残留中文。这些都在 v1.2.0 里修完。</p>
+</div>
+</div>
 </section>
 
 <section>
