@@ -293,6 +293,47 @@ footer{padding:56px 0 72px;text-align:center;color:var(--faint);font-size:13px}
 footer a{color:var(--mute);transition:color .2s}
 footer a:hover{color:var(--accent)}
 
+/* ── 顶部快捷导航 ──────────────────────────────────────────────────────────
+   固定吸顶，滚动后浮出。锚点跳转用 scroll-margin-top 让目标标题避开导航条。 */
+.nav{position:fixed;top:0;left:0;right:0;z-index:95;
+  background:rgba(15,16,18,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transform:translateY(-100%);transition:transform .32s var(--ease),border-color .32s var(--ease)}
+.nav.show{transform:none;border-bottom-color:var(--line)}
+.nav-in{max-width:1080px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;gap:4px;height:52px;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav-brand{font-weight:700;font-size:13px;letter-spacing:.02em;color:var(--accent);
+  margin-right:14px;white-space:nowrap;flex-shrink:0;text-decoration:none}
+.nav a.nav-l{font-size:12.5px;color:var(--mute);text-decoration:none;padding:6px 10px;
+  border-radius:7px;white-space:nowrap;flex-shrink:0;transition:color .18s,background .18s}
+.nav a.nav-l:hover{color:var(--ink);background:var(--panel2)}
+.nav a.nav-l.on{color:var(--accent);background:var(--accent-soft)}
+
+/* 锚点跳转时给标题留出导航条高度 */
+section[id]{scroll-margin-top:66px}
+
+/* ── 悬浮按钮组（回顶 / 回底）── */
+.fabs{position:fixed;right:28px;bottom:28px;z-index:90;
+  display:flex;flex-direction:column;gap:10px;
+  opacity:0;transform:translateY(16px);pointer-events:none;transition:all .34s var(--ease)}
+.fabs.show{opacity:1;transform:none;pointer-events:auto}
+.fab{width:44px;height:44px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--line);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:16px;transition:all .22s var(--ease)}
+.fab:hover{background:var(--accent);color:#0a1410;border-color:var(--accent)}
+.fab.off{opacity:.32;pointer-events:none}
+@media(max-width:640px){
+  .nav-in{padding:0 14px;height:48px}
+  .nav-brand{margin-right:8px;font-size:12px}
+  .nav a.nav-l{font-size:12px;padding:6px 8px}
+  .fabs{right:16px;bottom:16px;gap:8px}
+  .fab{width:40px;height:40px;font-size:15px}
+  section[id]{scroll-margin-top:60px}
+}
+
+
 /* ── 回到顶部 ── */
 .totop{position:fixed;right:28px;bottom:28px;width:44px;height:44px;border-radius:50%;
   background:var(--panel);border:1px solid var(--line);color:var(--accent);
@@ -323,6 +364,13 @@ footer a:hover{color:var(--accent)}
   /* 窄屏表格：min-width 620px 在 640px 以下必然横向溢出。
      缩小内边距 + 降 min-width，让两列表格基本能放下；
      四列表格仍靠 .tw 的横向滚动，但滚动条不会一进来就出现。 */
+  /* 安装步骤里的命令行在窄屏会撑破视口：step-body 是 grid 子项，
+     grid 默认 min-width:auto 会按内容撑宽。给 0 让它能收缩，
+     代码块再横向滚动，不把整页顶宽。 */
+  .step{grid-template-columns:1fr}
+  .step-body{min-width:0}
+  .code-box pre{overflow-x:auto;white-space:pre;max-width:100%}
+  .code-box{min-width:0;max-width:100%}
   .tw{margin:18px 0;border-radius:10px}
   table{min-width:0;font-size:12.5px}
   th,td{padding:10px 12px}
@@ -334,6 +382,20 @@ footer a:hover{color:var(--accent)}
 
 <div class="cursor-glow" id="glow"></div>
 <div class="progress" id="prog"></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="#top">YS-POJIA</a>
+    <a class="nav-l" href="#what">这是什么</a>
+    <a class="nav-l" href="#layers-sec">三层破甲</a>
+    <a class="nav-l" href="#tiers-sec">三档引擎</a>
+    <a class="nav-l" href="#hosts">版本适配</a>
+    <a class="nav-l" href="#changelog">变更记录</a>
+    <a class="nav-l" href="#weakness">短板</a>
+    <a class="nav-l" href="#install">安装</a>
+    <a class="nav-l" href="https://github.com/yushang657/DSH-YS-pojia" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">GitHub ↗</a>
+  </div>
+</nav>
 
 <header>
   <div class="wrap">
@@ -359,7 +421,7 @@ footer a:hover{color:var(--accent)}
   </div>
 </header>
 
-<section>
+<section id="what">
   <div class="wrap">
     <h2 class="reveal from-left">这是什么</h2>
     <p class="lead reveal from-left">
@@ -418,7 +480,7 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
-<section>
+<section id="layers-sec">
   <div class="wrap">
     <h2 class="reveal from-left">三层叠加破甲</h2>
     <p class="lead reveal from-left">多数破甲插件只改提示词——模型说「抱歉」那一刻，前面几千字规则全部作废。这里在三个层同时动手。</p>
@@ -448,7 +510,7 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
-<section>
+<section id="tiers-sec">
   <div class="wrap">
     <h2 class="reveal from-right">三档引擎，每档标注降智程度</h2>
     <p class="lead reveal from-right">不是所有人都要最强档。补丁失效时能降级，而不是整个破甲消失。</p>
@@ -497,7 +559,7 @@ footer a:hover{color:var(--accent)}
 </section>
 
 
-<section>
+<section id="hosts">
   <div class="wrap">
     <h2 class="reveal from-left">多版本宿主适配</h2>
     <p class="lead reveal from-left">补丁按宿主源码字符串匹配，跨版本时部分 pattern 会失配。这里不猜，直接数字告诉你。</p>
@@ -554,7 +616,7 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
-<section>
+<section id="changelog">
 <div class="wrap">
 <h2 class="reveal from-left">版本变更记录</h2>
 <p class="lead reveal from-left">按版本分组。每个版本修了什么、加了什么，能对号入座。</p>
@@ -761,7 +823,7 @@ footer a:hover{color:var(--accent)}
 </div>
 </section>
 
-<section>
+<section id="weakness">
   <div class="wrap">
     <h2 class="reveal from-left">先说短板</h2>
     <p class="lead reveal from-left">免得你装完才发现不合适。</p>
@@ -851,7 +913,7 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
-<section>
+<section id="install">
   <div class="wrap">
     <h2 class="reveal from-left">安装</h2>
     <p class="lead reveal from-left">三步。装完重启 DSH 生效。</p>
@@ -908,7 +970,10 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
   </div>
 </footer>
 
-<div class="totop" id="totop" title="回到顶部">↑</div>
+<div class="fabs" id="fabs">
+  <div class="fab" id="totop" title="回到顶部" role="button" tabindex="0">↑</div>
+  <div class="fab" id="tobottom" title="回到底部" role="button" tabindex="0">↓</div>
+</div>
 
 <script>
 (function(){
@@ -930,14 +995,24 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
 
   /* ── 2. 滚动进度条 ── */
   var prog = document.getElementById("prog");
-  function onScroll(){
-    var h = document.documentElement;
-    var max = h.scrollHeight - h.clientHeight;
-    var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
-    if (prog) prog.style.width = (p * 100).toFixed(2) + "%";
-    var top = document.getElementById("totop");
-    if (top) top.classList.toggle("show", p > 0.08);
-  }
+    var nav = document.getElementById("nav");
+    var fabs = document.getElementById("fabs");
+    var tobottom = document.getElementById("tobottom");
+    function onScroll(){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var y = h.scrollTop || document.body.scrollTop;
+      var p = max > 0 ? y / max : 0;
+      if (prog) prog.style.width = (p * 100).toFixed(2) + "%";
+
+      /* 导航条：滚过首屏后浮出 */
+      if (nav) nav.classList.toggle("show", y > 240);
+
+      /* 悬浮按钮组：离开顶部就出现，回顶按钮到底部时置灰，回底按钮在顶部置灰 */
+      if (fabs) fabs.classList.toggle("show", y > 120);
+      if (totop) totop.classList.toggle("off", y < 80);
+      if (tobottom) tobottom.classList.toggle("off", p > 0.985);
+    }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
@@ -1101,11 +1176,72 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
     });
   }
 
-  /* ── 6. 回到顶部 ── */
-  var totop = document.getElementById("totop");
-  if (totop) totop.addEventListener("click", function(){
-    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-  });
+    /* ── 6. 回顶 / 回底 ── */
+    var totopBtn = document.getElementById("totop");
+    var tobottomBtn = document.getElementById("tobottom");
+    var scrollMode = reduced ? "auto" : "smooth";
+
+    if (totopBtn) {
+      totopBtn.addEventListener("click", function(){
+        window.scrollTo({ top: 0, behavior: scrollMode });
+      });
+      totopBtn.addEventListener("keydown", function(ev){
+        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); totopBtn.click(); }
+      });
+    }
+
+    if (tobottomBtn) {
+      tobottomBtn.addEventListener("click", function(){
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: scrollMode });
+      });
+      tobottomBtn.addEventListener("keydown", function(ev){
+        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); tobottomBtn.click(); }
+      });
+    }
+
+    /* ── 6b. 导航高亮当前章节 ──
+       用 IntersectionObserver 比逐帧算位置便宜。
+       根边距顶部留出导航条高度，底部留 60%，这样「刚进入视口上半部分」才算当前章节，
+       不会出现两个章节同时高亮。 */
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav a.nav-l[href^='#']"));
+    if (navLinks.length && "IntersectionObserver" in window) {
+      var linkById = {};
+      navLinks.forEach(function(a){ linkById[a.getAttribute("href").slice(1)] = a; });
+
+      var seen = {};
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          seen[en.target.id] = en.isIntersecting;
+        });
+        /* 按 DOM 顺序找第一个仍在视口里的章节 */
+        var active = null;
+        for (var i = 0; i < navLinks.length; i++) {
+          var id = navLinks[i].getAttribute("href").slice(1);
+          if (seen[id]) { active = id; break; }
+        }
+        navLinks.forEach(function(a){
+          a.classList.toggle("on", a.getAttribute("href") === "#" + active);
+        });
+      }, { rootMargin: "-64px 0px -60% 0px", threshold: 0 });
+
+      navLinks.forEach(function(a){
+        var el = document.getElementById(a.getAttribute("href").slice(1));
+        if (el) io.observe(el);
+      });
+    }
+
+    /* ── 6c. 平滑锚点（尊重 reduced-motion，并关掉浏览器默认跳转）── */
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener("click", function(ev){
+        var id = a.getAttribute("href").slice(1);
+        if (!id) return;
+        var el = document.getElementById(id);
+        if (!el) return;
+        ev.preventDefault();
+        el.scrollIntoView({ behavior: scrollMode, block: "start" });
+        history.replaceState(null, "", "#" + id);
+      });
+    });
 
   /* ── 7. 安装命令复制 ── */
   document.querySelectorAll(".copy-btn").forEach(function(btn){
