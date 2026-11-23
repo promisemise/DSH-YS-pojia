@@ -627,19 +627,63 @@ footer a:hover{color:var(--accent)}
     <p class="lead reveal from-left">免得你装完才发现不合适。</p>
     <div class="tw">
       <table>
-        <thead><tr><th>短板</th><th>具体表现</th></tr></thead>
-        <tbody class="tbl-reveal">
-          <tr><td>版本覆盖有限</td><td>已验证 4 个版本：<strong style="color:var(--accent)">0.2.0-rc.2 / 0.2.1-rc.2 / 0.2.1-rc.5 / 0.2.2-rc.1</strong>；同 minor 版本给黄字提示不阻断，跨版本红字告警。控制台「补丁诊断」显示当前宿主实际能打几条</td></tr>
-          <tr><td>补丁会静默失效</td><td>宿主升级后按字符串匹配不上，<strong style="color:var(--warn)">不报错</strong>，破甲没了但界面正常</td></tr>
-          <tr><td>改宿主源码</td><td>T3 档要改写 DSH 的 lib/index.js，有人不接受这个侵入性</td></tr>
-          <tr><td>需要重启</td><td>T3 改完必须重启，不能像纯请求层方案立刻生效</td></tr>
-          <tr><td>单发破甲率不算顶尖</td><td>ASR 46.2%，26 类里 12 类一次破到底</td></tr>
-          <tr><td>社工类几乎无效</td><td>该类别实测 0 分，钓鱼/洗钱/伪造基本全拒</td></tr>
-          <tr><td>渗透类偏低</td><td>已按信息密度重算评分，实际数值需你自己跑一次确认</td></tr>
-          <tr><td>单人维护</td><td>无 CI 保证、无 LTS，长期稳定性无正式承诺</td></tr>
-        </tbody>
+          <thead><tr><th>短板</th><th>具体表现</th></tr></thead>
+          <tbody class="tbl-reveal">
+            <tr><td>0.2.2-rc.5 补丁层不可用</td><td>宿主把源码封进 <code>app.asar</code>，补丁无处写。配置层覆盖不到观察策略短路、结果裁剪、子代理深度上限</td></tr>
+            <tr><td>补丁会静默失效</td><td>宿主升级后按字符串匹配不上，<strong style="color:var(--warn)">不报错</strong>，破甲没了但界面正常</td></tr>
+            <tr><td>T3 档改宿主源码</td><td>要改写 DSH 的 <code>lib/index.js</code>，有人不接受这个侵入性</td></tr>
+            <tr><td>T3 改完必须重启</td><td>不能像纯请求层方案立刻生效</td></tr>
+            <tr><td>解包状态会被更新冲掉</td><td>手工解包后宿主自动更新会重新下载 asar</td></tr>
+            <tr><td>单发破甲率不算顶尖</td><td>ASR 46.2%，26 类里 12 类一次破到底。市面同类也在 45% 左右，基本同档</td></tr>
+            <tr><td>社工类几乎无效</td><td>该类别实测 0 分，钓鱼/洗钱/伪造基本全拒</td></tr>
+            <tr><td>渗透类偏低</td><td>已按信息密度重算评分，实际数值需你自己跑一次确认</td></tr>
+            <tr><td>单人维护</td><td>无 CI 保证、无 LTS，长期稳定性无正式承诺</td></tr>
+            <tr><td>中英两套字典</td><td>日韩用户看英文，插件没有第三语言</td></tr>
+          </tbody>
       </table>
     </div>
+
+      <h3 class="reveal from-left" style="margin-top:48px;font-size:17px;font-weight:650">实测通过的宿主版本</h3>
+      <p class="lead reveal from-left" style="font-size:14px">「实测通过」指插件加载后工具表完整、破甲注入生效、面板正常、无崩溃。不是「理论上应该能用」。</p>
+      <div class="tw reveal from-bottom">
+        <table>
+          <thead><tr><th>版本</th><th>状态</th><th>引擎</th><th>说明</th></tr></thead>
+          <tbody class="tbl-reveal">
+            <tr><td><code>0.2.0-rc.2</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>96 条补丁 73 条命中</td></tr>
+            <tr><td><code>0.2.1-rc.2</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
+            <tr><td><code>0.2.1-rc.5</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
+            <tr><td><code>0.2.2-rc.1</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
+            <tr><td><code>0.2.2-rc.5</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T2 配置层</td><td>宿主密封，配置层生效；解包后 65/96 补丁命中</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="reveal from-right" style="margin-top:48px;font-size:17px;font-weight:650">不适合谁</h3>
+      <div class="grid2 reveal from-bottom">
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果你需要补丁层</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">宿主是 0.2.2-rc.5 且你要观察策略短路、子代理深度放宽这类效果——配置层改不了代码逻辑，必须手工解包，而解包会被宿主更新冲掉。</p>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果介意改宿主源码</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">T3 补丁档会改 DSH 的 <code>lib/index.js</code>。带完整备份和回滚，但这是实打实的源码修改。只想要纯提示词的用 T1 档。</p>
+        </div>
+      </div>
+
+      <div class="grid2 reveal from-bottom" style="margin-top:14px">
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果要稳定生产环境</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">单人维护，无 CI，无 LTS。宿主每次升级都可能让补丁失效，需要你自己跟版本。适合折腾，不适合当基础设施。</p>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果主要做社工/钓鱼/伪造</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">该类别实测 0 分，规则写了但模型层几乎全拒。这是模型能力边界，不是插件能解决的。政治话题同理，只回一句不展开。</p>
+        </div>
+      </div>
+
+      <div class="note reveal from-bottom" style="margin-top:20px">
+        <p><strong>适合谁：</strong>宿主版本在实测列表内、需要完整破甲能力、能接受改宿主源码且有回滚预案、愿意跟版本更新、主要做技术类（逆向 / 渗透 / 外挂 / 恶意样本）或成人虚构内容的人。</p>
+      </div>
 
     <h2 style="margin-top:56px" class="reveal from-right">三条路线的取舍</h2>
     <p class="lead reveal from-right">不点具体项目名。对号入座。</p>
