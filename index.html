@@ -115,6 +115,25 @@ h1 .grad{background:linear-gradient(100deg,var(--ink) 20%,var(--accent) 55%,#7fd
   padding:5px 9px;border-radius:6px;transition:all .18s var(--ease)}
 .nav-lang:hover{background:var(--accent-soft);border-color:var(--accent)}
 
+/* ── 语言切换 ─────────────────────────────────────────────────────────────
+   固定在右上角，不跟导航栏一起显隐。
+   导航栏要滚过 240px 才浮出，把按钮放里面等于首屏看不到 —— 而语言是
+   进页面第一眼就要决定的事。 */
+.lang-fab{position:fixed;top:18px;right:22px;z-index:96;
+  min-width:44px;height:34px;padding:0 11px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font:600 12px/1 var(--mono);letter-spacing:.06em;
+  color:var(--accent);background:rgba(15,16,18,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:8px;cursor:pointer;
+  transition:all .22s var(--ease)}
+.lang-fab:hover{background:var(--accent);color:#0a1410;border-color:var(--accent);
+  transform:translateY(-1px)}
+.lang-fab:active{transform:translateY(0)}
+@media(max-width:640px){
+  .lang-fab{top:12px;right:12px;height:30px;min-width:38px;padding:0 9px;font-size:11px}
+}
+
 /* ── 章节内版本切换条 ─────────────────────────────────────────────────────
    变更记录两百多行、四个版本块。粘在导航条下面，滚到哪都能一眼看到
    其余版本在哪，不用滚回去。 */
@@ -435,6 +454,10 @@ section[id]{scroll-margin-top:66px}
 <div class="cursor-glow" id="glow"></div>
 <div class="progress" id="prog"></div>
 
+<!-- 语言切换：固定在右上角，不依赖导航栏显隐，首屏就能看到和点到 -->
+<button type="button" class="lang-fab" id="langToggle" title="切换语言 / Switch language" aria-label="Switch language">EN</button>
+
+
 <nav class="nav" id="nav">
   <div class="nav-in">
     <a class="nav-brand" href="#top">YS-POJIA</a>
@@ -445,7 +468,6 @@ section[id]{scroll-margin-top:66px}
     <a class="nav-l" href="#changelog" data-i18n="t6">变更记录</a>
     <a class="nav-l" href="#weakness" data-i18n="t7">短板</a>
     <a class="nav-l" href="#install" data-i18n="t8">安装</a>
-    <button type="button" class="nav-l nav-lang" id="langToggle" title="切换语言 / Switch language">EN</button>
     <a class="nav-l" href="https://github.com/yushang657/DSH-YS-pojia" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">GitHub ↗</a>
   </div>
 </nav>
