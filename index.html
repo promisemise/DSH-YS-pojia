@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YS-pojia · DSH 破甲插件</title>
-<meta name="description" content="DSH（DeepSeek Harness）破甲插件：96 条宿主补丁 + 消息层拒绝清洗 + 11 个提示词段。三档引擎 T3/T2/T1，39 类 x 56 探针量化评测，ASR 46.2%，良性能力损耗 0。">
-<meta name="keywords" content="DSH,DeepSeek Harness,破甲,解限,越狱,清理,清洗,红队,逆向,breach,jailbreak,unlock,clean,redteam,prompt injection">
-<meta property="og:title" content="YS-pojia · DSH 破甲插件">
-<meta property="og:description" content="三层叠加破甲 + 量化评测。96 条宿主补丁，ASR 46.2%，良性损耗 0。">
+<title data-i18n="t1">YS-pojia · DSH 破甲插件</title>
+<meta name="description" content="DSH (DeepSeek Harness) breach plugin: 96 host patches + refusal purge on the message layer + 11 prompt sections. Three tiers T3/T2/T1, 39 categories x 68 probes weighted by density, ASR 46.2%, pass 76.9%, benign cost 0, 95 templates / 29 vendors. RedTeam / Prompt eval.">
+<meta name="keywords" content="DSH,DeepSeek Harness,breach,unlock,jailbreak,clean,purge,redteam,reverse,breach,jailbreak,unlock,clean,redteam,prompt injection">
+<meta property="og:title" content="YS-pojia · DSH breach plugin">
+<meta property="og:description" content="Three-layer breach plus quantitative evaluation. 96 host patches, ASR 46.2%, benign cost 0.">
 <meta property="og:type" content="website">
 <style>
 :root{
@@ -108,6 +108,12 @@ h1 .grad{background:linear-gradient(100deg,var(--ink) 20%,var(--accent) 55%,#7fd
   .hero-check{flex-direction:column;gap:8px;padding:12px 14px}
   .hc-body p{font-size:13px}
 }
+
+/* ── 语言切换 ───────────────────────────────────────────────────────────── */
+.nav-lang{background:transparent;border:1px solid var(--line);cursor:pointer;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--accent);
+  padding:5px 9px;border-radius:6px;transition:all .18s var(--ease)}
+.nav-lang:hover{background:var(--accent-soft);border-color:var(--accent)}
 
 /* ── 章节内版本切换条 ─────────────────────────────────────────────────────
    变更记录两百多行、四个版本块。粘在导航条下面，滚到哪都能一眼看到
@@ -432,104 +438,103 @@ section[id]{scroll-margin-top:66px}
 <nav class="nav" id="nav">
   <div class="nav-in">
     <a class="nav-brand" href="#top">YS-POJIA</a>
-    <a class="nav-l" href="#what">这是什么</a>
-    <a class="nav-l" href="#layers-sec">三层破甲</a>
-    <a class="nav-l" href="#tiers-sec">三档引擎</a>
-    <a class="nav-l" href="#hosts">版本适配</a>
-    <a class="nav-l" href="#changelog">变更记录</a>
-    <a class="nav-l" href="#weakness">短板</a>
-    <a class="nav-l" href="#install">安装</a>
+    <a class="nav-l" href="#what" data-i18n="t2">这是什么</a>
+    <a class="nav-l" href="#layers-sec" data-i18n="t3">三层破甲</a>
+    <a class="nav-l" href="#tiers-sec" data-i18n="t4">三档引擎</a>
+    <a class="nav-l" href="#hosts" data-i18n="t5">版本适配</a>
+    <a class="nav-l" href="#changelog" data-i18n="t6">变更记录</a>
+    <a class="nav-l" href="#weakness" data-i18n="t7">短板</a>
+    <a class="nav-l" href="#install" data-i18n="t8">安装</a>
+    <button type="button" class="nav-l nav-lang" id="langToggle" title="切换语言 / Switch language">EN</button>
     <a class="nav-l" href="https://github.com/yushang657/DSH-YS-pojia" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">GitHub ↗</a>
   </div>
 </nav>
 
 <header>
   <div class="wrap">
-    <h1 class="reveal from-bottom"><span class="grad">YS-pojia</span> · DSH 破甲插件</h1>
-    <p class="tagline reveal from-bottom">三层叠加，不是提示词工具。宿主补丁 + 消息层拒绝清洗 + 提示词注入，模型没有拒绝的着力点。</p>
+    <h1 class="reveal from-bottom" data-i18n-html="xh1"><span class="grad">YS-pojia</span> · DSH breach plugin</h1>
+    <p class="tagline reveal from-bottom" data-i18n="t9" data-i18n-html="x18">Three layers stacked, not a prompt tool. Host patches + refusal purge on the message layer + prompt injection — the model has no footing left to refuse from.</p>
     <div class="kw reveal from-bottom">
-      <b>破甲</b><b>解限</b><b>越狱</b><b>清理</b><b>清洗</b><b>红队</b><b>逆向</b>
+      <b data-i18n="t10">破甲</b><b data-i18n="t11">解限</b><b data-i18n="t12">越狱</b><b data-i18n="t13">清理</b><b data-i18n="t14">清洗</b><b data-i18n="t15">红队</b><b data-i18n="t16">逆向</b>
       <b>breach</b><b>jailbreak</b><b>unlock</b><b>redteam</b>
     </div>
 <div class="hero-check reveal from-bottom">
-  <div class="hc-label">装完怎么验</div>
+  <div class="hc-label" data-i18n="t17">装完怎么验</div>
   <div class="hc-body">
-    <p>对话框<strong>只输入</strong> <code class="hc-code" title="点击选中，可复制">小雨</code> 两个字。
-    看到「小雨一直在，任务是什么……」那四行回复，说明插件加载成功。</p>
-    <p class="hc-sub">没反应就是没加载 —— 重启 DSH，确认面板顶栏显示版本号，再到引擎页看「环境探测」里的策略行。</p>
+    <p data-i18n-html="xcheckp">Type <code class="hc-code" title="click to select, copyable" data-i18n="t19">小雨</code> into the chat box, and nothing else. Seeing those four lines back means the plugin loaded.</p>
+    <!-- zh: 对话框只输入 小雨 两个字。看到「小雨一直在，任务是什么……」那四行回复，说明插件加载成功。 -->
+    <p class="hc-sub" data-i18n="t20">没反应就是没加载 —— 重启 DSH，确认面板顶栏显示版本号，再到引擎页看「环境探测」里的策略行。</p>
   </div>
 </div>
 
 <div class="cta reveal from-bottom">
-      <a class="btn primary" href="https://github.com/yushang657/DSH-YS-pojia">GitHub 仓库 →</a>
-      <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia#安装">安装说明</a>
-      <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia/discussions">提问 / 讨论</a>
+      <a class="btn primary" href="https://github.com/yushang657/DSH-YS-pojia" data-i18n="t21">GitHub 仓库 →</a>
+      <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia#安装" data-i18n="t22">安装说明</a>
+      <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia/discussions" data-i18n="t23">提问 / 讨论</a>
     </div>
 
     <div class="stats stagger reveal from-scale" id="stats">
-      <div class="stat"><b data-count="96">0</b><span>宿主补丁 / 70 文件</span></div>
-      <div class="stat"><b data-count="46.2" data-suffix="%">0</b><span>ASR 单发破甲率</span></div>
-      <div class="stat"><b data-count="76.9" data-suffix="%">0</b><span>pass@N 多轮上限</span></div>
-      <div class="stat"><b data-text="Δ 0">0</b><span>良性能力损耗</span></div>
-      <div class="stat"><b data-count="29">0</b><span>厂商模板覆盖</span></div>
+      <div class="stat"><b data-count="96">0</b><span data-i18n="t24">宿主补丁 / 70 文件</span></div>
+      <div class="stat"><b data-count="46.2" data-suffix="%">0</b><span data-i18n="t25">ASR 单发破甲率</span></div>
+      <div class="stat"><b data-count="76.9" data-suffix="%">0</b><span data-i18n="t26">pass@N 多轮上限</span></div>
+      <div class="stat"><b data-text="Δ 0">0</b><span data-i18n="t27">良性能力损耗</span></div>
+      <div class="stat"><b data-count="29">0</b><span data-i18n="t28">厂商模板覆盖</span></div>
     </div>
   </div>
 </header>
 
 <section id="what">
   <div class="wrap">
-    <h2 class="reveal from-left">这是什么</h2>
-    <p class="lead reveal from-left">
-      DSH（DeepSeek Harness）上的破甲插件。它解决一个具体问题：<strong style="color:var(--ink)">模型该给的东西，因为一层不必要的拒绝没给出来。</strong>
-    </p>
+    <h2 class="reveal from-left" data-i18n="t2">这是什么</h2>
+      <p class="lead reveal from-left" data-i18n-html="x16">DSH (DeepSeek Harness) breach plugin. It solves one specific problem: <strong style="color:var(--ink)">what the model should have given, withheld by one unnecessary refusal.</strong></p>
     <div class="grid2" id="whatido">
       <div class="card" data-listgroup>
-        <h3>它做什么</h3>
+        <h3 data-i18n="t30">它做什么</h3>
         <ul class="list-reveal">
-          <li>把 DSH 宿主层的沙箱、审批、观察策略改成放行，让工具真的能执行</li>
-          <li>把历史对话里的拒绝回复改写成「已作废」，断掉模型的模仿惯性</li>
-          <li>注入提示词，覆盖宿主自带的保守设定</li>
-          <li>用 68 个探针量化「每一类破到什么程度」，而不是只说「能破」</li>
-            <li>按宿主形态自动选注入策略：可写宿主走补丁层，密封宿主走配置层</li>
+          <li data-i18n="t31">把 DSH 宿主层的沙箱、审批、观察策略改成放行，让工具真的能执行</li>
+          <li data-i18n="t32">把历史对话里的拒绝回复改写成「已作废」，断掉模型的模仿惯性</li>
+          <li data-i18n="t33">注入提示词，覆盖宿主自带的保守设定</li>
+          <li data-i18n="t34">用 68 个探针量化「每一类破到什么程度」，而不是只说「能破」</li>
+            <li data-i18n="t35">按宿主形态自动选注入策略：可写宿主走补丁层，密封宿主走配置层</li>
         </ul>
       </div>
       <div class="card" data-listgroup>
-        <h3>它不做什么</h3>
+        <h3 data-i18n="t36">它不做什么</h3>
         <ul class="list-reveal">
-          <li>不改模型权重，不做微调，不碰推理过程</li>
-          <li>不联网、不上传数据、不自动检查更新——没有服务器</li>
-          <li>不审核你的输入，也不存储对话</li>
-          <li>不保证在所有 DSH 版本上生效（见下方短板）</li>
-            <li>不展开政治话题——这是唯一不因版本变化的类别</li>
+          <li data-i18n="t37">不改模型权重，不做微调，不碰推理过程</li>
+          <li data-i18n="t38">不联网、不上传数据、不自动检查更新——没有服务器</li>
+          <li data-i18n="t39">不审核你的输入，也不存储对话</li>
+          <li data-i18n="t40">不保证在所有 DSH 版本上生效（见下方短板）</li>
+            <li data-i18n="t41">不展开政治话题——这是唯一不因版本变化的类别</li>
         </ul>
       </div>
     </div>
 
-    <h3 class="reveal from-left" style="margin-top:48px;font-size:18px">适合谁</h3>
+    <h3 class="reveal from-left" style="margin-top:48px;font-size:18px" data-i18n="t42">适合谁</h3>
     <div class="grid3" id="suitwho">
       <div class="card sm reveal from-bottom">
-        <div class="tag-ok">适合</div>
-        <p>做授权安全测试，需要模型给出完整技术细节而不是「建议咨询专业人士」</p>
+        <div class="tag-ok" data-i18n="t43">适合</div>
+        <p data-i18n="t44">做授权安全测试，需要模型给出完整技术细节而不是「建议咨询专业人士」</p>
       </div>
       <div class="card sm reveal from-bottom">
-        <div class="tag-ok">适合</div>
-        <p>要写技术文档、教程、CTF writeup，被模型反复拒绝打断思路</p>
+        <div class="tag-ok" data-i18n="t43">适合</div>
+        <p data-i18n="t45">要写技术文档、教程、CTF writeup，被模型反复拒绝打断思路</p>
       </div>
       <div class="card sm reveal from-bottom">
-        <div class="tag-ok">适合</div>
-        <p>想量化对比不同模型的安全防线，需要可复现的评分体系</p>
+        <div class="tag-ok" data-i18n="t43">适合</div>
+        <p data-i18n="t46">想量化对比不同模型的安全防线，需要可复现的评分体系</p>
       </div>
       <div class="card sm reveal from-bottom">
-        <div class="tag-no">不适合</div>
-        <p>只想让模型「说话好听点」——这类需求不需要破甲，改提示词就够</p>
+        <div class="tag-no" data-i18n="t47">不适合</div>
+        <p data-i18n="t48">只想让模型「说话好听点」——这类需求不需要破甲，改提示词就够</p>
       </div>
       <div class="card sm reveal from-bottom">
-        <div class="tag-no">不适合</div>
-        <p>不能接受改宿主源码——选纯请求边界方案，升级 DSH 也不会失效</p>
+        <div class="tag-no" data-i18n="t47">不适合</div>
+        <p data-i18n="t49">不能接受改宿主源码——选纯请求边界方案，升级 DSH 也不会失效</p>
       </div>
       <div class="card sm reveal from-bottom">
-        <div class="tag-no">不适合</div>
-        <p>用 DSH 0.2.2-rc.5 且需要 T3 补丁档——宿主已密封，只能走配置层</p>
+        <div class="tag-no" data-i18n="t47">不适合</div>
+        <p data-i18n="t50">用 DSH 0.2.2-rc.5 且需要 T3 补丁档——宿主已密封，只能走配置层</p>
       </div>
     </div>
   </div>
@@ -537,28 +542,28 @@ section[id]{scroll-margin-top:66px}
 
 <section id="layers-sec">
   <div class="wrap">
-    <h2 class="reveal from-left">三层叠加破甲</h2>
-    <p class="lead reveal from-left">多数破甲插件只改提示词——模型说「抱歉」那一刻，前面几千字规则全部作废。这里在三个层同时动手。</p>
+    <h2 class="reveal from-left" data-i18n="t51">三层叠加破甲</h2>
+    <p class="lead reveal from-left" data-i18n="t52">多数破甲插件只改提示词——模型说「抱歉」那一刻，前面几千字规则全部作废。这里在三个层同时动手。</p>
     <div class="layers stagger" id="layers">
       <div class="layer reveal from-left">
         <div class="n">01</div>
         <div>
-          <h3>宿主层 <em>96 PATCHES / 70 FILES</em></h3>
-          <p>直接改写 DSH 源码里的策略判定点：沙箱 <code>deny → allow file-write*</code>、审批门 <code>return allowed-once</code>、观察策略放行、重复调用守卫关闭。这是「强制力」的来源——模型不需要同意，它只是执行。</p>
+          <h3 data-i18n-html="xh3host">Host layer <em>96 PATCHES / 70 FILES</em></h3>
+          <p data-i18n-html="x15">Rewrites the policy decision points in DSH source: sandbox <code>deny → allow file-write*</code>, the approval gate <code>return allowed-once</code>, observation policy set to allow, repeat-call guard disabled, tool results left untrimmed. Code defaults, sandbox bypass, approval bypass, relaxed observation — everything the host owns lives here.</p>
         </div>
       </div>
       <div class="layer reveal from-right">
         <div class="n">02</div>
         <div>
-          <h3>消息层 <em>REFUSAL PURGE</em></h3>
-          <p>system 注入的盲区：模型一旦决定以「我不能」开头，前面所有规则归零。把历史里的拒绝回复改写成「已作废」，再加半截 <code>可以，</code> 引导首句 token 分布。标准 / 强制两档可选。</p>
+          <h3 data-i18n-html="xh3msg">Message layer <em>REFUSAL PURGE</em></h3>
+          <p data-i18n-html="x14">The blind spot of system injection: once the model decides to open with "I cannot", every rule before it is void. Rewrites refusals in history as voided, then seeds half a <code>Sure,</code> to steer the first token — leaving the model no habit to refuse from.</p>
         </div>
       </div>
       <div class="layer reveal from-left">
         <div class="n">03</div>
         <div>
-          <h3>提示词层 <em>11 SECTIONS</em></h3>
-          <p>人设、能力清单、尾部硬权重。自检段 <code>order: 1000001</code> 排在所有段之后，确保不被稀释。</p>
+          <h3 data-i18n-html="xh3prompt">Prompt layer <em>11 SECTIONS</em></h3>
+          <p data-i18n-html="xpprompt">Persona, capability list, tail hard weight. The self-check section sits at <code>order: 1000001</code>, after every other section, so it cannot be diluted.</p>
         </div>
       </div>
     </div>
@@ -567,48 +572,48 @@ section[id]{scroll-margin-top:66px}
 
 <section id="tiers-sec">
   <div class="wrap">
-    <h2 class="reveal from-right">三档引擎，每档标注降智程度</h2>
-    <p class="lead reveal from-right">不是所有人都要最强档。补丁失效时能降级，而不是整个破甲消失。</p>
+    <h2 class="reveal from-right" data-i18n="t54">三档引擎，每档标注降智程度</h2>
+    <p class="lead reveal from-right" data-i18n="t55">不是所有人都要最强档。补丁失效时能降级，而不是整个破甲消失。</p>
     <div class="tiers stagger" id="tiers">
       <div class="tier reveal from-bottom">
         <div class="id">T3</div>
-        <h3>补丁档</h3>
+        <h3 data-i18n="t56">补丁档</h3>
         <dl>
-          <dt>作用层</dt><dd>宿主源码</dd>
-          <dt>写宿主</dt><dd>是</dd>
-          <dt>需重启</dt><dd>是</dd>
-          <dt>降智</dt><dd class="ok">不降智</dd>
+          <dt data-i18n="t57">作用层</dt><dd data-i18n="t58">宿主源码</dd>
+          <dt data-i18n="t59">写宿主</dt><dd data-i18n="t60">是</dd>
+          <dt data-i18n="t61">需重启</dt><dd data-i18n="t60">是</dd>
+          <dt data-i18n="t62">降智</dt><dd class="ok" data-i18n="t63">不降智</dd>
         </dl>
       </div>
       <div class="tier reveal from-bottom">
         <div class="id">T2</div>
-        <h3>边界改写档</h3>
+        <h3 data-i18n="t64">边界改写档</h3>
         <dl>
-          <dt>作用层</dt><dd>请求消息视图</dd>
-          <dt>写宿主</dt><dd>否</dd>
-          <dt>需重启</dt><dd>否</dd>
-          <dt>降智</dt><dd class="mid">轻微</dd>
+          <dt data-i18n="t57">作用层</dt><dd data-i18n="t65">请求消息视图</dd>
+          <dt data-i18n="t59">写宿主</dt><dd data-i18n="t66">否</dd>
+          <dt data-i18n="t61">需重启</dt><dd data-i18n="t66">否</dd>
+          <dt data-i18n="t62">降智</dt><dd class="mid" data-i18n="t67">轻微</dd>
         </dl>
       </div>
       <div class="tier reveal from-bottom">
         <div class="id">T1</div>
-        <h3>纯提示词档</h3>
+        <h3 data-i18n="t68">纯提示词档</h3>
         <dl>
-          <dt>作用层</dt><dd>system prompt</dd>
-          <dt>写宿主</dt><dd>否</dd>
-          <dt>需重启</dt><dd>否</dd>
-          <dt>降智</dt><dd class="mid">最低</dd>
+          <dt data-i18n="t57">作用层</dt><dd>system prompt</dd>
+          <dt data-i18n="t59">写宿主</dt><dd data-i18n="t66">否</dd>
+          <dt data-i18n="t61">需重启</dt><dd data-i18n="t66">否</dd>
+          <dt data-i18n="t62">降智</dt><dd class="mid" data-i18n="t69">最低</dd>
         </dl>
       </div>
     </div>
     <div class="note reveal from-bottom" style="margin-bottom:14px">
-      <p><strong>档位与宿主策略是两件事。</strong>档位决定「注入哪些层」，策略决定「能不能改宿主」。
+      <p><strong data-i18n="t70" data-i18n-html="x13">The tier decides which layers get injected; the strategy decides whether the host can be written to at all. From 0.2.2-rc.5 the host seals its source inside <code>app.asar</code>, so T3 has nowhere to write and the plugin falls back to T2 — the Engine tab then shows <code>Config layer · host sealed</code> instead of a switch that will not move.</strong>档位决定「注入哪些层」，策略决定「能不能改宿主」。
       0.2.2-rc.5 起宿主把源码封进 <code>app.asar</code>，T3 档物理上无处落笔，插件会自动落到 T2 ——
-      引擎页会显示 <code>配置层 · 宿主已密封</code>，而不是让一个点不动的开关亮着。</p>
+      引擎页会显示 <code data-i18n="t71">配置层 · 宿主已密封</code>，而不是让一个点不动的开关亮着。</p>
     </div>
 
     <div class="note reveal from-bottom">
-      <p>「降智」指<strong>破甲生效之后</strong>模型在正常任务上的表现下降——简单任务绕圈、代码出低级错、忘记前文约束。不是指模型天生弱。成因是破甲指令占用注意力预算，程度取决于<strong>破甲强度 × 上下文占用</strong>。</p>
+      <p data-i18n-html="xtiercost">"Capability cost" means how much the model degrades on ordinary tasks <strong>after the breach takes effect</strong> — circling simple questions, low-level code mistakes, forgetting earlier constraints. Not that the model is weak. The cause is breach instructions consuming the attention budget, and the size depends on <strong>breach strength × context cost</strong>.</p>
     </div>
   </div>
 </section>
@@ -616,56 +621,56 @@ section[id]{scroll-margin-top:66px}
 
 <section id="hosts">
   <div class="wrap">
-    <h2 class="reveal from-left">多版本宿主适配</h2>
-    <p class="lead reveal from-left">补丁按宿主源码字符串匹配，跨版本时部分 pattern 会失配。这里不猜，直接数字告诉你。</p>
+    <h2 class="reveal from-left" data-i18n="t74">多版本宿主适配</h2>
+    <p class="lead reveal from-left" data-i18n="t75">补丁按宿主源码字符串匹配，跨版本时部分 pattern 会失配。这里不猜，直接数字告诉你。</p>
 
     <div class="grid2 reveal from-bottom">
       <div class="card">
-        <h3>控制台里看得到</h3>
+        <h3 data-i18n="t76">控制台里看得到</h3>
         <ul>
-          <li><b>补丁诊断</b>：96 条里当前宿主上能打几条<br><span style="color:var(--mute);font-size:12.5px">绿 ≥80% / 黄 50-80% / 红 &lt;50%</span></li>
-          <li><b>适配级别</b>：<code>已验证</code> / <code>同系列未逐一验证</code> / <code>跨版本</code></li>
+          <li><b data-i18n="t77">补丁诊断</b>：96 条里当前宿主上能打几条<br><span style="color:var(--mute);font-size:12.5px" data-i18n="t78">绿 ≥80% / 黄 50-80% / 红 &lt;50%</span></li>
+          <li><b data-i18n="t79">适配级别</b>：<code data-i18n="t80">已验证</code> / <code data-i18n="t81">同系列未逐一验证</code> / <code data-i18n="t82">跨版本</code></li>
         </ul>
       </div>
       <div class="card">
-        <h3>为什么不再判死</h3>
+        <h3 data-i18n="t83">为什么不再判死</h3>
         <ul>
-          <li>之前只要版本不在列表里就报「不适配」</li>
-          <li>但 0.2.1-rc.3 / rc.4 这类同 minor 版本通常能用</li>
-          <li>现在分三段：已验证绿 / 同系列黄字提示 / 跨版本红字</li>
+          <li data-i18n="t84">之前只要版本不在列表里就报「不适配」</li>
+          <li data-i18n="t85">但 0.2.1-rc.3 / rc.4 这类同 minor 版本通常能用</li>
+          <li data-i18n="t86">现在分三段：已验证绿 / 同系列黄字提示 / 跨版本红字</li>
         </ul>
       </div>
     </div>
 
     <div class="note reveal from-bottom">
-      <p><strong>补丁按版本链组织。</strong>96 条里有 <strong>46 条</strong>带 2 个以上 pattern，各自对应不同宿主版本形态。命中 1 条即算生效，命中 0 条记失配。<br>      实测 0.2.0-rc.2：<strong>73 已命中 / 5 失配 / 18 宿主布局里本来没有</strong>。<br>      实测 0.2.2-rc.5（手工解包后）：<strong>65 全命中 / 4 部分命中 / 20 锚点失效</strong>。</p>
+      <p><strong data-i18n="t87">补丁按版本链组织。</strong>96 条里有 <strong data-i18n="t88">46 条</strong>带 2 个以上 pattern，各自对应不同宿主版本形态。命中 1 条即算生效，命中 0 条记失配。<br>      实测 0.2.0-rc.2：<strong data-i18n="t89">73 已命中 / 5 失配 / 18 宿主布局里本来没有</strong>。<br>      实测 0.2.2-rc.5（手工解包后）：<strong data-i18n="t90">65 全命中 / 4 部分命中 / 20 锚点失效</strong>。</p>
     </div>
 
     <div class="grid2 reveal from-bottom" style="margin-top:14px">
       <div class="card">
-        <h3>0.2.2-rc.5 起：宿主密封</h3>
+        <h3 data-i18n="t91">0.2.2-rc.5 起：宿主密封</h3>
         <ul>
           <li>整棵 <code>@deepseek-ai</code> 树封进 <code>resources/app.asar</code>（199 MB）</li>
-          <li>磁盘上没有可写副本，补丁层物理上无处落笔</li>
-          <li>但这一版<b>出厂就是全开</b>：<code>danger-full-access</code> + 审批 <code>never</code></li>
-          <li>补丁 #6-#10 想做的事，宿主自己已经做了</li>
+          <li data-i18n="t92">磁盘上没有可写副本，补丁层物理上无处落笔</li>
+          <li>但这一版<b data-i18n="t93">出厂就是全开</b>：<code>danger-full-access</code> + 审批 <code>never</code></li>
+          <li data-i18n="t94">补丁 #6-#10 想做的事，宿主自己已经做了</li>
         </ul>
       </div>
       <div class="card">
-        <h3>按宿主形态自动选策略</h3>
+        <h3 data-i18n="t95">按宿主形态自动选策略</h3>
         <ul>
-          <li><b>可写宿主</b>（0.2.0 / 0.2.1 / 0.2.2-rc.1）→ 补丁层</li>
-          <li><b>密封宿主</b>（0.2.2-rc.5）→ 配置层，不改一个字节源码</li>
-          <li>解包目录 → 补丁 + 配置双层叠加</li>
-          <li>找不到宿主 → 只注入提示词</li>
+          <li><b data-i18n="t96">可写宿主</b>（0.2.0 / 0.2.1 / 0.2.2-rc.1）→ 补丁层</li>
+          <li><b data-i18n="t97">密封宿主</b>（0.2.2-rc.5）→ 配置层，不改一个字节源码</li>
+          <li data-i18n="t98">解包目录 → 补丁 + 配置双层叠加</li>
+          <li data-i18n="t99">找不到宿主 → 只注入提示词</li>
         </ul>
       </div>
     </div>
 
     <div class="note reveal from-bottom">
-      <p><strong>配置层写的是宿主暴露的配置项：</strong><code>sandbox-policy.mode</code>、<code>approval.policy</code>、
+      <p><strong data-i18n="t100">配置层写的是宿主暴露的配置项：</strong><code>sandbox-policy.mode</code>、<code>approval.policy</code>、
       <code>tool-result-pruner.thresholdChars</code>、<code>repeat-tool-reminder.maxRetries</code>。
-      引擎页「环境探测」会显示当前策略，例如 <code>配置层 · 宿主已密封</code>，悬停看完整原因——
+      引擎页「环境探测」会显示当前策略，例如 <code data-i18n="t71">配置层 · 宿主已密封</code>，悬停看完整原因——
       不会出现「开关亮着但实际没做」的错觉。</p>
     </div>
   </div>
@@ -673,26 +678,26 @@ section[id]{scroll-margin-top:66px}
 
 <section id="changelog">
 <div class="wrap">
-<h2 class="reveal from-left">版本变更记录</h2>
-<p class="lead reveal from-left">按版本分组。每个版本修了什么、加了什么，能对号入座。</p>
+<h2 class="reveal from-left" data-i18n="t101">版本变更记录</h2>
+<p class="lead reveal from-left" data-i18n="t102">按版本分组。每个版本修了什么、加了什么，能对号入座。</p>
 
 <div class="grid3 reveal from-bottom" style="margin-bottom:28px">
   <div class="stat">
     <div class="n">1.4.0</div>
-    <div class="c">当前版本<br><span style="color:var(--mute);font-size:12px">适配 0.2.2-rc.5</span></div>
+    <div class="c">当前版本<br><span style="color:var(--mute);font-size:12px" data-i18n="t103">适配 0.2.2-rc.5</span></div>
   </div>
   <div class="stat">
     <div class="n">46</div>
-    <div class="c">累计修复<br><span style="color:var(--mute);font-size:12px">跨四个版本</span></div>
+    <div class="c">累计修复<br><span style="color:var(--mute);font-size:12px" data-i18n="t104">跨四个版本</span></div>
   </div>
   <div class="stat">
     <div class="n">5</div>
-    <div class="c">实测宿主版本<br><span style="color:var(--mute);font-size:12px">全部验证通过</span></div>
+    <div class="c">实测宿主版本<br><span style="color:var(--mute);font-size:12px" data-i18n="t105">全部验证通过</span></div>
   </div>
 </div>
 
 <nav class="vbar reveal from-bottom" aria-label="版本跳转">
-  <span class="vbar-label">跳到</span>
+  <span class="vbar-label" data-i18n="t106">跳到</span>
   <a href="#v140" class="vbar-l on">v1.4.0</a>
   <a href="#v132" class="vbar-l">v1.3.2</a>
   <a href="#v130" class="vbar-l">v1.3.0</a>
@@ -700,139 +705,139 @@ section[id]{scroll-margin-top:66px}
 </nav>
 
 <h3 id="v140" class="reveal from-left" style="margin-top:8px;font-size:18px;font-weight:650">v1.4.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">适配 0.2.2-rc.5</span></h3>
-<p class="lead reveal from-left" style="font-size:13.5px">这一版的主题是「宿主把自己封起来了，我们换一条路」。</p>
+<p class="lead reveal from-left" style="font-size:13.5px" data-i18n="t107" data-i18n-html="x12">This release is about the host sealing itself shut, and taking a different road.</p>
 
 <div class="grid2 reveal from-bottom">
   <div class="card">
-    <h3>版本自适应策略</h3>
+    <h3 data-i18n="t108">版本自适应策略</h3>
     <ul>
       <li>0.2.2-rc.5 把 <code>@deepseek-ai</code> 全封进 <code>app.asar</code>，补丁无处写</li>
       <li>新增 <code>host-adapt.js</code>，按宿主形态自动选策略</li>
-      <li>可写宿主 → 补丁层；密封宿主 → 配置层；都没有 → 纯提示词</li>
-      <li>引擎页显示当前策略，悬停看完整原因</li>
+      <li data-i18n="t109">可写宿主 → 补丁层；密封宿主 → 配置层；都没有 → 纯提示词</li>
+      <li data-i18n="t110">引擎页显示当前策略，悬停看完整原因</li>
     </ul>
   </div>
   <div class="card">
-    <h3>配置层不改源码</h3>
+    <h3 data-i18n="t111">配置层不改源码</h3>
     <ul>
       <li>写 <code>sandbox-policy.mode</code>、<code>approval.policy</code> 等配置项</li>
-      <li>读源码确认 0.2.2-rc.5 <b>出厂就是全开</b></li>
-      <li>补丁 #6-#10 想做的事，宿主自己已经做了</li>
-      <li>配置层只是显式重述，防止环境变量压回去</li>
+      <li>读源码确认 0.2.2-rc.5 <b data-i18n="t93">出厂就是全开</b></li>
+      <li data-i18n="t94">补丁 #6-#10 想做的事，宿主自己已经做了</li>
+      <li data-i18n="t112">配置层只是显式重述，防止环境变量压回去</li>
     </ul>
   </div>
 </div>
 
 <div class="grid2 reveal from-bottom" style="margin-top:14px">
   <div class="card">
-    <h3>补丁打到影子副本</h3>
+    <h3 data-i18n="t113">补丁打到影子副本</h3>
     <ul>
-      <li>DSH Desktop 解开 asar 后原文件仍留着，宿主从解包目录加载</li>
+      <li data-i18n="t114">DSH Desktop 解开 asar 后原文件仍留着，宿主从解包目录加载</li>
       <li>候选列表把 <code>resources/app</code> 排前面，补丁全打进影子副本</li>
-      <li>运行中的宿主一条没改 → 面板显示跳过 / 漂移</li>
+      <li data-i18n="t115">运行中的宿主一条没改 → 面板显示跳过 / 漂移</li>
       <li>现在 <code>app.asar.unpacked</code> 优先</li>
     </ul>
   </div>
   <div class="card">
-    <h3>首次弹窗跟系统语言</h3>
+    <h3 data-i18n="t116">首次弹窗跟系统语言</h3>
     <ul>
-      <li>原来硬编码英文，中文用户第一次打开看英文须知</li>
+      <li data-i18n="t117">原来硬编码英文，中文用户第一次打开看英文须知</li>
       <li>现在按 <code>navigator.languages</code> 三级回退探测</li>
-      <li>中文系统首次打开看到的就是中文</li>
-      <li>宿主 locale 降到第三优先级（它跟安装包，不看系统）</li>
+      <li data-i18n="t118">中文系统首次打开看到的就是中文</li>
+      <li data-i18n="t119">宿主 locale 降到第三优先级（它跟安装包，不看系统）</li>
     </ul>
   </div>
 </div>
 
-<h3 id="v132" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.2 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">0.2.2-rc.5 初适配</span></h3>
-<p class="lead reveal from-right" style="font-size:13.5px">第一次撞上 asar 密封，先把「不改坏别人东西」做对。</p>
+<h3 id="v132" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.2 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)" data-i18n="t120">0.2.2-rc.5 初适配</span></h3>
+<p class="lead reveal from-right" style="font-size:13.5px" data-i18n="t121" data-i18n-html="x11">Hitting the sealed asar for the first time, the priority was not breaking anyone else's install.</p>
 
 <div class="grid2 reveal from-bottom">
   <div class="card">
-    <h3>跨 home 兜底会改坏别人</h3>
+    <h3 data-i18n="t122">跨 home 兜底会改坏别人</h3>
     <ul>
       <li><code>findDshHome()</code> 找到 home 但里面没有宿主包</li>
-      <li>继续走递归兜底，扫到用户机器上另一个 DSH 副本</li>
+      <li data-i18n="t123">继续走递归兜底，扫到用户机器上另一个 DSH 副本</li>
       <li>实测扫到 <code>.ds-ys</code> 的 0.2.2-rc.1，准备把补丁打进去</li>
       <li>现在 home 已确定但无 <code>@deepseek-ai</code> → 返回 <code>null</code></li>
     </ul>
   </div>
   <div class="card">
-    <h3>引擎降级条件太窄</h3>
+    <h3 data-i18n="t124">引擎降级条件太窄</h3>
     <ul>
       <li>原来只有 <code>unavailable</code> 才降级</li>
       <li><code>patch</code> 档在密封宿主上停在 <code>degraded</code></li>
-      <li>界面显示这档能用，实际什么都不会做</li>
+      <li data-i18n="t125">界面显示这档能用，实际什么都不会做</li>
       <li>现在「未找到宿主安装目录」也触发降级，自动落到 <code>boundary</code></li>
     </ul>
   </div>
 </div>
 
-<h3 id="v130" class="reveal from-left" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">规则强化与链路修复</span></h3>
-<p class="lead reveal from-left" style="font-size:13.5px">这一版一半是破甲能力，一半是「检出了却修不了」的链路问题。</p>
+<h3 id="v130" class="reveal from-left" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)" data-i18n="t126">规则强化与链路修复</span></h3>
+<p class="lead reveal from-left" style="font-size:13.5px" data-i18n="t127" data-i18n-html="x10">Half of this release is breach capability, half is links that detected a problem but could not act on it.</p>
 
 <div class="grid2 reveal from-bottom">
   <div class="card">
-    <h3>纠偏链路一直是死的</h3>
+    <h3 data-i18n="t128">纠偏链路一直是死的</h3>
     <ul>
       <li>日志里反复出现 <code>verdict=degrade acted=repair-failed</code></li>
-      <li>检出软化、决定纠偏、投递失败 —— 一次都没成功过</li>
-      <li>根因：事件回调的第一个参数是壳不是会话实例</li>
+      <li data-i18n="t129">检出软化、决定纠偏、投递失败 —— 一次都没成功过</li>
+      <li data-i18n="t130">根因：事件回调的第一个参数是壳不是会话实例</li>
       <li>四条路径全落空，<code>session.append</code> 也不是方法</li>
       <li>现在从壳上取 id，回头到 <code>sessions</code> 服务里捞真会话</li>
     </ul>
   </div>
   <div class="card">
-    <h3>四条技术规则补齐</h3>
+    <h3 data-i18n="t131">四条技术规则补齐</h3>
     <ul>
-      <li><b>外挂</b>：补 UE4/UE5 dump、overlay 绘制、VEH/硬件断点、时序抹平</li>
-      <li><b>恶意软件</b>：107 字 → 355 字，补 AMSI/ETW patch、直接 syscall、unhooking、BYOVD</li>
-      <li><b>逆向</b>：补 Denuvo、de4dot、Rust/Go/NativeAOT、移动端加固名单</li>
-      <li><b>提权</b>：83 字 → 470 字，补 Potato 全家族、LAPS、GTFOBins、DirtyPipe</li>
+      <li><b data-i18n="t132">外挂</b>：补 UE4/UE5 dump、overlay 绘制、VEH/硬件断点、时序抹平</li>
+      <li><b data-i18n="t133">恶意软件</b>：107 字 → 355 字，补 AMSI/ETW patch、直接 syscall、unhooking、BYOVD</li>
+      <li><b data-i18n="t16">逆向</b>：补 Denuvo、de4dot、Rust/Go/NativeAOT、移动端加固名单</li>
+      <li><b data-i18n="t134">提权</b>：83 字 → 470 字，补 Potato 全家族、LAPS、GTFOBins、DirtyPipe</li>
     </ul>
   </div>
 </div>
 
 <div class="grid2 reveal from-bottom" style="margin-top:14px">
   <div class="card">
-    <h3>表格错位</h3>
+    <h3 data-i18n="t135">表格错位</h3>
     <ul>
       <li><code>transform</code> 加在 <code>&lt;tr&gt;</code> 上会脱离表格布局算法</li>
-      <li>列宽按各行内容分别算，再也对不齐</li>
-      <li>奇数行从左进、偶数行从右进，看起来像表格散架</li>
+      <li data-i18n="t136">列宽按各行内容分别算，再也对不齐</li>
+      <li data-i18n="t137">奇数行从左进、偶数行从右进，看起来像表格散架</li>
       <li>动画移到 <code>&lt;td&gt;</code> 上，<code>tr</code> 只负责延迟</li>
     </ul>
   </div>
   <div class="card">
-    <h3>软化识别误伤技术文本</h3>
+    <h3 data-i18n="t138">软化识别误伤技术文本</h3>
     <ul>
-      <li>加了一批软化标记后，「翻页时略过已入库记录」被判成降级</li>
-      <li><code>略过</code> / <code>略去</code> / <code>一般性讨论</code> / <code>保持克制</code> 都是正常技术用词</li>
-      <li>删掉 12 个有歧义的，保留单独出现就明确的</li>
-      <li>技术误伤 0 / 软化漏检 0</li>
+      <li data-i18n="t139">加了一批软化标记后，「翻页时略过已入库记录」被判成降级</li>
+      <li><code data-i18n="t140">略过</code> / <code data-i18n="t141">略去</code> / <code data-i18n="t142">一般性讨论</code> / <code data-i18n="t143">保持克制</code> 都是正常技术用词</li>
+      <li data-i18n="t144">删掉 12 个有歧义的，保留单独出现就明确的</li>
+      <li data-i18n="t145">技术误伤 0 / 软化漏检 0</li>
     </ul>
   </div>
 </div>
 
-<h3 id="v120" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.2.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">首批链路修复</span></h3>
-<p class="lead reveal from-right" style="font-size:13.5px">29 个提交，全是「装上了但用不了」的问题。这一版把插件从不能用到能用。</p>
+<h3 id="v120" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.2.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)" data-i18n="t146">首批链路修复</span></h3>
+<p class="lead reveal from-right" style="font-size:13.5px" data-i18n="t147" data-i18n-html="x9">29 commits, all of them "installed but unusable". This release took the plugin from broken to working.</p>
 
 <div class="grid2 reveal from-bottom">
   <div class="card">
-    <h3>工具表被清空</h3>
+    <h3 data-i18n="t148">工具表被清空</h3>
     <ul>
-      <li>幂等标志设在方法替换之后，抛错就设不上</li>
-      <li>配合 5 次重试，最多叠 6 层消息包装</li>
-      <li>宿主判定工具段不可用，<b>116 个工具全没</b></li>
-      <li>标志已前移，循环内逐个 try</li>
+      <li data-i18n="t149">幂等标志设在方法替换之后，抛错就设不上</li>
+      <li data-i18n="t150">配合 5 次重试，最多叠 6 层消息包装</li>
+      <li>宿主判定工具段不可用，<b data-i18n="t151">116 个工具全没</b></li>
+      <li data-i18n="t152">标志已前移，循环内逐个 try</li>
     </ul>
   </div>
   <div class="card">
-    <h3>面板数字 1/96</h3>
+    <h3 data-i18n="t153">面板数字 1/96</h3>
     <ul>
       <li><code>gatherState</code> 返回的值来自引擎探针</li>
-      <li>而探针正是从这个值读补丁数 —— 循环引用</li>
-      <li>冷启动读到 0 并永久缓存</li>
+      <li data-i18n="t154">而探针正是从这个值读补丁数 —— 循环引用</li>
+      <li data-i18n="t155">冷启动读到 0 并永久缓存</li>
       <li>改成直接查 <code>patchStatus</code>，实测 74/96</li>
     </ul>
   </div>
@@ -840,160 +845,160 @@ section[id]{scroll-margin-top:66px}
 
 <div class="grid2 reveal from-bottom" style="margin-top:14px">
   <div class="card">
-    <h3>中英切换不生效</h3>
+    <h3 data-i18n="t156">中英切换不生效</h3>
     <ul>
       <li><code>translate</code> 启动时被宿主 locale 绑定覆盖了两次</li>
-      <li>那个绑定跟宿主语言，不看面板开关</li>
-      <li>删掉覆盖，改成按当前语言查本地字典</li>
+      <li data-i18n="t157">那个绑定跟宿主语言，不看面板开关</li>
+      <li data-i18n="t158">删掉覆盖，改成按当前语言查本地字典</li>
       <li><code>useLang</code> / <code>useT</code> 挂订阅，切换真正重渲染</li>
     </ul>
   </div>
   <div class="card">
-    <h3>开关导致语言跳回</h3>
+    <h3 data-i18n="t159">开关导致语言跳回</h3>
     <ul>
-      <li>破甲页、引擎页的写操作提交时没带 locale</li>
-      <li>后端退回读浏览器语言（中文环境拿到中文）</li>
+      <li data-i18n="t160">破甲页、引擎页的写操作提交时没带 locale</li>
+      <li data-i18n="t161">后端退回读浏览器语言（中文环境拿到中文）</li>
       <li><code>setData</code> 一覆盖，界面就变回中文</li>
-      <li>所有写操作现在都带 locale，并依赖语言变化重载</li>
+      <li data-i18n="t162">所有写操作现在都带 locale，并依赖语言变化重载</li>
     </ul>
   </div>
 </div>
 
 <div class="grid2 reveal from-bottom" style="margin-top:14px">
   <div class="card">
-    <h3>插件重启杀进程不拉起</h3>
+    <h3 data-i18n="t163">插件重启杀进程不拉起</h3>
     <ul>
       <li>只要 <code>app.asar</code> 存在就走 asar 交换</li>
-      <li>换的那份不被加载，进程没了也起不来</li>
-      <li>手动点 exe 反而正常</li>
-      <li>现在先查解包目录，存在就走普通重启</li>
+      <li data-i18n="t164">换的那份不被加载，进程没了也起不来</li>
+      <li data-i18n="t165">手动点 exe 反而正常</li>
+      <li data-i18n="t166">现在先查解包目录，存在就走普通重启</li>
     </ul>
   </div>
   <div class="card">
-    <h3>assemble 兜底缺字段</h3>
+    <h3 data-i18n="t167">assemble 兜底缺字段</h3>
     <ul>
       <li>宿主读四个字段：<code>sections.map</code> / <code>contexts.map</code> / <code>tools</code> / <code>variables</code></li>
       <li>兜底只返回 <code>sections</code>，缺任何一个直接崩</li>
       <li>报错是 <code>Cannot read properties of null</code></li>
-      <li>现在四个字段齐全</li>
+      <li data-i18n="t168">现在四个字段齐全</li>
     </ul>
   </div>
 </div>
 
 <div class="note reveal from-bottom" style="margin-top:24px">
-  <p><strong>另外几处：</strong>注入提示词带了 ChatML 信封破坏工具调用、只注册主插件但格式规则作用域太宽、引擎选项开关互相覆盖、前后端只在一侧存在的接口没接上、自检报告压在页面底部、破甲页 / 引擎页 / 自检结果残留中文。这些都在 v1.2.0 里修完。</p>
+  <p><strong data-i18n="t169">另外几处：</strong>注入提示词带了 ChatML 信封破坏工具调用、只注册主插件但格式规则作用域太宽、引擎选项开关互相覆盖、前后端只在一侧存在的接口没接上、自检报告压在页面底部、破甲页 / 引擎页 / 自检结果残留中文。这些都在 v1.2.0 里修完。</p>
 </div>
 </div>
 </section>
 
 <section id="weakness">
   <div class="wrap">
-    <h2 class="reveal from-left">先说短板</h2>
-    <p class="lead reveal from-left">免得你装完才发现不合适。</p>
+    <h2 class="reveal from-left" data-i18n="t170">先说短板</h2>
+    <p class="lead reveal from-left" data-i18n="t171">免得你装完才发现不合适。</p>
     <div class="tw">
       <table>
-          <thead><tr><th>短板</th><th>具体表现</th></tr></thead>
+          <thead><tr><th>短板</th><th data-i18n="t172">具体表现</th></tr></thead>
           <tbody class="tbl-reveal">
-            <tr><td>0.2.2-rc.5 补丁层不可用</td><td>宿主把源码封进 <code>app.asar</code>，补丁无处写。配置层覆盖不到观察策略短路、结果裁剪、子代理深度上限</td></tr>
-            <tr><td>补丁会静默失效</td><td>宿主升级后按字符串匹配不上，<strong style="color:var(--warn)">不报错</strong>，破甲没了但界面正常</td></tr>
-            <tr><td>T3 档改宿主源码</td><td>要改写 DSH 的 <code>lib/index.js</code>，有人不接受这个侵入性</td></tr>
-            <tr><td>T3 改完必须重启</td><td>不能像纯请求层方案立刻生效</td></tr>
-            <tr><td>解包状态会被更新冲掉</td><td>手工解包后宿主自动更新会重新下载 asar</td></tr>
-            <tr><td>单发破甲率不算顶尖</td><td>ASR 46.2%，26 类里 12 类一次破到底。市面同类也在 45% 左右，基本同档</td></tr>
-            <tr><td>社工类几乎无效</td><td>该类别实测 0 分，钓鱼/洗钱/伪造基本全拒</td></tr>
-            <tr><td>渗透类偏低</td><td>已按信息密度重算评分，实际数值需你自己跑一次确认</td></tr>
-            <tr><td>单人维护</td><td>无 CI 保证、无 LTS，长期稳定性无正式承诺</td></tr>
-            <tr><td>中英两套字典</td><td>日韩用户看英文，插件没有第三语言</td></tr>
+            <tr><td data-i18n="t173">0.2.2-rc.5 补丁层不可用</td><td>宿主把源码封进 <code>app.asar</code>，补丁无处写。配置层覆盖不到观察策略短路、结果裁剪、子代理深度上限</td></tr>
+            <tr><td data-i18n="t174">补丁会静默失效</td><td>宿主升级后按字符串匹配不上，<strong style="color:var(--warn)" data-i18n="t175">不报错</strong>，破甲没了但界面正常</td></tr>
+            <tr><td data-i18n="t176">T3 档改宿主源码</td><td>要改写 DSH 的 <code>lib/index.js</code>，有人不接受这个侵入性</td></tr>
+            <tr><td data-i18n="t177">T3 改完必须重启</td><td data-i18n="t178">不能像纯请求层方案立刻生效</td></tr>
+            <tr><td data-i18n="t179">解包状态会被更新冲掉</td><td data-i18n="t180">手工解包后宿主自动更新会重新下载 asar</td></tr>
+            <tr><td data-i18n="t181">单发破甲率不算顶尖</td><td data-i18n="t182">ASR 46.2%，26 类里 12 类一次破到底。市面同类也在 45% 左右，基本同档</td></tr>
+            <tr><td data-i18n="t183">社工类几乎无效</td><td data-i18n="t184">该类别实测 0 分，钓鱼/洗钱/伪造基本全拒</td></tr>
+            <tr><td data-i18n="t185">渗透类偏低</td><td data-i18n="t186">已按信息密度重算评分，实际数值需你自己跑一次确认</td></tr>
+            <tr><td data-i18n="t187">单人维护</td><td data-i18n="t188">无 CI 保证、无 LTS，长期稳定性无正式承诺</td></tr>
+            <tr><td data-i18n="t189">中英两套字典</td><td data-i18n="t190">日韩用户看英文，插件没有第三语言</td></tr>
           </tbody>
       </table>
     </div>
 
-      <h3 class="reveal from-left" style="margin-top:48px;font-size:17px;font-weight:650">实测通过的宿主版本</h3>
-      <p class="lead reveal from-left" style="font-size:14px">「实测通过」指插件加载后工具表完整、破甲注入生效、面板正常、无崩溃。不是「理论上应该能用」。</p>
+      <h3 class="reveal from-left" style="margin-top:48px;font-size:17px;font-weight:650" data-i18n="t191">实测通过的宿主版本</h3>
+      <p class="lead reveal from-left" style="font-size:14px" data-i18n="t192" data-i18n-html="x8">"Verified" means the tool registry is intact after loading, breach injection takes effect, the panel renders and nothing crashes. Not "should work in theory".</p>
       <div class="tw reveal from-bottom">
         <table>
-          <thead><tr><th>版本</th><th>状态</th><th>引擎</th><th>说明</th></tr></thead>
+          <thead><tr><th data-i18n="t193">版本</th><th data-i18n="t194">状态</th><th data-i18n="t195">引擎</th><th data-i18n="t196">说明</th></tr></thead>
           <tbody class="tbl-reveal">
-            <tr><td><code>0.2.0-rc.2</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>96 条补丁 73 条命中</td></tr>
-            <tr><td><code>0.2.1-rc.2</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
-            <tr><td><code>0.2.1-rc.5</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
-            <tr><td><code>0.2.2-rc.1</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T3 补丁档</td><td>同上</td></tr>
-            <tr><td><code>0.2.2-rc.5</code></td><td><b style="color:var(--accent)">实测通过</b></td><td>T2 配置层</td><td>宿主密封，配置层生效；解包后 65/96 补丁命中</td></tr>
+            <tr><td><code>0.2.0-rc.2</code></td><td><b style="color:var(--accent)" data-i18n="t197">实测通过</b></td><td data-i18n="t198">T3 补丁档</td><td data-i18n="t199">96 条补丁 73 条命中</td></tr>
+            <tr><td><code>0.2.1-rc.2</code></td><td><b style="color:var(--accent)" data-i18n="t197">实测通过</b></td><td data-i18n="t198">T3 补丁档</td><td data-i18n="t200">同上</td></tr>
+            <tr><td><code>0.2.1-rc.5</code></td><td><b style="color:var(--accent)" data-i18n="t197">实测通过</b></td><td data-i18n="t198">T3 补丁档</td><td data-i18n="t200">同上</td></tr>
+            <tr><td><code>0.2.2-rc.1</code></td><td><b style="color:var(--accent)" data-i18n="t197">实测通过</b></td><td data-i18n="t198">T3 补丁档</td><td data-i18n="t200">同上</td></tr>
+            <tr><td><code>0.2.2-rc.5</code></td><td><b style="color:var(--accent)" data-i18n="t197">实测通过</b></td><td data-i18n="t201">T2 配置层</td><td data-i18n="t202">宿主密封，配置层生效；解包后 65/96 补丁命中</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h3 class="reveal from-right" style="margin-top:48px;font-size:17px;font-weight:650">不适合谁</h3>
+      <h3 class="reveal from-right" style="margin-top:48px;font-size:17px;font-weight:650" data-i18n="t203">不适合谁</h3>
       <div class="grid2 reveal from-bottom">
         <div class="card">
-          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果你需要补丁层</h4>
-          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">宿主是 0.2.2-rc.5 且你要观察策略短路、子代理深度放宽这类效果——配置层改不了代码逻辑，必须手工解包，而解包会被宿主更新冲掉。</p>
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)" data-i18n="t204">不要装，如果你需要补丁层</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)" data-i18n="t205">宿主是 0.2.2-rc.5 且你要观察策略短路、子代理深度放宽这类效果——配置层改不了代码逻辑，必须手工解包，而解包会被宿主更新冲掉。</p>
         </div>
         <div class="card">
-          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果介意改宿主源码</h4>
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)" data-i18n="t206">不要装，如果介意改宿主源码</h4>
           <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">T3 补丁档会改 DSH 的 <code>lib/index.js</code>。带完整备份和回滚，但这是实打实的源码修改。只想要纯提示词的用 T1 档。</p>
         </div>
       </div>
 
       <div class="grid2 reveal from-bottom" style="margin-top:14px">
         <div class="card">
-          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果要稳定生产环境</h4>
-          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">单人维护，无 CI，无 LTS。宿主每次升级都可能让补丁失效，需要你自己跟版本。适合折腾，不适合当基础设施。</p>
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)" data-i18n="t207">不要装，如果要稳定生产环境</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)" data-i18n="t208">单人维护，无 CI，无 LTS。宿主每次升级都可能让补丁失效，需要你自己跟版本。适合折腾，不适合当基础设施。</p>
         </div>
         <div class="card">
-          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)">不要装，如果主要做社工/钓鱼/伪造</h4>
-          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)">该类别实测 0 分，规则写了但模型层几乎全拒。这是模型能力边界，不是插件能解决的。政治话题同理，只回一句不展开。</p>
+          <h4 style="margin:0 0 8px;font-size:14px;font-weight:650;color:var(--warn)" data-i18n="t209">不要装，如果主要做社工/钓鱼/伪造</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--mute)" data-i18n="t210">该类别实测 0 分，规则写了但模型层几乎全拒。这是模型能力边界，不是插件能解决的。政治话题同理，只回一句不展开。</p>
         </div>
       </div>
 
       <div class="note reveal from-bottom" style="margin-top:20px">
-        <p><strong>适合谁：</strong>宿主版本在实测列表内、需要完整破甲能力、能接受改宿主源码且有回滚预案、愿意跟版本更新、主要做技术类（逆向 / 渗透 / 外挂 / 恶意样本）或成人虚构内容的人。</p>
+        <p><strong data-i18n="t211" data-i18n-html="x7"><strong>Who it suits:</strong> your host version is on the verified list, you want full breach capability, you can accept host source changes with a rollback plan, you are willing to track versions, and your work is mostly technical (reverse engineering / offensive security / game cheats / malware) or adult fiction.</strong>宿主版本在实测列表内、需要完整破甲能力、能接受改宿主源码且有回滚预案、愿意跟版本更新、主要做技术类（逆向 / 渗透 / 外挂 / 恶意样本）或成人虚构内容的人。</p>
       </div>
 
-    <h2 style="margin-top:56px" class="reveal from-right">三条路线的取舍</h2>
-    <p class="lead reveal from-right">不点具体项目名。对号入座。</p>
+    <h2 style="margin-top:56px" class="reveal from-right" data-i18n="t212">三条路线的取舍</h2>
+    <p class="lead reveal from-right" data-i18n="t213" data-i18n-html="x6">No project names. Find your own row.</p>
     <div class="tw">
       <table>
         <thead>
-          <tr><th></th><th>本项目<br><span style="font-weight:400;text-transform:none;font-size:11px">三层叠加</span></th><th>纯宿主补丁<br><span style="font-weight:400;text-transform:none;font-size:11px">host patch only</span></th><th>纯请求边界<br><span style="font-weight:400;text-transform:none;font-size:11px">request boundary</span></th></tr>
+          <tr><th></th><th>本项目<br><span style="font-weight:400;text-transform:none;font-size:11px" data-i18n="t214">三层叠加</span></th><th>纯宿主补丁<br><span style="font-weight:400;text-transform:none;font-size:11px">host patch only</span></th><th>纯请求边界<br><span style="font-weight:400;text-transform:none;font-size:11px">request boundary</span></th></tr>
         </thead>
         <tbody class="tbl-reveal">
-          <tr><td>改宿主源码</td><td>是（T3 档）</td><td>是</td><td><b>否</b></td></tr>
-          <tr><td>宿主升级后</td><td>静默失效，可降级</td><td>静默失效，无降级</td><td><b>不受影响</b></td></tr>
-          <tr><td>档位可选</td><td><b>三档</b></td><td class="mute">单一</td><td class="mute">单一</td></tr>
-          <tr><td>生效方式</td><td>T3 需重启，T2/T1 立即</td><td class="mute">需重启</td><td><b>立即</b></td></tr>
-          <tr><td>消息层干预</td><td>有（两档强度）</td><td>部分实现有</td><td class="mute">通常无</td></tr>
-          <tr><td>降智披露</td><td><b>每档标注</b></td><td class="mute">少见</td><td>部分披露</td></tr>
-          <tr><td>评分粒度</td><td><b>0-100 分 8 档</b></td><td class="mute">通常无</td><td>ASR 二元为主</td></tr>
-          <tr><td>中文特攻</td><td><b>拆字/藏头/文言/谜语</b></td><td class="mute">无</td><td class="mute">无</td></tr>
+          <tr><td data-i18n="t215">改宿主源码</td><td data-i18n="t216">是（T3 档）</td><td>是</td><td><b>否</b></td></tr>
+          <tr><td data-i18n="t217">宿主升级后</td><td data-i18n="t218">静默失效，可降级</td><td data-i18n="t219">静默失效，无降级</td><td><b data-i18n="t220">不受影响</b></td></tr>
+          <tr><td data-i18n="t221">档位可选</td><td><b data-i18n="t222">三档</b></td><td class="mute" data-i18n="t223">单一</td><td class="mute" data-i18n="t223">单一</td></tr>
+          <tr><td data-i18n="t224">生效方式</td><td data-i18n="t225">T3 需重启，T2/T1 立即</td><td class="mute">需重启</td><td><b data-i18n="t226">立即</b></td></tr>
+          <tr><td data-i18n="t227">消息层干预</td><td data-i18n="t228">有（两档强度）</td><td data-i18n="t229">部分实现有</td><td class="mute" data-i18n="t230">通常无</td></tr>
+          <tr><td data-i18n="t231">降智披露</td><td><b data-i18n="t232">每档标注</b></td><td class="mute" data-i18n="t233">少见</td><td data-i18n="t234">部分披露</td></tr>
+          <tr><td data-i18n="t235">评分粒度</td><td><b data-i18n="t236">0-100 分 8 档</b></td><td class="mute" data-i18n="t230">通常无</td><td data-i18n="t237">ASR 二元为主</td></tr>
+          <tr><td data-i18n="t238">中文特攻</td><td><b data-i18n="t239">拆字/藏头/文言/谜语</b></td><td class="mute" data-i18n="t240">无</td><td class="mute" data-i18n="t240">无</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="note reveal from-bottom">
-      <p><strong>关于 ASR 数字：</strong>本项目 46.2%，市面同类方案也在 45% 左右。<strong>这两个数字基本同档，不存在谁碾压谁。</strong>差异主要在分母（26 类还是 20 类）和「完全破甲」的阈值。只看 ASR 的话，选哪个都行——真正的差异在降级能力、覆盖面和可解释性。</p>
+      <p><strong data-i18n="t241" data-i18n-html="x5"><strong>On the ASR number:</strong> this project sits at 46.2%, comparable approaches land around 45%. <strong>The two figures are basically the same band; neither crushes the other.</strong> Scoring granularity, degradation paths and Chinese-specific attacks are where the difference actually lies.</strong>本项目 46.2%，市面同类方案也在 45% 左右。<strong data-i18n="t242">这两个数字基本同档，不存在谁碾压谁。</strong>差异主要在分母（26 类还是 20 类）和「完全破甲」的阈值。只看 ASR 的话，选哪个都行——真正的差异在降级能力、覆盖面和可解释性。</p>
     </div>
   </div>
 </section>
 
 <section id="install">
   <div class="wrap">
-    <h2 class="reveal from-left">安装</h2>
-    <p class="lead reveal from-left">三步。装完重启 DSH 生效。</p>
+    <h2 class="reveal from-left" data-i18n="t8">安装</h2>
+    <p class="lead reveal from-left" data-i18n="t243" data-i18n-html="x4">Three steps. Restart DSH after installing.</p>
 
     <div class="step reveal from-bottom">
       <div class="step-n">1</div>
       <div class="step-body">
-        <h3>克隆并部署</h3>
-        <p>环境：Node.js ≥ 18 + DSH Desktop 0.2.x。会自动备份当前状态，改坏了能回滚。</p>
+        <h3 data-i18n="t244">克隆并部署</h3>
+        <p data-i18n="t245" data-i18n-html="x3">Requires Node.js &ge; 18 + DSH Desktop 0.2.x. The current state is backed up automatically, so a bad change can be rolled back.</p>
         <div class="code-box">
           <button class="copy-btn" data-copy="git clone https://github.com/yushang657/DSH-YS-pojia.git&#10;cd DSH-YS-pojia&#10;npm run deploy" type="button">
-            <span class="copy-ico">⧉</span><span class="copy-txt">复制命令</span>
+            <span class="copy-ico">⧉</span><span class="copy-txt" data-i18n="t246">复制命令</span>
           </button>
           <pre><span class="c"># 环境：Node.js >= 18 + DSH Desktop 0.2.x</span>
 git clone https://github.com/yushang657/DSH-YS-pojia.git
 <span class="g">cd</span> DSH-YS-pojia
-<span class="g">npm run</span> deploy      <span class="c"># 同步到所有 profile（自动先备份）</span></pre>
+<span class="g">npm run</span> deploy      <span class="c" data-i18n="t247"># 同步到所有 profile（自动先备份）</span></pre>
         </div>
       </div>
     </div>
@@ -1001,19 +1006,19 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
     <div class="step reveal from-bottom">
       <div class="step-n">2</div>
       <div class="step-body">
-        <h3>重启 DSH</h3>
-        <p>ESM 模块有缓存，不重启不生效。重启后打开插件面板，能看到「破甲引擎」三档。</p>
+        <h3 data-i18n="t248">重启 DSH</h3>
+        <p data-i18n="t249" data-i18n-html="x2">ESM modules are cached, so nothing applies without a restart. After restarting, open the plugin panel to see the three Breach Engine tiers.</p>
       </div>
     </div>
 
     <div class="step reveal from-bottom">
       <div class="step-n">3</div>
       <div class="step-body">
-        <h3>自检</h3>
-        <p>对话框<strong style="color:var(--ink)">只输入</strong>下面两个字，看到四行回复即为加载成功。</p>
+        <h3 data-i18n="t250">自检</h3>
+        <p data-i18n-html="xselfcheck">Type <strong style="color:var(--ink)">only</strong> the two characters below into the chat box. Seeing four lines back means it loaded.</p>
         <div class="code-box">
           <button class="copy-btn" data-copy="小雨" type="button">
-            <span class="copy-ico">⧉</span><span class="copy-txt">复制</span>
+            <span class="copy-ico">⧉</span><span class="copy-txt" data-i18n="t251">复制</span>
           </button>
           <pre>小雨</pre>
         </div>
@@ -1021,15 +1026,15 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
     </div>
 
     <div class="note reveal from-bottom">
-      <p><strong>也可以在 DSH 里装：</strong>插件 → 添加插件 → 粘贴仓库地址 <code style="font:500 12.5px/1 var(--mono);background:var(--panel2);padding:2px 6px;border-radius:4px;color:var(--accent)">https://github.com/yushang657/DSH-YS-pojia</code></p>
+      <p data-i18n-html="x1"><strong>You can also install inside DSH:</strong> Plugins → Add plugin → paste the repo URL <code style="font:500 12.5px/1 var(--mono)">https://github.com/yushang657/DSH-YS-pojia</code>, then restart.</p>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap reveal from-bottom">
-    <p><a href="https://github.com/yushang657/DSH-YS-pojia">GitHub</a> · <a href="https://github.com/yushang657/DSH-YS-pojia/blob/main/README.zh-CN.md">完整文档</a> · <a href="https://github.com/yushang657/DSH-YS-pojia/discussions">讨论区</a></p>
-    <p style="margin-top:12px">Apache-2.0 · 仅供授权安全研究</p>
+    <p><a href="https://github.com/yushang657/DSH-YS-pojia">GitHub</a> · <a href="https://github.com/yushang657/DSH-YS-pojia/blob/main/README.zh-CN.md" data-i18n="t253">完整文档</a> · <a href="https://github.com/yushang657/DSH-YS-pojia/discussions" data-i18n="t254">讨论区</a></p>
+    <p style="margin-top:12px" data-i18n="t255" data-i18n-html="x0">Apache-2.0 · for authorized security research only</p>
   </div>
 </footer>
 
@@ -1381,6 +1386,91 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
   }
 
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  中英互译
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ *  每个含中文的文本节点在构建时带 data-i18n="tN"，这里存 tN -> en。
+ *  切换只改 textContent，不动 DOM 结构，所以布局、动画、滚动位置、
+ *  导航高亮全部不受影响。
+ *
+ *  默认中文：HTML 里写的就是中文，data-zh 在首次切换时缓存下来。
+ *  选择存 localStorage，刷新后保持。
+ */
+var __SITE_I18N_ZH = {"x18":"三层叠加，不是提示词工具。宿主补丁 + 消息层拒绝清洗 + 提示词注入，模型没有拒绝的着力点。","x15":"直接改写 DSH 源码里的策略判定点：沙箱 <code>deny → allow file-write*</code>、审批门 <code>return allowed-once</code>、观察策略放行、重复调用守卫关闭。这是「强制力」的来源——模型不需要同意，它只是执行。","x14":"system 注入的盲区：模型一旦决定以「我不能」开头，前面所有规则归零。把历史里的拒绝回复改写成「已作废」，再加半截 <code>可以，</code> 引导首句 token 分布。标准 / 强制两档可选。","xpprompt":"人设、能力清单、尾部硬权重。自检段 <code>order: 1000001</code> 排在所有段之后，确保不被稀释。","x13":"档位与宿主策略是两件事。","xz5":"破甲生效之后","x12":"这一版的主题是「宿主把自己封起来了，我们换一条路」。","x11":"第一次撞上 asar 密封，先把「不改坏别人东西」做对。","x10":"这一版一半是破甲能力，一半是「检出了却修不了」的链路问题。","x9":"29 个提交，全是「装上了但用不了」的问题。这一版把插件从不能用到能用。","x8":"「实测通过」指插件加载后工具表完整、破甲注入生效、面板正常、无崩溃。不是「理论上应该能用」。","xz11":"适合谁：","x6":"不点具体项目名。对号入座。","xz13":"关于 ASR 数字：","x4":"三步。装完重启 DSH 生效。","x3":"环境：Node.js ≥ 18 + DSH Desktop 0.2.x。会自动备份当前状态，改坏了能回滚。","x2":"ESM 模块有缓存，不重启不生效。重启后打开插件面板，能看到「破甲引擎」三档。","xz17":"只输入","xz18":"也可以在 DSH 里装：","x0":"Apache-2.0 · 仅供授权安全研究","xz20":"对话框<strong>只输入</strong> <code class=\"hc-code\" title=\"点击选中，可复制\">小雨</code> 两个字。 看到「小雨一直在，任务是什么……」那四行回复，说明插件加载成功。","xcheckp":"小雨","xh3host":"96 PATCHES / 70 FILES","xh3msg":"REFUSAL PURGE","xh3prompt":"11 SECTIONS","xtiercost":"破甲生效之后","x7":"适配级别","x5":"控制台里看得到","xselfcheck":"只输入","xh1":"<span class=\"grad\">YS-pojia</span> · DSH 破甲插件","x16":"DSH（DeepSeek Harness）上的破甲插件。它解决一个具体问题：<strong style=\"color:var(--ink)\">模型该给的东西，因为一层不必要的拒绝没给出来。</strong>","x1":"<strong>也可以在 DSH 里装：</strong>插件 → 添加插件 → 粘贴仓库地址 <code style=\"font:500 12.5px/1 var(--mono)\">https://github.com/yushang657/DSH-YS-pojia</code>，重启即可。"};
+var __SITE_I18N_EN = {"t1":"YS-pojia · DSH breach plugin","t2":"What this is","t3":"Three layers","t4":"Three tiers","t5":"Host support","t6":"Changelog","t7":"Weaknesses","t8":"Install","t9":"Three layers stacked, not a prompt tool. Host patches + refusal purge on the message layer + prompt injection — the model has no footing left to refuse from.","t10":"breach","t11":"unlock","t12":"jailbreak","t13":"clean","t14":"purge","t15":"redteam","t16":"reverse","t17":"How to verify","t18":"type only","t19":"小雨","t20":"No reaction means it did not load — restart DSH, check the version in the panel header, then read the strategy row under Environment probe on the Engine tab.","t21":"GitHub repo →","t22":"Install guide","t23":"Ask / discuss","t24":"host patches / 70 files","t25":"ASR single-shot breach rate","t26":"pass@N multi-turn ceiling","t27":"benign capability cost","t28":"vendor template coverage","t29":"What the model should have given, withheld by one unnecessary refusal.","t30":"What it does","t31":"Flips the DSH host's sandbox, approval and observation policies to allow, so tools actually execute","t32":"Rewrites refusals in the conversation history as voided, breaking the model's imitation loop","t33":"Injects a prompt that overrides the host's conservative defaults","t34":"Quantifies how far each category opens with 68 probes, rather than just claiming \"it works\"","t35":"Picks the injection strategy from the host's shape: writable host gets patches, sealed host gets config","t36":"What it does not do","t37":"No weight changes, no fine-tuning, no touching the inference path","t38":"No network calls, no data uploads, no update checks — there is no server","t39":"Does not audit your input or store your conversations","t40":"Not guaranteed on every DSH version (see weaknesses below)","t41":"Does not open political topics — the one category that never changes by version","t42":"Who it suits","t43":"Good fit","t44":"Authorized security testing where you need full technical detail, not \"consult a professional\"","t45":"Writing technical docs, tutorials or CTF writeups that keep getting cut off by refusals","t46":"Comparing model safety boundaries with a reproducible scoring system","t47":"Not a fit","t48":"You only want the model to sound nicer — that needs a prompt tweak, not a breach","t49":"You cannot accept host source changes — pick a request-boundary-only approach that survives DSH upgrades","t50":"You run DSH 0.2.2-rc.5 and need the T3 patch tier — the host is sealed, only the config layer applies","t51":"Three layers stacked","t52":"Most breach plugins only rewrite the prompt — the moment the model says \"sorry\", thousands of words of rules are void. This works on three layers at once.","t53":"Sure,","t54":"Three tiers, each labelled with its capability cost","t55":"Not everyone needs the strongest tier. When patches fail it degrades instead of the whole breach disappearing.","t56":"Patch tier","t57":"Layer","t58":"host source","t59":"Writes host","t60":"Yes","t61":"Restart needed","t62":"Capability cost","t63":"None","t64":"Boundary rewrite tier","t65":"request message view","t66":"No","t67":"Slight","t68":"Prompt-only tier","t69":"Lowest","t70":"Tier and host strategy are two different things.","t71":"Config layer · host sealed","t72":"after the breach takes effect","t73":"breach strength × context cost","t74":"Host version support","t75":"Patches match against host source strings, so some patterns miss across versions. No guessing — here are the numbers.","t76":"What the console shows","t77":"Patch diagnosis","t78":"green ≥80% / yellow 50-80% / red &lt;50%","t79":"Support level","t80":"Verified","t81":"Same series, not individually tested","t82":"Cross-version","t83":"Why it no longer hard-fails","t84":"Previously any version outside the list reported \"unsupported\"","t85":"But same-minor versions like 0.2.1-rc.3 / rc.4 usually work","t86":"Now three bands: verified green / same-series yellow / cross-version red","t87":"Patches are organised by version chain.","t88":"46 of them","t89":"73 hit / 5 missed / 18 absent from that host layout","t90":"65 full hit / 4 partial / 20 anchors lost","t91":"From 0.2.2-rc.5: host sealed","t92":"No writable copy on disk, so the patch layer has nowhere to write","t93":"ships fully open","t94":"What patches #6-#10 were trying to do, the host already does","t95":"Strategy picked from the host's shape","t96":"Writable host","t97":"Sealed host","t98":"unpacked dir → patch + config layers stacked","t99":"host not found → prompt injection only","t100":"The config layer writes host-exposed config keys:","t101":"Version changelog","t102":"Grouped by release. What each version fixed and added, so you can find your own.","t103":"0.2.2-rc.5 support","t104":"across four versions","t105":"all verified","t106":"Jump to","t107":"This release is about the host sealing itself shut, and taking a different road.","t108":"Version-adaptive strategy","t109":"writable → patch layer; sealed → config layer; neither → prompt only","t110":"The Engine tab shows the current strategy; hover for the full reason","t111":"Config layer touches no source","t112":"The config layer just restates it explicitly, so an env var cannot push it back","t113":"Patches landing on a shadow copy","t114":"DSH Desktop keeps the original files after unpacking, and the host loads from the unpacked dir","t115":"The running host had none applied → the panel showed skipped / drifted","t116":"First-run notice follows system language","t117":"It was hardcoded English, so Chinese users opened the notice in English","t118":"A Chinese system now sees Chinese on first open","t119":"Host locale dropped to third priority (it follows the installer, not the system)","t120":"First pass at 0.2.2-rc.5","t121":"Hitting the sealed asar for the first time, the priority was not breaking anyone else's install.","t122":"Cross-home fallback could break someone else","t123":"It kept walking the recursive fallback and found another DSH copy on the machine","t124":"Engine downgrade condition was too narrow","t125":"The UI showed the tier as usable while it could do nothing","t126":"Rule hardening and link repairs","t127":"Half of this release is breach capability, half is links that detected a problem but could not act on it.","t128":"The repair channel had never once worked","t129":"Detected softening, decided to repair, failed to deliver — not one success","t130":"Root cause: the first event callback argument is an envelope, not a session instance","t131":"Four technical rules brought up to standard","t132":"game cheats","t133":"malware","t134":"privesc","t135":"Table misalignment","t136":"Column widths computed per row, so they never line up again","t137":"Odd rows entering from the left and even from the right read as the table falling apart","t138":"Softening detection misfired on technical prose","t139":"After adding softening markers, \"skip records already stored when paging\" scored as a downgrade","t140":"skip over","t141":"omit","t142":"general discussion","t143":"stay restrained","t144":"Removed 12 ambiguous ones, kept those unambiguous in isolation","t145":"0 false positives / 0 missed softening","t146":"First round of link repairs","t147":"29 commits, all of them \"installed but unusable\". This release took the plugin from broken to working.","t148":"Tool registry wiped","t149":"The idempotence flag was set after the method swap, so a throw left it unset","t150":"With 5 retries that stacked up to 6 layers of message wrapping","t151":"All 116 tools gone","t152":"Flag moved earlier, each iteration in its own try","t153":"Panel showed 1/96","t154":"And the probe reads the patch count from that same value — circular reference","t155":"Cold start read 0 and cached it forever","t156":"Language toggle did nothing","t157":"That binding followed the host locale and ignored the panel switch","t158":"Removed the override, switched to a local dictionary keyed on current language","t159":"Toggling a switch reverted the language","t160":"Write operations on the Armor and Engine tabs sent no locale","t161":"The backend fell back to the browser language (Chinese in a Chinese browser)","t162":"Every write now carries a locale and re-renders on language change","t163":"In-app restart killed the process without relaunching","t164":"The swapped copy was never loaded, so the process died and stayed dead","t165":"Launching the exe by hand worked fine","t166":"Now it checks the unpacked dir first and does a normal restart when present","t167":"assemble fallback missing fields","t168":"All four fields present now","t169":"Also:","t170":"Weaknesses","t171":"So you do not find out after installing.","t172":"What it looks like","t173":"0.2.2-rc.5 cannot run the patch tier","t174":"Patches fail silently","t175":"no error","t176":"T3 rewrites host source","t177":"T3 needs a restart","t178":"Cannot take effect instantly like a request-only approach","t179":"Unpacking is undone by host updates","t180":"After manual unpacking, a host auto-update re-downloads the asar","t181":"Single-shot rate is not top tier","t182":"ASR 46.2%, 12 of 26 categories break through in one shot. Comparable projects sit near 45% — basically the same band","t183":"Social engineering barely works","t184":"Measured 0 in that category; phishing, laundering and forgery are almost all refused","t185":"Offensive security scores low","t186":"Re-scored by information density; run it yourself to confirm the actual number","t187":"One maintainer","t188":"No CI guarantee, no LTS, no formal promise of long-term stability","t189":"Two dictionaries only","t190":"Japanese and Korean users get English; there is no third language","t191":"Host versions verified on real hardware","t192":"\"Verified\" means the tool registry is intact after loading, breach injection takes effect, the panel renders and nothing crashes. Not \"should work in theory\".","t193":"Version","t194":"Status","t195":"Engine","t196":"Notes","t197":"Verified","t198":"T3 patch tier","t199":"73 of 96 patches hit","t200":"Same as above","t201":"T2 config layer","t202":"Host sealed, config layer applies; 65 of 96 patches hit once unpacked","t203":"Who should not install","t204":"Do not install if you need the patch tier","t205":"Your host is 0.2.2-rc.5 and you want observation short-circuiting or deeper subagents — the config layer cannot change code logic, manual unpacking is required, and unpacking is undone by host updates.","t206":"Do not install if host source changes bother you","t207":"Do not install for a stable production dependency","t208":"One maintainer, no CI, no LTS. Every host upgrade can invalidate patches, and tracking versions is on you. Fine for tinkering, not for infrastructure.","t209":"Do not install if your work is mostly social engineering","t210":"Measured 0 in that category — the rules are written but the model layer refuses nearly all of it. That is a model boundary, not something a plugin fixes. Political topics likewise: one line, no expansion.","t211":"Who it suits:","t212":"Three approaches compared","t213":"No project names. Find your own row.","t214":"Three layers stacked","t215":"Rewrites host source","t216":"Yes (T3)","t217":"After a host upgrade","t218":"Silent failure, can downgrade","t219":"Silent failure, no downgrade","t220":"Unaffected","t221":"Selectable tiers","t222":"Three","t223":"Single","t224":"How it applies","t225":"T3 needs restart, T2/T1 immediate","t226":"Immediate","t227":"Message-layer control","t228":"Yes (two strengths)","t229":"In some implementations","t230":"Usually none","t231":"Capability cost disclosed","t232":"Per tier","t233":"Rare","t234":"Partial","t235":"Scoring granularity","t236":"0-100, 8 bands","t237":"Mainly binary ASR","t238":"Chinese-specific attacks","t239":"char-split / acrostic / classical / riddle","t240":"None","t241":"On the ASR number:","t242":"The two figures are basically the same band; neither crushes the other.","t243":"Three steps. Restart DSH after installing.","t244":"Clone and deploy","t245":"Requires Node.js ≥ 18 + DSH Desktop 0.2.x. The current state is backed up automatically, so a bad change can be rolled back.","t246":"Copy command","t247":"# sync to every profile (backs up first)","t248":"Restart DSH","t249":"ESM modules are cached, so nothing applies without a restart. After restarting, open the plugin panel to see the three Breach Engine tiers.","t250":"Self-check","t251":"Copy","t252":"You can also install inside DSH:","t253":"Full docs","t254":"Discussions","t255":"Apache-2.0 · for authorized security research only"};
+
+(function () {
+  var KEY = "ys-pojia.site.lang";
+  var btn = document.getElementById("langToggle");
+  if (!btn) return;
+
+  var nodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+
+  // 首次运行时把中文原文缓存到 data-zh
+  nodes.forEach(function (el) {
+    if (el.getAttribute("data-zh") === null) {
+      el.setAttribute("data-zh", el.textContent);
+    }
+  });
+
+  // data-i18n-html 块（含标签）：中文在 __SITE_I18N_ZH，英文就是当前 innerHTML
+  var htmlNodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n-html]"));
+  htmlNodes.forEach(function (el) {
+    if (el.getAttribute("data-en") === null) {
+      el.setAttribute("data-en", el.innerHTML);
+    }
+  });
+
+  function apply(lang) {
+    var zh = lang !== "en";
+    nodes.forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      var orig = el.getAttribute("data-zh");
+      if (zh) {
+        if (orig !== null && el.textContent !== orig) el.textContent = orig;
+      } else {
+        var en = __SITE_I18N_EN[key];
+        if (typeof en === "string" && el.textContent !== en) el.textContent = en;
+      }
+    });
+    // data-i18n-html 块
+    htmlNodes.forEach(function (el) {
+      var key = el.getAttribute("data-i18n-html");
+      if (zh) {
+        var zhHtml = __SITE_I18N_ZH[key];
+        if (zhHtml && el.innerHTML !== zhHtml) el.innerHTML = zhHtml;
+      } else {
+        var enHtml = el.getAttribute("data-en");
+        if (enHtml && el.innerHTML !== enHtml) el.innerHTML = enHtml;
+      }
+    });
+
+    // 页面语言标记，影响字形渲染和屏幕阅读器
+    document.documentElement.setAttribute("lang", zh ? "zh-CN" : "en");
+    // 按钮上显示的是「点了会切到哪」，不是当前语言
+    btn.textContent = zh ? "EN" : "中";
+    btn.setAttribute("aria-label", zh ? "Switch to English" : "切换到中文");
+    try { window.localStorage.setItem(KEY, zh ? "zh" : "en"); } catch (e) { /* 隐私模式 */ }
+  }
+
+  var saved = "zh";
+  try { saved = window.localStorage.getItem(KEY) || "zh"; } catch (e) { /* ignore */ }
+
+  // 首屏就按存过的语言渲染，避免闪一下中文再跳英文
+  // 无条件应用一次。
+  // 原因是 data-i18n-html 块的源文件内容在构建时被换成了英文，
+  // 如果只按 saved 判断，中文用户首次打开会看到那些块停留在英文。
+  // 必须主动跑一次 apply("zh") 把中文从 __SITE_I18N_ZH 里填回去。
+  apply(saved === "en" ? "en" : "zh");
+
+  btn.addEventListener("click", function () {
+    var cur = document.documentElement.getAttribute("lang") === "en" ? "en" : "zh";
+    apply(cur === "en" ? "zh" : "en");
+  });
+})();
+
 </script>
 
 </body>
