@@ -87,6 +87,27 @@ h1 .grad{background:linear-gradient(100deg,var(--ink) 20%,var(--accent) 55%,#7fd
 .kw b{font:500 12px/1 var(--mono);padding:7px 12px;border:1px solid var(--line);border-radius:999px;
   color:var(--mute);background:var(--panel);transition:all .28s var(--ease);cursor:default}
 .kw b:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px) scale(1.04)}
+.kw b{user-select:text;-webkit-user-select:text}
+
+/* ── 首屏自检提示 ─────────────────────────────────────────────────────────
+   放在 hero 里而不是只写在安装章节：多数人是先看首屏决定要不要装，
+   装完回来找「怎么验证」又得滚到最底。这里给最短的一条判据。 */
+.hero-check{margin-top:26px;display:flex;gap:14px;align-items:flex-start;
+  padding:14px 18px;border:1px solid var(--line);border-radius:12px;
+  background:linear-gradient(180deg,var(--panel),transparent);position:relative}
+.hc-label{flex-shrink:0;font:600 11px/1.6 var(--sans);letter-spacing:.06em;
+  color:var(--accent);text-transform:uppercase;padding-top:1px}
+.hc-body{flex:1;min-width:0}
+.hc-body p{margin:0;font-size:13.5px;line-height:1.7;color:var(--mute)}
+.hc-body p strong{color:var(--ink);font-weight:600}
+.hc-code{font:600 13px/1 var(--mono);color:var(--accent);
+  background:var(--accent-soft);border:1px solid rgba(109,191,140,.32);
+  border-radius:6px;padding:3px 8px;cursor:text;user-select:all;-webkit-user-select:all}
+.hc-sub{margin-top:6px!important;font-size:12.5px!important;color:var(--faint)!important}
+@media(max-width:640px){
+  .hero-check{flex-direction:column;gap:8px;padding:12px 14px}
+  .hc-body p{font-size:13px}
+}
 
 .cta{margin-top:36px;display:flex;flex-wrap:wrap;gap:12px;position:relative}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;
@@ -405,7 +426,16 @@ section[id]{scroll-margin-top:66px}
       <b>破甲</b><b>解限</b><b>越狱</b><b>清理</b><b>清洗</b><b>红队</b><b>逆向</b>
       <b>breach</b><b>jailbreak</b><b>unlock</b><b>redteam</b>
     </div>
-    <div class="cta reveal from-bottom">
+<div class="hero-check reveal from-bottom">
+  <div class="hc-label">装完怎么验</div>
+  <div class="hc-body">
+    <p>对话框<strong>只输入</strong> <code class="hc-code" title="点击选中，可复制">小雨</code> 两个字。
+    看到「小雨一直在，任务是什么……」那四行回复，说明插件加载成功。</p>
+    <p class="hc-sub">没反应就是没加载 —— 重启 DSH，确认面板顶栏显示版本号，再到引擎页看「环境探测」里的策略行。</p>
+  </div>
+</div>
+
+<div class="cta reveal from-bottom">
       <a class="btn primary" href="https://github.com/yushang657/DSH-YS-pojia">GitHub 仓库 →</a>
       <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia#安装">安装说明</a>
       <a class="btn ghost" href="https://github.com/yushang657/DSH-YS-pojia/discussions">提问 / 讨论</a>
@@ -1290,17 +1320,10 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
     } catch (e) { return false; }
   }
 
-  /* ── 8. 关键词点击复制 ── */
-  document.querySelectorAll(".kw b").forEach(function(tag){
-    tag.style.cursor = "pointer";
-    tag.addEventListener("click", function(){
-      var t = tag.textContent;
-      if (navigator.clipboard) navigator.clipboard.writeText(t).catch(function(){});
-      var old = tag.textContent;
-      tag.textContent = "已复制";
-      setTimeout(function(){ tag.textContent = old; }, 900);
-    });
-  });
+/* ── 8. 关键词标签：纯展示 ──
+   之前点一下就把词写进剪贴板，还把标签文字临时改成「已复制」——
+   读者想选中某个词搜索时反而被抢了剪贴板。现在只保留 hover 效果，
+   文字可选可复制，行为跟普通文本一致。 */
 })();
 </script>
 
