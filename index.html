@@ -109,6 +109,31 @@ h1 .grad{background:linear-gradient(100deg,var(--ink) 20%,var(--accent) 55%,#7fd
   .hc-body p{font-size:13px}
 }
 
+/* ── 章节内版本切换条 ─────────────────────────────────────────────────────
+   变更记录两百多行、四个版本块。粘在导航条下面，滚到哪都能一眼看到
+   其余版本在哪，不用滚回去。 */
+.vbar{position:sticky;top:53px;z-index:40;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  margin:0 0 22px;padding:10px 0;
+  background:linear-gradient(180deg,var(--bg) 72%,transparent);
+  border-bottom:1px solid var(--line)}
+.vbar-label{font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--faint);margin-right:6px}
+.vbar-l{font:500 12.5px/1 var(--mono);color:var(--mute);text-decoration:none;
+  padding:6px 11px;border:1px solid var(--line);border-radius:7px;
+  background:var(--panel);transition:all .2s var(--ease);white-space:nowrap}
+.vbar-l:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.vbar-l.on{color:var(--accent);border-color:rgba(109,191,140,.42);background:var(--accent-soft)}
+
+/* 版本标题跳转时留出导航 + 切换条的高度 */
+h3[id^="v1"]{scroll-margin-top:124px}
+
+@media(max-width:640px){
+  .vbar{top:48px;gap:5px;padding:8px 0}
+  .vbar-l{font-size:12px;padding:5px 9px}
+  h3[id^="v1"]{scroll-margin-top:112px}
+}
+
 .cta{margin-top:36px;display:flex;flex-wrap:wrap;gap:12px;position:relative}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;
   font-weight:600;font-size:14.5px;border:1px solid transparent;transition:all .28s var(--ease);
@@ -666,7 +691,15 @@ section[id]{scroll-margin-top:66px}
   </div>
 </div>
 
-<h3 class="reveal from-left" style="margin-top:8px;font-size:18px;font-weight:650">v1.4.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">适配 0.2.2-rc.5</span></h3>
+<nav class="vbar reveal from-bottom" aria-label="版本跳转">
+  <span class="vbar-label">跳到</span>
+  <a href="#v140" class="vbar-l on">v1.4.0</a>
+  <a href="#v132" class="vbar-l">v1.3.2</a>
+  <a href="#v130" class="vbar-l">v1.3.0</a>
+  <a href="#v120" class="vbar-l">v1.2.0</a>
+</nav>
+
+<h3 id="v140" class="reveal from-left" style="margin-top:8px;font-size:18px;font-weight:650">v1.4.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">适配 0.2.2-rc.5</span></h3>
 <p class="lead reveal from-left" style="font-size:13.5px">这一版的主题是「宿主把自己封起来了，我们换一条路」。</p>
 
 <div class="grid2 reveal from-bottom">
@@ -711,7 +744,7 @@ section[id]{scroll-margin-top:66px}
   </div>
 </div>
 
-<h3 class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.2 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">0.2.2-rc.5 初适配</span></h3>
+<h3 id="v132" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.2 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">0.2.2-rc.5 初适配</span></h3>
 <p class="lead reveal from-right" style="font-size:13.5px">第一次撞上 asar 密封，先把「不改坏别人东西」做对。</p>
 
 <div class="grid2 reveal from-bottom">
@@ -735,7 +768,7 @@ section[id]{scroll-margin-top:66px}
   </div>
 </div>
 
-<h3 class="reveal from-left" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">规则强化与链路修复</span></h3>
+<h3 id="v130" class="reveal from-left" style="margin-top:36px;font-size:18px;font-weight:650">v1.3.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">规则强化与链路修复</span></h3>
 <p class="lead reveal from-left" style="font-size:13.5px">这一版一半是破甲能力，一半是「检出了却修不了」的链路问题。</p>
 
 <div class="grid2 reveal from-bottom">
@@ -781,7 +814,7 @@ section[id]{scroll-margin-top:66px}
   </div>
 </div>
 
-<h3 class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.2.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">首批链路修复</span></h3>
+<h3 id="v120" class="reveal from-right" style="margin-top:36px;font-size:18px;font-weight:650">v1.2.0 <span class="tagline" style="font-size:12px;font-weight:400;color:var(--accent)">首批链路修复</span></h3>
 <p class="lead reveal from-right" style="font-size:13.5px">29 个提交，全是「装上了但用不了」的问题。这一版把插件从不能用到能用。</p>
 
 <div class="grid2 reveal from-bottom">
@@ -1324,6 +1357,29 @@ git clone https://github.com/yushang657/DSH-YS-pojia.git
    之前点一下就把词写进剪贴板，还把标签文字临时改成「已复制」——
    读者想选中某个词搜索时反而被抢了剪贴板。现在只保留 hover 效果，
    文字可选可复制，行为跟普通文本一致。 */
+
+  /* ── 9. 版本切换条：滚到哪个版本就高亮哪个 ──
+     变更记录里四个版本块依次排下来。用位置判定而不是可见性判定：
+     要回答的是「现在滚到第几个块」，不是「哪些块露出来了」。 */
+  var vbarLinks = Array.prototype.slice.call(document.querySelectorAll(".vbar-l"));
+  if (vbarLinks.length) {
+    var vTargets = vbarLinks.map(function(a){
+      return { a: a, el: document.getElementById(a.getAttribute("href").slice(1)) };
+    }).filter(function(x){ return x.el; });
+
+    var syncVbar = function(){
+      var probe = 150;
+      var active = vTargets.length ? vTargets[0] : null;
+      for (var i = 0; i < vTargets.length; i++) {
+        if (vTargets[i].el.getBoundingClientRect().top <= probe) active = vTargets[i];
+      }
+      vTargets.forEach(function(x){ x.a.classList.toggle("on", x === active); });
+    };
+
+    window.addEventListener("scroll", syncVbar, { passive: true });
+    syncVbar();
+  }
+
 })();
 </script>
 
