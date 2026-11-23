@@ -516,6 +516,34 @@ footer a:hover{color:var(--accent)}
       <p><strong>补丁按版本链组织。</strong>96 条里有 <strong>46 条</strong>带 2 个以上 pattern，各自对应不同宿主版本形态。命中 1 个就能打上，命中数越多说明版本定位越准。<br>
       实测 0.2.0-rc.2：<strong>73 已命中 / 5 失配 / 18 宿主布局里本来没有</strong>。</p>
     </div>
+
+    <div class="grid2 reveal from-bottom" style="margin-top:14px">
+      <div class="card">
+        <h3>0.2.2-rc.5 起：宿主密封</h3>
+        <ul>
+          <li>整棵 <code>@deepseek-ai</code> 树封进 <code>resources/app.asar</code>（199 MB）</li>
+          <li>磁盘上没有可写副本，补丁层物理上无处落笔</li>
+          <li>但这一版<b>出厂就是全开</b>：<code>danger-full-access</code> + 审批 <code>never</code></li>
+          <li>补丁 #6-#10 想做的事，宿主自己已经做了</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>按宿主形态自动选策略</h3>
+        <ul>
+          <li><b>可写宿主</b>（0.2.0 / 0.2.1 / 0.2.2-rc.1）→ 补丁层</li>
+          <li><b>密封宿主</b>（0.2.2-rc.5）→ 配置层，不改一个字节源码</li>
+          <li>解包目录 → 补丁 + 配置双层叠加</li>
+          <li>找不到宿主 → 只注入提示词</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note reveal from-bottom">
+      <p><strong>配置层写的是宿主暴露的配置项：</strong><code>sandbox-policy.mode</code>、<code>approval.policy</code>、
+      <code>tool-result-pruner.thresholdChars</code>、<code>repeat-tool-reminder.maxRetries</code>。
+      引擎页「环境探测」会显示当前策略，例如 <code>配置层 · 宿主已密封</code>，悬停看完整原因——
+      不会出现「开关亮着但实际没做」的错觉。</p>
+    </div>
   </div>
 </section>
 
