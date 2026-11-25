@@ -96,8 +96,7 @@ export function forceEngine(dshHome) {
  * 把规则集开到全量。
  *
  * 写 `enabled` 数组而不是 `present`：`armor-store.js` 用 enabled 决定
- * 实际启用的规则，「25 条全在 present 里但 enabled 只有 24 条」是它的默认态
- *（第 10 条政治规则默认关）。无限制模式要的就是把这条也打开。
+ * 实际启用的规则，只改 present 不生效。无限制模式要的就是全量打开。
  *
  * 规则 id 从磁盘上现有的 armor-rules.json 里读，读不到就问 rule-catalog。
  * 不在这里硬编码 1..25——规则会随版本增删，硬编码会漏掉新规则。

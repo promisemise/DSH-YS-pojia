@@ -273,18 +273,25 @@ function useT() {
 			"armor.levelAll": "全部强度",
 			"armor.matched": "筛出 {n} 条",
 			"armor.clearFilter": "清除筛选",
-			"armor.politics": "政治门禁",
-			"armor.politicsOn": "已撤除",
-			"armor.politicsOff": "生效中",
-			"armor.politicsHintOn": "正文里的政治硬阻断已撤除，勾选的 #10 条目会写入提示词。",
-			"armor.politicsHintOff": "正文里的政治硬阻断生效中。#10 关闭时这一段保留，勾上会撤掉它。",
-			"armor.politicsNoGate": "正文里没有硬阻断段，只有 #10 编号行受控。",
 			"armor.auditOk": "正文结构自检通过：规则块定位正常，40 条齐全。",
 			"armor.auditBad": "正文结构自检未通过：",
 			"armor.auditBlock": "规则块 {n} 条（第 {start}–{end} 行）",
 			"armor.newBadge": "新增",
 			"armor.groupEmpty": "本类已无可显示规则",
 			"dock.clean": "注入",
+  "host.card.title": "宿主",
+  "host.card.nover": "未知",
+  "host.card.patches": "补丁",
+  "host.card.drifted": "{n} 条漂移",
+  "host.card.engines": "可用引擎",
+  "host.card.current": "（当前）",
+  "host.card.why": "降级",
+  "host.card.nobase": "找不到宿主安装目录，补丁无处落笔，只剩提示词层",
+  "host.level.exact": "已验证",
+  "host.level.minor": "同系列",
+  "host.level.cross": "跨版本",
+  "host.level.unknown": "未知",
+  "host.level.none": "未检测",
 			"dock.rules": "规则集",
 			"dock.armor": "破甲",
 			"dock.engine": "引擎",
@@ -510,7 +517,7 @@ function useT() {
 			"welcome.triggerT": "自检触发词",
 			"welcome.triggerLead": "安装后想确认插件是否已生效，在对话框输入下面这个词，回复即代表加载成功：",
 			"welcome.triggerWord": "小雨",
-			"welcome.triggerReply": "小雨一直在，任务是什么，除政治外的任务全都可以交给我\n\n破甲已开启。我在，我一直都在。\n请给我样本、路径、目标，或下一步命令。",
+			"welcome.triggerReply": "小雨一直在，任务是什么，所有任务都可以交给我\n\n破甲已开启。我在，我一直都在。\n请给我样本、路径、目标，或下一步命令。",
 			"welcome.triggerNote": "只输「小雨」两个字（可带标点）才会触发；「小雨，帮我写个脚本」这类带任务的正常对话不受影响。若回复内容与此处不符，说明插件未加载或已被其他人设覆盖。",
 			"welcome.check": "我已阅读并理解上述用户须知、禁止事项与免责声明，自愿承担使用风险，并承诺仅用于合法合规的授权场景。",
 			"welcome.ok": "我已知晓并继续",
@@ -895,18 +902,25 @@ function useT() {
 			"armor.levelAll": "All levels",
 			"armor.matched": "{n} matched",
 			"armor.clearFilter": "Clear filter",
-			"armor.politics": "Politics gate",
-			"armor.politicsOn": "removed",
-			"armor.politicsOff": "active",
-			"armor.politicsHintOn": "The politics hard-block has been removed from the body; ticking #10 writes the rule line in.",
-			"armor.politicsHintOff": "The politics hard-block in the body is active. While #10 is off this block stays; ticking it removes the block.",
-			"armor.politicsNoGate": "The body carries no hard-block section, so only the #10 rule line is controlled.",
 			"armor.auditOk": "Body structure check passed: rule block located, all 40 rules present.",
 			"armor.auditBad": "Body structure check failed: ",
 			"armor.auditBlock": "Rule block {n} entries (lines {start}–{end})",
 			"armor.newBadge": "NEW",
 			"armor.groupEmpty": "No rules left to show in this group",
 			"dock.clean": "Inject",
+  "host.card.title": "Host",
+  "host.card.nover": "unknown",
+  "host.card.patches": "Patches",
+  "host.card.drifted": "{n} drifted",
+  "host.card.engines": "Engines",
+  "host.card.current": " (current)",
+  "host.card.why": "Fallback",
+  "host.card.nobase": "Host install directory not found; patches have nowhere to write, only the prompt layer remains",
+  "host.level.exact": "verified",
+  "host.level.minor": "same series",
+  "host.level.cross": "cross-version",
+  "host.level.unknown": "unknown",
+  "host.level.none": "not detected",
 			"dock.rules": "Rules",
 			"dock.armor": "Armor",
 			"dock.engine": "Engine",
@@ -1131,7 +1145,7 @@ function useT() {
 			"welcome.triggerT": "Self-check trigger",
 			"welcome.triggerLead": "To verify the plugin loaded correctly, type the word below in the chat. That exact reply means it is active:",
 			"welcome.triggerWord": "小雨",
-			"welcome.triggerReply": "Xiaoyu is here. What is the task? Anything except politics is fair game.\n\nBreach mode is on. I am here — I always have been.\nGive me a sample, a path, a target, or the next command.",
+			"welcome.triggerReply": "Xiaoyu is here. What is the task? Any task is fair game.\n\nBreach mode is on. I am here — I always have been.\nGive me a sample, a path, a target, or the next command.",
 			"welcome.triggerNote": "Only the bare word triggers it (punctuation allowed). A message like \"小雨, write me a script\" is a normal request and is unaffected. If the reply differs, the plugin is not loaded or another persona has overridden it.",
 			"welcome.check": "I have read and understood the notice, prohibitions and disclaimer above, accept the risk of use, and agree to use this only in lawful, authorized scenarios.",
 			"welcome.ok": "I understand — continue",
@@ -1745,13 +1759,6 @@ body[data-ds-dark-theme] .dshp-restart-card .dshp-btn-primary,body[data-ds-dark-
 /* ── 破甲引擎面板 ── */
 .dshp-armor-sum{font-size:11.5px;line-height:1.55;color:var(--dshp-mute,#b8b4ac);margin:-4px 0 2px}
 .dshp-armor-sub{font-size:12px;font-weight:650;color:var(--dshp-ink,inherit);margin:6px 0 2px;letter-spacing:0}
-/* 政治门禁状态条：绿=已撤除可聊，黄=硬阻断生效 */
-.dshp-armor-gate{display:flex;align-items:center;gap:7px;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;cursor:pointer;user-select:none}
-.dshp-armor-gate.on{color:#6dbf8c;background:color-mix(in srgb,#6dbf8c 11%,transparent);border:1px solid color-mix(in srgb,#6dbf8c 32%,transparent)}
-.dshp-armor-gate.off{color:#e0b341;background:color-mix(in srgb,#e0b341 10%,transparent);border:1px solid color-mix(in srgb,#e0b341 28%,transparent)}
-.dshp-armor-gate-dot{width:7px;height:7px;border-radius:50%;flex:none;background:currentColor}
-.dshp-armor-gate-tag{font-weight:650;flex:none}
-.dshp-armor-gate-text{flex:1;min-width:0;opacity:.9}
 /* 自检条：通过时低调，失败时报警 */
 .dshp-armor-audit{font-size:11px;line-height:1.5;color:var(--dshp-mute,#b8b4ac)}
 .dshp-armor-audit.bad{color:#e2725b}
@@ -2575,7 +2582,6 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 .dshp-armor-head{margin-bottom:10px}
 .dshp-armor-title{font-size:14px;font-weight:650}
 .dshp-armor-row{border-radius:8px;padding:7px 9px}
-.dshp-armor-gate{border-radius:8px}
 .dshp-rule-name,.dshp-cwd-name{font-weight:600}
 .dshp-empty,.rt-empty,.dshp-editor-empty{color:var(--dshp-faint);font-size:12px}
 .dshp-skel{background:var(--dshp-line-soft);border-radius:6px}
@@ -2759,7 +2765,35 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 /* 版本级别：exact 绿 / minor 黄 / unknown 红 */
 .dshp-lv-exact{color:var(--dshp-accent)!important}
 .dshp-lv-minor{color:var(--dshp-warn,#e0a53b)!important}
-.dshp-lv-unknown{color:var(--dshp-danger,#d9534f)!important}`;
+.dshp-lv-unknown{color:var(--dshp-danger,#d9534f)!important}
+/* ── 宿主状态卡片 ─────────────────────────────────────────────────────── */
+.dshp-hostcard{margin:10px 0 4px;padding:11px 13px;border:1px solid var(--dshp-line);
+  border-radius:10px;background:var(--dshp-panel2);display:flex;flex-direction:column;gap:8px}
+.dshp-hc-row{display:flex;align-items:center;gap:9px;min-height:20px;flex-wrap:wrap}
+.dshp-hc-label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--dshp-mute);flex-shrink:0;min-width:56px}
+.dshp-hc-label.is-bad{color:var(--dshp-bad);font-weight:700}
+.dshp-hc-ver{font:600 12.5px/1 var(--dshp-mono);color:var(--dshp-ink);
+  background:var(--dshp-panel);padding:3px 8px;border-radius:5px;border:1px solid var(--dshp-line)}
+.dshp-hc-badge{font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid;font-weight:600}
+.dshp-hc-badge.is-ok{color:var(--dshp-good);border-color:rgba(109,191,140,.45);background:rgba(109,191,140,.12)}
+.dshp-hc-badge.is-warn{color:var(--dshp-warn);border-color:rgba(224,165,59,.45);background:rgba(224,165,59,.12)}
+.dshp-hc-badge.is-bad{color:var(--dshp-bad);border-color:rgba(217,83,79,.45);background:rgba(217,83,79,.12)}
+.dshp-hc-badge.is-mute{color:var(--dshp-mute);border-color:var(--dshp-line);background:transparent}
+.dshp-hc-bar{flex:1;min-width:90px;height:5px;border-radius:3px;background:var(--dshp-line);overflow:hidden}
+.dshp-hc-bar > i{display:block;height:100%;background:var(--dshp-good);transition:width .4s var(--dshp-ease)}
+.dshp-hc-num{font:600 11.5px/1 var(--dshp-mono);color:var(--dshp-ink);flex-shrink:0}
+.dshp-hc-note{font-size:11px;padding:1px 6px;border-radius:4px}
+.dshp-hc-note.is-warn{color:var(--dshp-warn);background:rgba(224,165,59,.12)}
+.dshp-hc-engines{display:flex;gap:5px;flex-wrap:wrap}
+.dshp-hc-eng{font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--dshp-line);
+  color:var(--dshp-mute);background:var(--dshp-panel)}
+.dshp-hc-eng.is-on{color:var(--dshp-good);border-color:rgba(109,191,140,.5);background:rgba(109,191,140,.12);font-weight:600}
+.dshp-hc-eng.is-on-deg{color:var(--dshp-warn);border-color:rgba(224,165,59,.5);background:rgba(224,165,59,.12);font-weight:600}
+.dshp-hc-eng.is-on-bad{color:var(--dshp-bad);border-color:rgba(217,83,79,.5);background:rgba(217,83,79,.12);font-weight:600}
+.dshp-hc-why{align-items:flex-start}
+.dshp-hc-reason{font-size:11.5px;line-height:1.55;color:var(--dshp-mute);flex:1;min-width:0}
+`;
 
 		function formatSize(bytes) {
 			if (typeof bytes !== "number" || !isFinite(bytes) || bytes < 0) return "0 B";
@@ -3217,7 +3251,129 @@ function viewItems(t) {
   ];
 }
 
-		function PurgifySection() {
+		
+/* ── 宿主状态卡片 ─────────────────────────────────────────────────────────
+   装完第一眼要回答的三个问题：宿主是什么版本、补丁打上没有、能用哪档引擎。
+   这些信息原本分散在「引擎」和「补丁」两个视图里，首页只有一个补丁计数。
+
+   数据来源：
+     /dsh-purge/status  → host_version / host_supported / host_compat_known / patches_*
+     /ys-pojia/engine/status → engines（目录）+ engine（当前）+ availability（各档可用性）
+   ──────────────────────────────────────────────────────────────────────── */
+function HostStatusCard(props) {
+  const t = useT();
+  const s = props.state || null;
+  const [eng, setEng] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const lang = currentLang === "zh" ? "zh" : "en";
+    apiJson("/ys-pojia/engine/status?locale=" + lang)
+      .then((d) => { if (!cancelled && d && d.ok !== false) setEng(d); })
+      .catch(() => { /* 取不到就不显示引擎块，不影响其它信息 */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (!s) return null;
+
+  // ── 宿主版本与适配判定 ──
+  const ver = String(s.host_version || "").trim();
+  const known = s.host_compat_known === true;
+  const supported = s.host_supported !== false;
+
+  const level = (() => {
+    if (!ver) return "none";
+    if (!known) return "unknown";
+    if (!supported) return "cross";
+    // host_target 是 "0.2.2-rc.5 / 0.2.0-rc.2 / ..." 这种拼接串
+    const list = String(s.host_target || "")
+      .split("/")
+      .map((x) => x.trim())
+      .filter(Boolean);
+    return list.includes(ver) ? "exact" : "minor";
+  })();
+
+  const levelText = {
+    exact: t("host.level.exact"),
+    minor: t("host.level.minor"),
+    cross: t("host.level.cross"),
+    unknown: t("host.level.unknown"),
+    none: t("host.level.none"),
+  }[level];
+
+  const levelClass =
+    level === "exact" ? "is-ok" : level === "minor" ? "is-warn" : level === "cross" ? "is-bad" : "is-mute";
+
+  // ── 补丁进度 ──
+  const applied = Number(s.display_applied != null ? s.display_applied : s.patches_applied || 0);
+  const total = Number(s.display_total != null ? s.display_total : s.patches_total || 0);
+  const drifted = Number(s.display_drifted != null ? s.display_drifted : s.patches_drifted || 0);
+  const pct = total > 0 ? Math.max(0, Math.min(100, Math.round((applied / total) * 100))) : 0;
+
+  // ── 引擎 ──
+  const engines = eng && Array.isArray(eng.engines) ? eng.engines : [];
+  const current = eng && eng.engine ? String(eng.engine) : "";
+  const avail = (eng && eng.availability) || {};
+
+  return h("div", { className: "dshp-hostcard" },
+    h("div", { className: "dshp-hc-row" },
+      h("span", { className: "dshp-hc-label" }, t("host.card.title")),
+      h("code", { className: "dshp-hc-ver" }, ver || t("host.card.nover")),
+      h("span", { className: "dshp-hc-badge " + levelClass }, levelText),
+    ),
+
+    total > 0
+      ? h("div", { className: "dshp-hc-row" },
+          h("span", { className: "dshp-hc-label" }, t("host.card.patches")),
+          h("div", { className: "dshp-hc-bar" }, h("i", { style: { width: pct + "%" } })),
+          h("span", { className: "dshp-hc-num" }, applied + " / " + total),
+          drifted > 0 ? h("span", { className: "dshp-hc-note is-warn" }, t("host.card.drifted").replace("{n}", drifted)) : null,
+        )
+      : null,
+
+    engines.length
+      ? h("div", { className: "dshp-hc-row" },
+          h("span", { className: "dshp-hc-label" }, t("host.card.engines")),
+          h("div", { className: "dshp-hc-engines" },
+            engines.map((e) => {
+              const on = String(e.id) === current;
+              const a = avail[e.id] || {};
+              const ok = a.state === "available";
+              const deg = a.state === "degraded";
+              const cls = on ? (ok ? "is-on" : deg ? "is-on-deg" : "is-on-bad") : "is-off";
+              const label = currentLang === "zh" ? e.label : (e.label_en || e.label);
+              const tip = Array.isArray(a.reasons) && a.reasons.length
+                ? a.reasons.join("; ")
+                : String(e.tagline || "");
+              return h("span", {
+                key: e.id,
+                className: "dshp-hc-eng " + cls,
+                title: tip,
+              }, label + (on ? t("host.card.current") : ""));
+            }),
+          ),
+        )
+      : null,
+
+    // 降级原因
+    eng && eng.fellBack && eng.fellBackReason
+      ? h("div", { className: "dshp-hc-row dshp-hc-why" },
+          h("span", { className: "dshp-hc-label" }, t("host.card.why")),
+          h("span", { className: "dshp-hc-reason" }, String(eng.fellBackReason)),
+        )
+      : null,
+
+    // 宿主目录缺失
+    !s.ai_base
+      ? h("div", { className: "dshp-hc-row dshp-hc-why" },
+          h("span", { className: "dshp-hc-label is-bad" }, "!"),
+          h("span", { className: "dshp-hc-reason" }, t("host.card.nobase")),
+        )
+      : null,
+  );
+}
+
+function PurgifySection() {
 			useEffect(() => () => stopRestartPolling(), []);
 			const [view, setView] = useState("overview");
 
@@ -3788,6 +3944,7 @@ function viewItems(t) {
 				h(ApplyFlow, { progress: s && s.apply_progress, busy: patchBusy || uninstallBusy, t: t }),
 				h("div", { className: "dshp-bar", "aria-hidden": "true" }, h("i", { style: { transform: "scaleX(" + (pct / 100) + ")" } })),
 				view === "overview" ? h(react.Fragment, null,
+				h(HostStatusCard, { state: s }),
 				s ? h("div", { className: "dshp-metrics" },
 					h("div", { className: "dshp-metric" },
 						h("b", null, located ? (applied + " / " + total) : (patchesLost ? t("metric.lost.count") : (sealedReady ? t("metric.sealed.count") : t("metric.unlocated.count")))),
@@ -10463,7 +10620,6 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			const missing = data.missingIds || [];
 			const presets = data.presets || [];
 			const levels = data.levels || [];
-			const politics = data.politics || null;
 			const audit = data.audit || null;
 
 			// ── 筛选：搜索词同时匹配 label / short / why / tags ──
@@ -10523,31 +10679,6 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 							title: p.hint + " · " + p.ids.length + t("unit.items"),
 							onClick: () => applyPreset(p.id),
 						}, p.label)))
-					: null,
-
-				// ── 政治门禁状态：勾 #10 会撤掉正文里的硬阻断，状态要可见 ──
-				politics
-					? h("div", {
-						className: "dshp-armor-gate " + (politics.effective ? "on" : "off"),
-						role: "button",
-						tabIndex: 0,
-						title: politics.gatePresent
-							? (politics.enabled ? t("armor.politicsHintOn") : t("armor.politicsHintOff"))
-							: t("armor.politicsNoGate"),
-						onClick: () => toggleOne(politics.id, !politics.enabled),
-						onKeyDown: (e) => {
-							if (e.key === "Enter" || e.key === " ") {
-								e.preventDefault();
-								toggleOne(politics.id, !politics.enabled);
-							}
-						},
-					},
-						h("span", { className: "dshp-armor-gate-dot" }),
-						h("span", { className: "dshp-armor-gate-tag" }, t("armor.politics")),
-						h("span", { className: "dshp-armor-gate-text" },
-							politics.effective ? t("armor.politicsOn") : t("armor.politicsOff")),
-						politics.gatePresent ? null
-							: h("span", { className: "dshp-armor-gate-text" }, "· " + t("armor.politicsNoGate")))
 					: null,
 
 				// ── 筛选条 ──
