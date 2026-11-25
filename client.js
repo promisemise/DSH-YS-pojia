@@ -5260,7 +5260,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 		class RewindSafe extends Component {
 			constructor(p) { super(p); this.state = { failed: false }; }
 			static getDerivedStateFromError() { return { failed: true }; }
-			componentDidCatch(error) { try { console.error("[dsh-purge] rewind slot:", error); } catch { /* ignore */ } }
+			componentDidCatch(error) { try { console.error("[ys-pojia] rewind slot:", error); } catch { /* ignore */ } }
 			render() {
 				if (this.state.failed) return h(RewindFallback, this.props);
 				return h(RewindButton, this.props);
@@ -5270,7 +5270,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 		class ContinueSafe extends Component {
 			constructor(p) { super(p); this.state = { failed: false }; }
 			static getDerivedStateFromError() { return { failed: true }; }
-			componentDidCatch(error) { try { console.error("[dsh-purge] continue slot:", error); } catch { /* ignore */ } }
+			componentDidCatch(error) { try { console.error("[ys-pojia] continue slot:", error); } catch { /* ignore */ } }
 			render() {
 				if (this.state.failed) {
 					return h("button", {
@@ -11959,7 +11959,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 					if (!row) {
 						if (!warnedMiss) {
 							warnedMiss = true;
-							try { console.warn("[dsh-purge] HeroNewSessionMount: anchor row missing (the host may have changed)"); } catch { /* ignore */ }
+							try { console.warn("[ys-pojia] HeroNewSessionMount: anchor row missing (the host may have changed)"); } catch { /* ignore */ }
 						}
 						setHost((prev) => (prev ? null : prev));
 						return;
@@ -12024,7 +12024,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 					if (!row) {
 						if (!warnedMiss) {
 							warnedMiss = true;
-							try { console.warn("[dsh-purge] TabRowPurgeMount: tab row anchor missing"); } catch { /* ignore */ }
+							try { console.warn("[ys-pojia] TabRowPurgeMount: tab row anchor missing"); } catch { /* ignore */ }
 						}
 						setHost((prev) => (prev ? null : prev));
 						return;
@@ -12145,7 +12145,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 						el.style.display = "none";
 						if (!warned && Date.now() - startedAt > 5000) {
 							warned = true;
-							try { console.warn("[dsh-purge] rewind: composer standardControls anchor missing"); } catch { /* ignore */ }
+							try { console.warn("[ys-pojia] rewind: composer standardControls anchor missing"); } catch { /* ignore */ }
 						}
 						return;
 					}
@@ -12356,7 +12356,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 						ctx.inject(["sessions", "uiWorkspace", "conversation"], (host) => installRewindUi(host));
 					}
 				} catch (e2) {
-					try { console.warn("[dsh-purge] rewind ui skipped:", e2 || e); } catch { /* ignore */ }
+					try { console.warn("[ys-pojia] rewind ui skipped:", e2 || e); } catch { /* ignore */ }
 				}
 			}
 		}

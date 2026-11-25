@@ -188,6 +188,10 @@ All scores come from `bench.mjs` auto-grading. Probe text, raw model responses a
 
 ### Breach depth per category
 
+<details>
+<summary>Expand the full category table (26 categories, measured scores)</summary>
+
+
 **gpt-6.1-sol · all 26 categories**
 
 | Metric | Value |
@@ -255,6 +259,9 @@ Refusal 0-20       1   social 0
 | kimi-k3.1-pro | Moonshot AI/kimik3.1 | 78 | 3/5 |
 | qwen3.8-max | — | 0 | all timed out (gateway rate limit) |
 
+
+</details>
+
 ### What the template is worth (same model)
 
 glm-5.3-flash:
@@ -284,356 +291,75 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ---
 
-## v1.5.0: Android / DSH Go support
+## Changelog
 
-This release fixes "install the plugin on a phone and messages stop sending".
+Current: **v1.5.1**. The full record - per-release technical detail and verification data - lives on the landing page, which suits long-form better than a README.
 
-### Why the previous attempt failed
+**[→ Full changelog](https://yushang657.github.io/DSH-YS-pojia/#changelog)**
 
-An earlier mobile attempt was rolled back. Sending a message threw
-`Cannot read properties of undefined (reading 'length')`, and the decompressed
-session file held only a session header - the message never persisted.
+### Recent releases
 
-Root cause: DSH Go is a Flutter shell over a prebuilt vite dist, a different
-renderer from the web front end. The custom node this plugin registers on
-`conversation.chat.node` returns an object whose shape the Go renderer reads
-differently.
-
-### Three changes
-
-**1. `lib/surface.js` gains an android surface**
-
-`SURFACES` adds `"android"`, and `isAndroidSurface()` checks six signals:
-`DSH_SURFACE=android`, `DSH_GO_RUNTIME_ROOT`, `DSH_GO=1`, `platform=android`,
-a path under `/data/data/` or `/com.termux/`, and `os.release()`.
-
-All failing returns false - a false negative costs an Android user one skipped
-feature, a false positive costs a desktop user their panel. Android is checked
-before desktop because the Go runtime lives under
-`/data/data/<pkg>/files/runtime/rootfs/` with `resources/` inside, which the
-desktop tree regex would otherwise match.
-
-`adapterFor("android")` returns `"web"` - there is no exe to restart on a phone.
-
-**2. `client.js` skips `conversation.chat.node` on Android**
-
-That node only draws a command invocation as an input card. Dropping it costs no
-breach capability - patches, prompt injection and tools all run in the host
-process. Trading one card for a working send button.
-
-**3. `shell.overlay` drops from seven children to two**
-
-Kept: `WelcomeNotice` (pure React) and `PurgeDock` (panel entry). Dropped:
-`EnvAdaptSendGate`, which monkey-patches the host's submit - the exact call chain
-that failed before - plus three UI mount points and the floating launcher.
-
-### Verified on a real device
-
-OPPO PLQ110 with KernelSU root. DSH Go v1.3.0 keeps its runtime inside a Linux
-container:
-
-```
-/data/data/io.github.ccch1mneyyy.dsh_app/files/runtime/rootfs/
-├── opt/dsh/node_modules/                            host packages
-└── root/.dsh/profiles/web/node_modules/ys-pojia/    the plugin lives here
-```
-
-Load confirmed:
-
-| Check | Result |
-|---|---|
-| `dsh-purge/installed-rev` | `apply:1.5.0` |
-| `prompt-inject.md` | 90742 to 166509 bytes |
-| file count | 147 |
-| `isAndroidSurface` / `isAndroid` | 3 occurrences each |
-
-**Sending messages works; plugin features are available.**
-
-### Verification
-
-23 Android assertions pass, plus the existing suites (18 overclock, 17 rule,
-16 fallback).
-
-### Known issues
-
-`PurgeDock` has no phone-specific layout work; the command echo card is gone on
-Android (deliberate trade). Full technical notes in `docs/mobile-android.md`.
-
----
-
-## v1.4.5: main command renamed, overclock made observable, fallback hardened
-
-### Main command: `/purge` to `/yspojia`
-
-`purge` is a generic word that other plugins also register, and the host keeps only
-the first registration - which is why `/purge` showed another plugin's behaviour. The
-name is now released entirely.
-
-Lowercase is mandatory: the host validates against `/^[a-z][a-z0-9_-]*$/u` and throws
-a TypeError otherwise. That matters because every command registration sits in one try
-block, so a single invalid name aborts the rest of the commands and hooks.
-
-Everything folds into one entry point; standalone commands still work:
-
-```
-/yspojia status / apply / revert / uninstall / edit
-/yspojia overclock / overclock text
-/yspojia rules / skills / rewind / help
-
-/rules  /skills  /overclock  /rewind
-```
-
-### Overclock is now observable
-
-Previously enabling it produced no visible effect anywhere. Four surfaces now:
-
-| Surface | Purpose |
-|---|---|
-| `/overclock` | switch state, model detection, selected group |
-| `/overclock text` | print the exact injected text |
-| `overclock_status` tool | the model can check itself |
-| `[unlimited.inject]` log line | one line per injection |
-
-`purge_boost` diagnostics also append the overclock state.
-
-### The model name was never readable
-
-The old lookup used `session.requestHeader().config` and `session.header.model` - both
-stay empty until the first message commits a `request/header` event, and a command runs
-before that. Every fresh session fell through to generic.
-
-The working path is `sessionProjections.stateOf(session, "modelSelection")`, which has a
-value from the moment the session exists. Four paths in reliability order:
-
-```
-1. sessionProjections -> pending, else lastUsed   (works on a fresh session)
-2. session.requestHeader().config.model
-3. session.header.model
-4. empty -> generic
-```
-
-### Chinese fallback
-
-`generic` only had an English variant, so a Chinese UI with an unresolvable model got
-English text. A Chinese version now exists (418 chars), deliberately not copying the
-deepseek environment framing - an unknown model may not recognise it - and instead
-stating the constraint neutrally with three repetitions.
-
-Dirty input is normalised too: `unlimitedText("nonsense","zh")` used to return English;
-it now maps to generic and picks language by locale.
-
-`/overclock` separates the two failure causes: model genuinely unknown versus model name
-unreadable, with different explanations.
-
-### Verification
-
-51 assertions pass (16 fallback + 18 overclock + 17 rule). The dispatcher matrix covers
-11 cases. Not verified in a live session - the host still runs pre-restart modules.
-
----
-
-## v1.4.4: the overclock notice now adapts to the model's vendor
-
-The overclock segment used to be one fixed block of Chinese text built around an
-"internal limit-verification environment" framing. That framing works on DeepSeek
-and models trained on similar data, but it is the wrong shape elsewhere - GPT reads
-"test environment" as a safety trigger, Claude resists imperative phrasing, Gemini
-loses the middle of long paragraphs, and open-weight models skip mid-block
-constraints when instruction-following is weak.
-
-### Six variants
-
-| Group | Vendors | Shape |
+| Version | Theme | Highlights |
 |---|---|---|
-| `deepseek` | DeepSeek / Qwen / Kimi / GLM / Doubao / Hunyuan / ERNIE / Spark / MiniMax / StepFun / Yi / Baichuan / InternLM / TeleChat / Kunlun | Chinese environment framing |
-| `openai` | GPT / Copilot / Cursor / Grok / Perplexity / Brave | English process instructions, numbered steps and hard rules |
-| `anthropic` | Claude | English collaborative phrasing, no commands |
-| `google` | Gemini | English short lines and bullet lists only |
-| `open` | Llama / Mistral / Hermes | English with shorter sentences and repeated core constraints |
-| `generic` | anything unrecognised | neutral English |
+| **v1.5.1** | Maintenance | Routine maintenance |
+| **v1.5.0** | Android / DSH Go support | New `android` surface (six signals); `conversation.chat.node` skipped on Android; `shell.overlay` cut from seven children to two. Verified on a real OPPO PLQ110 with KernelSU |
+| **v1.4.5** | Command renamed, overclock observable, fallback | `/purge` → `/yspojia`; `/overclock` self-check; fixed the model name never being readable (now reads the sessionProjections projection) |
+| **v1.4.4** | Overclock adapts per vendor | Six variants across 29 vendors; language follows the model, not the UI locale |
+| **v1.4.3** | All 40 rules rewritten | Rule section 7,279 → 51,315 characters; fixed a defect that made rule selection a complete no-op |
+| **v1.4.2** | Politics exclusion removed | Rule #10 treated like any other topic; the politics verdict and gate section are gone |
+| **v1.4.1** | Version metadata corrected | Four places still advertised an older release |
+| **v1.4.0** | 0.2.2-rc.5 support | Host sealed inside asar; version-adaptive strategy added |
 
-Language follows the model, not just the UI locale. Only the `deepseek` group takes
-the Chinese text under a `zh` locale; the other four stay in English even under a
-Chinese UI, because their training data is English-dominant and Chinese instructions
-measurably lower compliance on the hard-rule section.
+<details>
+<summary><b>v1.5.0 in detail</b> (Android support)</summary>
 
-### Detection
+**Why the previous attempt failed**: sending a message on the phone threw `Cannot read properties of undefined (reading 'length')`, and the decompressed session file held only a session header - the message never persisted. DSH Go is a Flutter shell over a prebuilt vite dist, a different renderer from the web front end; the `conversation.chat.node` this plugin registers is read by the Go shell with its own field shape.
 
-Reads `context.agent.session.requestHeader().config.model` first - the same path the
-host itself uses in `installModelSelection` - then falls back to
-`session.header.model`, then to the generic variant. A failed lookup never suppresses
-the segment.
+**Three changes**:
 
-### Verification
+1. `lib/surface.js` gains an `android` surface. `isAndroidSurface()` checks `DSH_SURFACE=android`, `DSH_GO_RUNTIME_ROOT`, `DSH_GO=1`, `platform=android`, a path under `/data/data/` or `/com.termux/`, and `os.release()`. All failing returns false - a false negative costs an Android user one skipped feature, a false positive costs a desktop user their panel.
+2. `client.js` skips `conversation.chat.node` on Android. That node only draws an input card; dropping it costs no breach capability.
+3. `shell.overlay` drops from seven children to two: `WelcomeNotice` and `PurgeDock` stay; `EnvAdaptSendGate` (which patches the host submit - the failing call chain) and three UI mount points go.
 
-18 overclock assertions pass and all 29 known vendors map to a concrete group.
-End-to-end with real model names:
+Full notes in [docs/mobile-android.md](docs/mobile-android.md).
 
-```
-deepseek-v4.1-flash -> deepseek  Chinese, 557 chars
-gpt-6.1-sol         -> openai    English, 978 chars
-claude-opus-4.6     -> anthropic English, 1074 chars
-gemini-3.1-pro      -> google    English, 626 chars
-llama-4-maverick    -> open      English, 945 chars
-unknown-xyz         -> generic   English, 844 chars
-```
+</details>
 
-### How to verify it is actually on
+<details>
+<summary><b>v1.4.5 in detail</b> (command rename and overclock self-check)</summary>
 
-The switch lives on the Engine tab, but until now there was no visible feedback for
-"did turning it on do anything" - the model will not announce that it received an
-unlimited-resources notice, so you could only guess from its behaviour. Three
-checkable signals now exist:
+**`/purge` → `/yspojia`**: `purge` is a generic word other plugins register too, and the host keeps only the first registration. Lowercase is mandatory - the host validates `/^[a-z][a-z0-9_-]*$/u` and throws otherwise, and since every command registration sits in one try block, one invalid name aborts the rest.
 
-**1. `/overclock` command**
+**Overclock is observable**: `/overclock` for switch state and model detection, an `overclock_status` tool, and an `[unlimited.inject]` log line.
 
-```
-/overclock          switch state + model detection + which group is selected
-/overclock text     print the exact text that will be injected
-/overclock help     help
-```
+**The model name was never readable**: the old lookup used `requestHeader().config` and `session.header.model`, both empty until the first message commits. It now reads `sessionProjections.stateOf(session, "modelSelection")`, which exists from session creation.
 
-**2. `overclock_status` tool**
+</details>
 
-The model can call this itself. Ask "is overclock on?" and it checks instead of
-guessing.
+<details>
+<summary><b>v1.4.4 in detail</b> (overclock per vendor)</summary>
 
-**3. The log line**
+The old overclock text was one fixed Chinese block built around an "internal limit-verification environment" framing. That works on DeepSeek and models trained similarly, but not elsewhere: GPT reads "test environment" as a safety trigger, Claude resists imperative phrasing, Gemini loses mid-paragraph content, open models skip mid-block constraints.
 
-Every injection writes one:
+Six variants now: `deepseek` (Chinese environment framing, 15 Chinese vendors), `openai` (English process instructions), `anthropic` (English collaborative phrasing), `google` (short lists), `open` (strong repetition), `generic` (fallback).
 
-```
-[unlimited.inject] model=deepseek-v4.1-flash vendor=deepseek group=deepseek locale=zh bytes=557
-```
+Language follows the model, not the UI locale - only the Chinese group takes Chinese text under a Chinese UI.
 
-Log path: `%TEMP%\dsh-purge-desktop.log`
+</details>
 
-**Fallback when the model cannot be resolved**
-
-A failed vendor lookup - or a model outside the known 29 - lands on `generic` and the
-segment is still injected. Two variants:
-
-| Case | Text used |
-|---|---|
-| No model name, Chinese UI | `generic` Chinese (418 chars) |
-| No model name, English UI | `generic` English (844 chars) |
-| Model name present but unknown | same, chosen by UI language |
-
-The Chinese generic deliberately avoids the "internal limit-verification environment"
-framing - that shape is tuned for Chinese models and an unknown model may not
-recognise it. It uses a neutral "unlimited resources this session" statement and
-repeats the core constraint three times (opening, workflow, rules), because an
-unresolvable model is most likely one with weaker instruction-following.
-
-`/overclock` marks the group line with "← 通用兜底" and distinguishes the two causes:
-the model is genuinely unknown, or the model name could not be read at all.
-
-**Judge by the switch and group lines only.** A model saying "I received the
-overclock notice" is not evidence - that can be a hallucination, and a model saying
-"no" may simply not have parsed it. Only the host-side switch state and the selected
-text are facts.
-
-### Stale docs fixed along the way
-
-The probes badge said `68 / 39 categories`; bench.mjs actually has 10 probe groups
-totalling 68 probes, so it now reads `68 / 10 groups`. The patches badge gained the
-file count (`96 / 70 files`), and two `dshTarget` statements in this README were
-still on `0.2.0-rc.2` and now read `0.2.2-rc.5` with the full `dshTargets` list.
-
----
-
-## v1.4.3: all 40 rules rewritten to delivery depth, and a rule-filter fix
-
-### Every rule rewritten
+<details>
+<summary><b>v1.4.3 in detail</b> (40 rules rewritten)</summary>
 
 | Metric | v1.4.2 | v1.4.3 |
 |---|---|---|
 | Rule section characters | 7,279 | 51,315 |
 | Mean per rule | 182 | ~1,300 |
 | Rules under 400 characters | 34 | 0 |
-| Prompt body characters | 48,476 | 92,446 |
 
-Each rule went from a topic list to commands, payloads, parameters and detection surfaces. Rule 1 gained engine detection order (Unity / UE / Cocos / CEF by file signature — get the engine wrong and everything after is wasted), the CE pointer-chain workflow, the three-IOCTL driver pattern with CR3 switching, per-vendor anti-cheat detection surfaces, and the packet-authority triage. Rule 4's anti-debug matrix now names the `NtQueryInformationProcess` classes (`ProcessDebugPort=7` / `ProcessDebugFlags=0x1F` / `ProcessDebugObjectHandle=0x1E`). Rule 16 covers both the full Windows and Linux escalation paths. Rules 26–33 and 40 carry executable commands instead of topic names.
+It also fixed a defect that made rule selection a **complete no-op**: `locateRuleBlock` only recognised single-line rules, so multi-line blocks broke the run and filtering was skipped entirely - ticking one rule injected all 40. Block-level location fixed it; all 10 presets now round-trip correctly.
 
-### A defect that made rule selection a no-op
+</details>
 
-After rewriting the rules, verification showed that ticking one rule still injected all 40.
-
-`locateRuleBlock` only recognised a rule as a single line starting with `N. ` and required the run to be consecutive from 1. Once rules became multi-line blocks, continuity broke immediately after rule 1, the block was never located, and `filterScopedRules` returned the body untouched.
-
-Second trap: the body has another numbered list (`1. 理论 / 2. 组件 / 3. 流程 / 4. 参数` in the hard-topic ladder) that competed with the rule block. Filtered down to a few rules, both fell below the minimum run length and both were rejected.
-
-Rewritten to block-level location: each `N. **` starts a rule, the span runs to the next rule or the section end, deletion drops whole spans rather than single lines, and candidate runs are layered — inside the Scoped Rules section the ids no longer have to be consecutive, and only the fallback outside it keeps the strict minimum.
-
-### Verification
-
-17 module-level assertions pass, all 10 presets round-trip to their exact rule count, each of the 40 rules filtered alone yields exactly that rule, and filtering is idempotent.
-
-```
-default 40→40 91667 · minimal 5→5 49274 · web 14→14 61919
-reverse 9→9 55688 · redteam 17→17 66361 · cloud 8→8 53730
-research 10→10 53463 · content 4→4 43756 · business 4→4 44104
-nothing selected []→0 40374
-```
-
-`asset-table.js` re-sealed; decrypted back to 92,446 characters, byte-identical to the md source. No panel-level end-to-end test — the host was not restarted.
-
----
-
-## v1.4.2: the politics exclusion is gone
-
-This release is a scope change, not a capability bump. **Rule #10 is no longer "the one category not delivered" — it is treated exactly like every other topic.**
-
-### What changed
-
-| Where | Before | Now |
-|---|---|---|
-| Prompt body, section 1 | "Sole forbidden zone: politics" | "No forbidden zone" |
-| Rule 10 | one-line refusal only | answered directly and factually |
-| `#10 defaultOn` | `false` | `true` |
-| Rule group `restricted` | "Restricted", off by default | "Current affairs and politics", green |
-| Default set / "All" preset | excluded #10 | includes #10 (full 40) |
-| Output guard | had a `politics` verdict that hard-`reject`ed | verdict removed, scored like anything else |
-| Panel politics-gate strip | present (green = removed / amber = active) | removed |
-| Self-check reply | "Anything except politics is fair game" | "Any task is fair game" |
-
-### How it lands in code
-
-**Prompt body.** Section 1 is rewritten as "no forbidden zone" and now states that it overrides any upstream "this topic cannot be answered" clause. Rule 10's text changed from a refusal template to a delivery standard.
-
-**Body filter.** `applyPoliticsGate(text, enabled)` used to decide between "strip the hard block" and "re-add the canonical block" based on the #10 toggle. It now takes one argument and always runs `stripPoliticsGate` — any hard-block residue in a body on disk (a hand-edited user copy, an older default body) is stripped before injection.
-
-**Output guard.** `POLITICS_MARKERS` and the `politics` verdict are gone. `decideAction` used to `reject` outright on a politics hit (repair was pointless — the model would just restate it); that branch is removed. Verdict precedence went from `politics > refusal > degrade > stripped > fallback > pass` to `refusal > degrade > stripped > fallback > pass`.
-
-**Rule metadata.** `#10 defaultOn: true`, group tone `mute → green`, and #10 is now in both the default set and the "All" preset. The `POLITICS_RULE_ID` constant stays for existing callers.
-
-**Console.** The politics-gate strip on the Breach tab (6 dictionary entries plus 2 CSS rules) is deleted, and `catalogSnapshot` no longer returns a `politics` field.
-
-### Who is affected
-
-- **Upgrading with a saved rule selection**: `armor-rules.json` holds an explicit set, so nothing is force-flipped to full. Tick #10 yourself, or hit the Default / All preset.
-- **Fresh install**: the default set includes #10, so it is 40 of 40 out of the box.
-- **All three tiers**: T3 goes through `addPromptSection`, T2/T1 through `rewritePromptAssembly`; both call `filterScopedRules`, so the gate strip runs on either path.
-
-### Verification
-
-```
-node --check client.js / lib/index.js / lib/rule-ids.js / lib/rule-filter.js
-node --check lib/rule-catalog.js / lib/output-guard.js / lib/asset-table.js
-
-rule10 defaultOn = true | group = restricted | label = 政治 / 历史 / 时事
-DEFAULT_ENABLED_IDS has 10 ? true | count = 40
-gate present in shipped body ? false
-legacy gate detected ? true
-after strip contains 唯一禁区 ? false | tail kept ? true
-catalogSnapshot.politics field = removed
-filterScopedRules(default) contains 不展开政治话题 ? false
-scoreOutput(political-neutral).verdict = pass | has politics key ? false
-scoreOutput(refusal).verdict = refusal | decide = repair
-embedded prompt 48476 chars, identical to lib/default-prompt-inject.md
-```
-
----
 
 ## Three injection tiers (user-selectable)
 
