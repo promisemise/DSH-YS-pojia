@@ -14,6 +14,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -51,8 +52,19 @@ walk(ROOT, "", files);
 const sorted = {};
 for (const k of Object.keys(files).sort()) sorted[k] = files[k];
 
+/* 记下当前 commit，客户端按它拉文件。
+ * 用 commit 而不是 tag：tag 只在发版时打，而清单每次提交都会变，
+ * 用 tag 会出现「清单说 1.5.4，但该 tag 里没有这个文件」。 */
+let commit = "";
+try {
+  commit = execSync("git rev-parse HEAD", { encoding: "utf8", cwd: ROOT }).trim();
+} catch {
+  commit = "";
+}
+
 const manifest = {
   version: pkg.version,
+  commit,
   generatedAt: new Date().toISOString(),
   fileCount: Object.keys(sorted).length,
   files: sorted,
@@ -63,5 +75,6 @@ fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2) + "\n", "utf8");
 
 console.log("version-manifest.json");
 console.log("  版本   " + manifest.version);
+console.log("  提交   " + (commit ? commit.slice(0, 7) : "（无 git）"));
 console.log("  文件数 " + manifest.fileCount);
 console.log("  大小   " + (fs.statSync(outPath).size / 1024).toFixed(1) + " KB");
