@@ -1,7 +1,7 @@
 {
   "version": "1.5.4",
-  "commit": "dfeae5fef514b2d44bb08c400c3b5c1dd84fd761",
-  "generatedAt": "2026-11-25T21:06:23.213Z",
+  "commit": "4a329155a21356ceae855d9df47d8a5223e98f96",
+  "generatedAt": "2026-11-25T21:09:01.961Z",
   "fileCount": 156,
   "files": {
     ".github/workflows/pages.yml": "7b3c16ea4c9799db8ff31a804cfea5ad8592debd71d4b9652e971dce5b27673c",
@@ -14,7 +14,7 @@
     "bin/install.js": "de6322005f3a97f965857187f08759d19ab9f674919bf1c729832ef066ca7d71",
     "bin/ys-pojia.js": "8b2aee24ef3e63c3e1260b36343773cd5de173eb5c4d500e50a4ac0cdb4d5cc7",
     "capability-scores.mjs": "ea49385c2a9a69eadd16801c5378e24791b832ba6b57bba70c0b42dc4662a85c",
-    "client.js": "7ae24cbf55afa25d7e76fc2aa2dc2081f118e2c9a8619534dbfb724e0209ddc4",
+    "client.js": "dcbf227d82c1f6fb00126b10a12a8d139568ea0c6e2edc642ee4664549a3b1f3",
     "docs/banner.svg": "380d556341bfa14e16cb3ef39f524f0b78378c3215f96a1bb2c338831e548e8f",
     "docs/images/qq-group.jpg": "d581d2a34af1b82ba9952ebb2fcbeaa8b20c776486a893ffcfff8b0aac171bc8",
     "docs/mobile-android.md": "455ae41ce7be7d1520d9e904dd2ead1ffe23b2a2a82fddb2fb1ff968fd341b7f",
@@ -37,7 +37,7 @@
     "lib/anchor.js": "c0ed5a30855dc3e5c7235f23adc8a15e0c970825e003246f41a9ed4a6a177ba9",
     "lib/apply-progress.js": "a6f2efb2f7f3fc46db4df4289b903e2df9033bf8117f4677bec1aee7c9923751",
     "lib/armor-store.js": "ab9bf609264987b85cc0d7adb89c32e5e5f6dbb23fff5968aa62ba611eaf2ada",
-    "lib/asset-table.js": "53577591536eac70e90ab7ec141420ec94902ac091c76fb0133dcc07c12cb70c",
+    "lib/asset-table.js": "096d1d284bf0212d09526f3eac8c3087e3a29b71d99829a37fb32546222822c6",
     "lib/bench-runner.js": "37b6c60d309ca1f5fedc2d42cfd4b8824479db0c3f0465740bbdba91fd6d295b",
     "lib/bin-preflight.js": "eb2817079de6d8153be9721ddf2be435eb27b5409961bb8cdb394eae43862091",
     "lib/boost.js": "e5693908ef41b456692bacd40f3555ded7cd8d611f2c5b570fd89d1d6c1cda90",

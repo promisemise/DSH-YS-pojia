@@ -10391,7 +10391,15 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			if (dockBus.open) setDock({ open: false, authOpen: false, pending: "tab" });
 			else openDockClean();
 		}
-		syncDrillGrant();
+		/* 延到下一个宏任务再同步演练台授权。
+		 * 原本在模块顶层同步执行 —— 那时 React 还没挂载、连接还没建立，
+		 * 一旦 fetch 抛错会冒泡出 factory，整个模块加载失败、前端入口消失。
+		 * 现在推迟到模块加载完成之后，并吞掉异常。 */
+		try {
+			(window.requestAnimationFrame || window.setTimeout)(() => {
+				try { syncDrillGrant(); } catch { /* 静默 */ }
+			});
+		} catch { /* window 不可用 */ }
 
 		const DOCK_GEOM_KEY = "ys-pojia-dock-geom-v4";
 		/* 默认停在右上，底边留在输入框上面。拖动之后停在用户松开的位置，只保证不拖出窗口。 */
