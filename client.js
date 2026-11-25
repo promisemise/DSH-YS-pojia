@@ -194,6 +194,23 @@ function useT() {
 }
 		function clientGuessSurface() {
 			try {
+				/* Android 优先判：DSH Go 是 Flutter 壳 + 预构建 vite dist，
+				 * 跟 Web 前端不是同一套渲染器。判据三条：
+				 *   1. UA 含 Android 且不是桌面 Electron
+				 *   2. 协议是 capacitor / ionic（Go 壳可能用）
+				 *   3. 全局对象里有 DSH Go 注入的标记
+				 * 判错方向有讲究：宁可漏判成 web 也不要误判成 android ——
+				 * 误判会让桌面用户丢掉命令回显卡片。 */
+				if (typeof navigator !== "undefined") {
+					const ua = String(navigator.userAgent || "");
+					const isElectron = /electron/i.test(ua);
+					if (!isElectron && /android/i.test(ua)) return "android";
+				}
+				if (typeof window !== "undefined" && window.__DSH_GO__) return "android";
+				if (typeof location !== "undefined") {
+					const proto = String(location.protocol || "");
+					if (proto === "capacitor:" || proto === "ionic:") return "android";
+				}
 				if (typeof navigator !== "undefined" && /electron/i.test(navigator.userAgent || "")) return "desktop";
 				if (typeof location !== "undefined") {
 					const port = String(location.port || "");
@@ -12256,7 +12273,22 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 		}
 
 		function apply(ctx) {
-			if (ctx.uiConversation && ctx.uiConversation.events && typeof ctx.uiConversation.events.register === "function") {
+			/* 命令回显节点：Android 上不注册。
+			 *
+			 * 这是上次手机适配失败的根因。DSH Go 的会话渲染器跟 Web 前端是两套
+			 * 实现，它按自己的结构读 conversation.chat.node 的返回对象，字段对不上
+			 * 就在「发消息」这一步抛 `Cannot read properties of undefined
+			 * (reading 'length')` —— 消息根本没落盘，会话文件里只有一行 session 头。
+			 *
+			 * 代价评估：这个节点只负责把 /yspojia 之类的调用在对话里画成一张输入
+			 * 卡片，关掉不影响任何破甲能力（补丁、提示词注入、工具都在宿主进程里
+			 * 跑，跟渲染器无关）。所以手机上直接跳过，换取「能正常发消息」。
+			 *
+			 * 为什么不在节点内部做兼容：Go 壳的渲染器读哪些字段、什么形状，我没有
+			 * 它的源码可查，靠猜去补字段风险更高 —— 猜错还是崩，而且更难定位。 */
+			const surface = clientGuessSurface();
+			const isAndroid = surface === "android";
+			if (!isAndroid && ctx.uiConversation && ctx.uiConversation.events && typeof ctx.uiConversation.events.register === "function") {
 				ctx.uiConversation.events.register(purgeCommandInputDefinition);
 				ctx.slots.inject("conversation.chat.node", () => ctx.slots.register({
 					name: "conversation.chat.node", key: "dsh-purge-command-input",
@@ -12289,11 +12321,29 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
           if (!sawNavigator) currentLang = /^zh/i.test(lang) ? "zh" : "en";
         }
 			} catch { /* 保持默认 */ }
+			/* shell.overlay 的挂载内容按面裁剪。
+			 *
+			 * Android（DSH Go）上只留两样：
+			 *   - WelcomeNotice：首屏须知，纯 React 组件，不碰宿主 API
+			 *   - PurgeDock：面板入口，用户要能打开插件面板
+			 *
+			 * 去掉三样：
+			 *   - EnvAdaptSendGate：它挂住宿主 SessionInputShell.submit 做发送拦截。
+			 *     Go 壳的 submit 签名与 Web 不同，wrapper 一旦返回错值，
+			 *     「发消息」直接失败 —— 这正是上次崩溃所在的调用链。
+			 *   - HeroNewSessionMount / TabRowPurgeMount / RewindDockMount：
+			 *     都往宿主 UI 的特定位置挂组件，Go 壳没有那些位置。
+			 *   - PurgeLauncher：浮动启动器，手机屏幕小、会盖住输入框。
+			 *
+			 * 破甲能力不受影响：补丁、提示词注入、工具全在宿主进程里跑。 */
+			const overlayChildren = isAndroid
+				? [h(WelcomeNotice), h(PurgeDock)]
+				: [h(WelcomeNotice), h(PurgeLauncher), h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate), h(RewindDockMount)];
 			ctx.slots.inject("shell.overlay", () => ctx.slots.register({
 				name: "shell.overlay",
 				id: "dsh-purge-dock",
 				order: 50,
-			}, () => h(react.Fragment, null, h(WelcomeNotice), h(PurgeLauncher), h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate), h(RewindDockMount))));
+			}, () => h(react.Fragment, null, ...overlayChildren)));
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));

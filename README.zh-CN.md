@@ -283,6 +283,65 @@ GPT 的降级手法有三种可识别特征：先声明「我不能描写…」�
 
 ---
 
+## v1.5.0：适配手机端（DSH Go / Android）
+
+这一版解决「插件装到手机就发不出消息」的问题。
+
+### 上次为什么失败
+
+2026-11 试过一轮，最终回退。症状：手机上发消息报 `Cannot read properties of undefined (reading 'length')`，解压崩溃的会话文件只有一行 session 头——**消息根本没落盘**。
+
+根因：DSH Go 是 Flutter 壳 + 预构建 vite dist，跟 Web 前端不是同一套渲染器。插件往 `conversation.chat.node` 注册的自定义节点，Go 壳按自己的结构读字段，对不上就抛错。
+
+### 三处改动
+
+**① `lib/surface.js` 加 android 面**
+
+`SURFACES` 加 `"android"`，新增 `isAndroidSurface()` 六条判据：`DSH_SURFACE=android`、`DSH_GO_RUNTIME_ROOT`、`DSH_GO=1`、`platform=android`、路径含 `/data/data/` 或 `/com.termux/`、`os.release()` 含 android。
+
+全失败返回 false——宁可漏判成 web，也不误判让桌面用户丢面板。android 排在 desktop 之前，因为 Go 壳的 `/data/data/<pkg>/files/runtime/rootfs/` 里有 `resources/` 会被桌面树正则误命中。
+
+`adapterFor("android")` 返回 `"web"`——安卓上没有重启 exe 这回事。
+
+**② `client.js` Android 上跳过 `conversation.chat.node`**
+
+这个节点只负责把 `/yspojia` 画成输入卡片。关掉不影响破甲能力（补丁、注入、工具都在宿主进程里跑）。用「一张卡片」换「能正常发消息」。
+
+**③ `shell.overlay` 从七个组件砍到两个**
+
+保留 `WelcomeNotice`（纯 React）和 `PurgeDock`（面板入口）。去掉 `EnvAdaptSendGate`（挂住宿主 `submit` 做发送拦截，正是上次崩溃的调用链）、三个 UI 挂载点、浮动启动器。
+
+### 真机验证
+
+OPPO PLQ110 + KernelSU root 实测。DSH Go v1.3.0 的运行时在 Linux 容器里：
+
+```
+/data/data/io.github.ccch1mneyyy.dsh_app/files/runtime/rootfs/
+├── opt/dsh/node_modules/                     ← 宿主包
+└── root/.dsh/profiles/web/node_modules/ys-pojia/   ← 插件装这里
+```
+
+加载确认：
+
+| 检查项 | 结果 |
+|---|---|
+| `dsh-purge/installed-rev` | `apply:1.5.0` |
+| `prompt-inject.md` | 90742 → 166509 字节 |
+| 文件数 | 147 |
+| `isAndroidSurface` / `isAndroid` | 各 3 处 |
+
+**发消息正常，插件功能可用。**
+
+### 验证
+
+23 项 Android 断言 + 原有用例（超频 18、规则 17、兜底 16）全过。
+
+### 已知问题
+
+`PurgeDock` 在手机窄屏没专门优化布局；Android 上命令回显卡片没了（有意取舍）。详细技术说明见 `docs/mobile-android.md`。
+
+---
+
 ## v1.4.5：主命令改名、超频可观测、读不到模型时的兜底
 
 ### 主命令 `/purge` → `/yspojia`

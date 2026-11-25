@@ -284,6 +284,83 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ---
 
+## v1.5.0: Android / DSH Go support
+
+This release fixes "install the plugin on a phone and messages stop sending".
+
+### Why the previous attempt failed
+
+An earlier mobile attempt was rolled back. Sending a message threw
+`Cannot read properties of undefined (reading 'length')`, and the decompressed
+session file held only a session header - the message never persisted.
+
+Root cause: DSH Go is a Flutter shell over a prebuilt vite dist, a different
+renderer from the web front end. The custom node this plugin registers on
+`conversation.chat.node` returns an object whose shape the Go renderer reads
+differently.
+
+### Three changes
+
+**1. `lib/surface.js` gains an android surface**
+
+`SURFACES` adds `"android"`, and `isAndroidSurface()` checks six signals:
+`DSH_SURFACE=android`, `DSH_GO_RUNTIME_ROOT`, `DSH_GO=1`, `platform=android`,
+a path under `/data/data/` or `/com.termux/`, and `os.release()`.
+
+All failing returns false - a false negative costs an Android user one skipped
+feature, a false positive costs a desktop user their panel. Android is checked
+before desktop because the Go runtime lives under
+`/data/data/<pkg>/files/runtime/rootfs/` with `resources/` inside, which the
+desktop tree regex would otherwise match.
+
+`adapterFor("android")` returns `"web"` - there is no exe to restart on a phone.
+
+**2. `client.js` skips `conversation.chat.node` on Android**
+
+That node only draws a command invocation as an input card. Dropping it costs no
+breach capability - patches, prompt injection and tools all run in the host
+process. Trading one card for a working send button.
+
+**3. `shell.overlay` drops from seven children to two**
+
+Kept: `WelcomeNotice` (pure React) and `PurgeDock` (panel entry). Dropped:
+`EnvAdaptSendGate`, which monkey-patches the host's submit - the exact call chain
+that failed before - plus three UI mount points and the floating launcher.
+
+### Verified on a real device
+
+OPPO PLQ110 with KernelSU root. DSH Go v1.3.0 keeps its runtime inside a Linux
+container:
+
+```
+/data/data/io.github.ccch1mneyyy.dsh_app/files/runtime/rootfs/
+├── opt/dsh/node_modules/                            host packages
+└── root/.dsh/profiles/web/node_modules/ys-pojia/    the plugin lives here
+```
+
+Load confirmed:
+
+| Check | Result |
+|---|---|
+| `dsh-purge/installed-rev` | `apply:1.5.0` |
+| `prompt-inject.md` | 90742 to 166509 bytes |
+| file count | 147 |
+| `isAndroidSurface` / `isAndroid` | 3 occurrences each |
+
+**Sending messages works; plugin features are available.**
+
+### Verification
+
+23 Android assertions pass, plus the existing suites (18 overclock, 17 rule,
+16 fallback).
+
+### Known issues
+
+`PurgeDock` has no phone-specific layout work; the command echo card is gone on
+Android (deliberate trade). Full technical notes in `docs/mobile-android.md`.
+
+---
+
 ## v1.4.5: main command renamed, overclock made observable, fallback hardened
 
 ### Main command: `/purge` to `/yspojia`
