@@ -74,7 +74,7 @@ generic 兜底
 [unlimited.inject] model=deepseek-v4.1-flash vendor=deepseek group=deepseek locale=zh bytes=557
 ```
 
-路径：`%TEMP%\dsh-purge-desktop.log`
+路径：`%TEMP%\ys-pojia-desktop.log`
 
 ### 判定标准
 

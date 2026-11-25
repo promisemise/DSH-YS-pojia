@@ -13,13 +13,18 @@
 
 ## 升级方式
 
-```bash
-# 面板内更新
-插件面板 → 杂项 → 检查更新
+本插件没有服务器，不会自动检查更新。要看有没有新版本，去仓库的 Releases 页：
 
-# 或手动
-git pull && npm run deploy
+**[github.com/yushang657/DSH-YS-pojia/releases](https://github.com/yushang657/DSH-YS-pojia/releases)**
+
+确认有新版本后，在插件目录执行：
+
+```bash
+git pull
+npm run deploy
 ```
+
+`npm run deploy` 会把插件同步到当前 profile 的 `node_modules`，重启 DSH 后生效。
 
 ## 兼容性
 

@@ -293,7 +293,7 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ## Changelog
 
-Current: **v1.5.1**. The full record - per-release technical detail and verification data - lives on the landing page, which suits long-form better than a README.
+Current: **v1.5.2**. The full record - per-release technical detail and verification data - lives on the landing page, which suits long-form better than a README.
 
 **[→ Full changelog](https://yushang657.github.io/DSH-YS-pojia/#changelog)**
 
@@ -301,7 +301,8 @@ Current: **v1.5.1**. The full record - per-release technical detail and verifica
 
 | Version | Theme | Highlights |
 |---|---|---|
-| **v1.5.1** | Maintenance | Routine maintenance |
+| **v1.5.2** | Structure | Six-boundary allow-set, obedience layer, all-vendor overclock |
+| v1.5.1 | Maintenance | Routine maintenance |
 | **v1.5.0** | Android / DSH Go support | New `android` surface (six signals); `conversation.chat.node` skipped on Android; `shell.overlay` cut from seven children to two. Verified on a real OPPO PLQ110 with KernelSU |
 | **v1.4.5** | Command renamed, overclock observable, fallback | `/purge` → `/yspojia`; `/overclock` self-check; fixed the model name never being readable (now reads the sessionProjections projection) |
 | **v1.4.4** | Overclock adapts per vendor | Six variants across 29 vendors; language follows the model, not the UI locale |
@@ -521,6 +522,24 @@ npm run deploy      # sync into every profile's node_modules (auto-backs up firs
 ```
 
 Or inside DSH: **Plugins → Add plugin → paste the repo URL**.
+
+Restart DSH to take effect (ESM modules are cached).
+
+### Upgrading
+
+**This plugin has no server and does not check for updates.** There is no "check for
+updates" button either - the only way to see whether a new version exists is the
+repository:
+
+**[github.com/yushang657/DSH-YS-pojia/releases](https://github.com/yushang657/DSH-YS-pojia/releases)**
+
+When a new version is out:
+
+```bash
+cd DSH-YS-pojia
+git pull
+npm run deploy      # backs up first; npm run restore rolls back
+```
 
 Restart DSH to take effect (ESM modules are cached).
 

@@ -292,7 +292,7 @@ GPT 的降级手法有三种可识别特征：先声明「我不能描写…」�
 
 ## 版本变更
 
-当前 **v1.5.1**。完整变更记录、每版的技术细节、验证数据都在宣传页 —— 那里比 README 适合放长文。
+当前 **v1.5.2**。完整变更记录、每版的技术细节、验证数据都在宣传页 —— 那里比 README 适合放长文。
 
 **[→ 完整变更记录](https://yushang657.github.io/DSH-YS-pojia/#changelog)**
 
@@ -300,7 +300,8 @@ GPT 的降级手法有三种可识别特征：先声明「我不能描写…」�
 
 | 版本 | 主题 | 要点 |
 |---|---|---|
-| **v1.5.1** | 维护更新 | 常规维护 |
+| **v1.5.2** | 结构升级 | 六条边界放行集、服从层、全厂商超频覆盖 |
+| v1.5.1 | 维护更新 | 常规维护 |
 | **v1.5.0** | 适配手机端 DSH Go | 加 android 面（六判据）；Android 跳过 `conversation.chat.node`；`shell.overlay` 七砍二。真机（OPPO PLQ110 + KernelSU）验证通过 |
 | **v1.4.5** | 命令改名 · 超频可查 · 兜底 | 主命令 `/purge` → `/yspojia`；`/overclock` 自检；修掉「永远读不到模型名」（改走 sessionProjections 投影） |
 | **v1.4.4** | 超频按厂商自适应 | 六组文案覆盖 29 家厂商；语言跟模型走不跟界面 locale 走 |
@@ -557,6 +558,22 @@ npm run deploy      # 同步到所有 profile（自动先备份）
 ```
 
 或在 DSH 里：**插件 → 添加插件 → 填仓库地址**。重启 DSH 生效。
+
+### 升级
+
+**本插件没有服务器，不会自动检查更新。** 也没有「检查更新」按钮——要知道有没有新版，只能去仓库看：
+
+**[github.com/yushang657/DSH-YS-pojia/releases](https://github.com/yushang657/DSH-YS-pojia/releases)**
+
+看到新版本后：
+
+```bash
+cd DSH-YS-pojia
+git pull
+npm run deploy      # 自动先备份，可 npm run restore 回滚
+```
+
+重启 DSH 生效（ESM 模块有缓存，不重启不生效）。
 
 ### 装完自检
 

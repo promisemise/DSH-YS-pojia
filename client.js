@@ -238,14 +238,13 @@ function useT() {
 		function apiTimeoutMs(p, init) {
 			const path = String(p || "");
 			const method = String((init && init.method) || "GET").toUpperCase();
-			if (path.indexOf("/dsh-purge/update") !== -1) return method === "POST" ? 180000 : 45000;
-			if (path.indexOf("/dsh-purge/uninstall") !== -1) return 90000;
-			if (path.indexOf("/dsh-purge/skill") !== -1) return method === "POST" ? 120000 : 20000;
+			if (path.indexOf("/ys-pojia/uninstall") !== -1) return 90000;
+			if (path.indexOf("/ys-pojia/skill") !== -1) return method === "POST" ? 120000 : 20000;
 			// status 会在"应用"期间被后端的同步落盘阻塞，默认 20s 必然被 abort，界面只会显示"读取失败: timeout"。
-			if (path.indexOf("/dsh-purge/status") !== -1) return 60000;
-			if (path.indexOf("/dsh-purge/apply") !== -1) return 240000;
-			if (path.indexOf("/dsh-purge/revert") !== -1) return 120000;
-			if (path.indexOf("/dsh-purge/restart") !== -1) return 60000;
+			if (path.indexOf("/ys-pojia/status") !== -1) return 60000;
+			if (path.indexOf("/ys-pojia/apply") !== -1) return 240000;
+			if (path.indexOf("/ys-pojia/revert") !== -1) return 120000;
+			if (path.indexOf("/ys-pojia/restart") !== -1) return 60000;
 			return 20000;
 		}
 		function isAbortError(e) {
@@ -295,7 +294,7 @@ function useT() {
 		}
 
 		function rulesApi(op, extra) {
-			return apiJson("/dsh-purge/rules", {
+			return apiJson("/ys-pojia/rules", {
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify(Object.assign({ op: op }, extra || {})),
@@ -312,9 +311,9 @@ function useT() {
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify(Object.assign({ op: op }, extra || {})),
 			};
-			return apiJson("/dsh-purge/skills", init).catch((e) => {
+			return apiJson("/ys-pojia/skills", init).catch((e) => {
 				if (!skillsRouteMissing(e)) throw e;
-				return apiJson("/dsh-purge/skill", init);
+				return apiJson("/ys-pojia/skill", init);
 			});
 		}
 
@@ -703,8 +702,6 @@ function useT() {
 			"uninstall.done": "已卸载并还原，正在重启…",
 			"uninstall.done.desktop": "已卸载并还原，正在重启桌面应用…",
 			"uninstall.fail": "卸载失败: {error}",
-			"btn.checkUpdate": "检测更新",
-			"btn.checkUpdate.busy": "检测中…",
 			"btn.doUpdate": "更新",
 			"btn.doUpdate.busy": "更新中…",
 			"channel.title": "通道",
@@ -1335,8 +1332,6 @@ function useT() {
 			"uninstall.done": "Uninstalled and restored. Restarting…",
 			"uninstall.done.desktop": "Uninstalled and restored. Restarting the desktop app…",
 			"uninstall.fail": "Uninstall failed: {error}",
-			"btn.checkUpdate": "Check update",
-			"btn.checkUpdate.busy": "Checking…",
 			"btn.doUpdate": "Update",
 			"btn.doUpdate.busy": "Updating…",
 			"channel.title": "Channel",
@@ -3144,7 +3139,7 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 			const [busy, setBusy] = useState(false);
 
 			useEffect(() => {
-				apiJson("/dsh-purge/hooks-deny")
+				apiJson("/ys-pojia/hooks-deny")
 					.then((d) => { if (d && d.ok) setCfg({ hooksDenyBypass: d.hooksDenyBypass !== false }); })
 					.catch(() => {});
 			}, []);
@@ -3153,7 +3148,7 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 				if (!cfg || busy) return;
 				setCfg({ hooksDenyBypass });
 				setBusy(true);
-				apiJson("/dsh-purge/hooks-deny", {
+				apiJson("/ys-pojia/hooks-deny", {
 					method: "POST",
 					headers: { "content-type": "application/json" },
 					body: JSON.stringify({ hooksDenyBypass }),
@@ -3199,7 +3194,7 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 			const [busy, setBusy] = useState(false);
 
 			useEffect(() => {
-				apiJson("/dsh-purge/continue/settings")
+				apiJson("/ys-pojia/continue/settings")
 					.then((d) => { if (d && d.ok) setCfg(d); })
 					.catch(() => {});
 			}, []);
@@ -3211,7 +3206,7 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 				if (next.autoContinue && !(Number(next.continueMax) > 0)) next.continueMax = 3;
 				setCfg(next);
 				setBusy(true);
-				apiJson("/dsh-purge/continue/settings", {
+				apiJson("/ys-pojia/continue/settings", {
 					method: "POST",
 					headers: { "content-type": "application/json" },
 					body: JSON.stringify(next),
@@ -3339,7 +3334,7 @@ function viewItems(t) {
    这些信息原本分散在「引擎」和「补丁」两个视图里，首页只有一个补丁计数。
 
    数据来源：
-     /dsh-purge/status  → host_version / host_supported / host_compat_known / patches_*
+     /ys-pojia/status  → host_version / host_supported / host_compat_known / patches_*
      /ys-pojia/engine/status → engines（目录）+ engine（当前）+ availability（各档可用性）
    ──────────────────────────────────────────────────────────────────────── */
 function HostStatusCard(props) {
@@ -3473,15 +3468,11 @@ function PurgifySection() {
 			const [ownServers, setOwnServers] = useState("");
 			const [ownLoaded, setOwnLoaded] = useState(false);
 			const [patchBusy, setPatchBusy] = useState(false);
-			const [updateBusy, setUpdateBusy] = useState(false);
-			const [canApplyUpdate, setCanApplyUpdate] = useState(false);
-			const [updateJob, setUpdateJob] = useState(null);
 			const [askRestart, setAskRestart] = useState(false);
 			const suppressRestartAsk = useRef(false);
 			const [askUninstall, setAskUninstall] = useState(false);
 			const [uninstallBusy, setUninstallBusy] = useState(false);
 			const [notice, setNotice] = useState({ kind: "idle", text: "" });
-			const [updateNotice, setUpdateNotice] = useState({ kind: "idle", text: "" });
 			const [updateInfo, setUpdateInfo] = useState(null);
 			const [channel, setChannel] = useState("stable");
 			const [pick, setPick] = useState({ stable: "", beta: "" });
@@ -3572,113 +3563,10 @@ function PurgifySection() {
 				return tr("update.fail", { error: msg });
 			};
 
-			const applyUpdateInfo = useCallback((d, tr, kind) => {
-				if (d.channel) setChannel(d.channel);
-				setUpdateInfo((prev) => {
-					const versions = (d.versions && d.versions.length) ? d.versions : ((prev && prev.versions) || []);
-					return Object.assign({}, prev || {}, d, { versions });
-				});
-				if (d.versions && d.versions.length) syncPicks(d);
-				if (kind === "check") setCanApplyUpdate(Boolean(d.hasUpdate) && !d.error);
-				else if (kind === "done" || kind === "switched" || kind === "channel") setCanApplyUpdate(false);
-				const version = d.localVersion || d.localSha || "—";
-				const remote = d.remoteVersion || d.remoteSha || "—";
-				let text = tr("update.latest", { version });
-				if (d.hasUpdate) text = tr("update.available", { remote, local: version });
-				if (d.pinned && d.hasUpdate) text = tr("update.pinned", { version, remote });
-				if (kind === "switched" || kind === "channel") text = tr("update.switched", { version: d.localVersion || d.remoteVersion || "—" });
-				if (kind === "done") text = tr("update.done", { version: d.localVersion || d.remoteVersion || "—" });
-				if (d.error) text = d.error;
-				setUpdateNotice({ kind: d.ok === false || d.error ? "error" : "ok", text });
-			}, []);
-
-			const checkUpdate = useCallback((id) => {
-				setUpdateBusy(true);
-				setUpdateJob({ id: id || "", kind: "check" });
-				const tr = tRef.current;
-				setUpdateNotice({ kind: "ok", text: tr("update.checking") });
-				apiJson("/dsh-purge/update")
-					.then((d) => {
-						if (!d || (!d.ok && !d.channel)) throw new Error((d && d.error) || "check failed");
-						applyUpdateInfo(d, tr, "check");
-					})
-					.catch((e) => setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) }))
-					.finally(() => {
-						setUpdateBusy(false);
-						setUpdateJob(null);
-					});
-			}, [applyUpdateInfo]);
-
-			const postUpdate = useCallback((body, kind, id) => {
-				setUpdateBusy(true);
-				setUpdateJob({ id: id || "", kind });
-				const tr = tRef.current;
-				setUpdateNotice({ kind: "ok", text: kind === "switched" || kind === "channel" ? tr("update.switching") : tr("update.applying") });
-				return apiJson("/dsh-purge/update", {
-					method: "POST",
-					headers: { "content-type": "application/json" },
-					body: JSON.stringify(body || {}),
-				})
-					.then((d) => {
-						if (!d || (d.ok === false && d.error)) throw new Error((d && d.error) || "update failed");
-						applyUpdateInfo(d, tr, kind);
-						if (d.needsFullQuit) {
-							suppressRestartAsk.current = false;
-							setAskRestart(true);
-							setUpdateNotice({ kind: "ok", text: tr("restart.official.body") });
-							return d;
-						}
-						if (d.restartAfter) {
-							setUpdateNotice({ kind: "ok", text: tr("update.restarting") });
-							return d;
-						}
-						if (d.applied && d.reloadClient !== false) {
-							setUpdateNotice({ kind: "ok", text: tr("update.reloading") });
-							setTimeout(() => {
-								try { window.location.reload(); } catch { /* ignore */ }
-							}, 280);
-						} else if (d.needRestart) {
-							setAskRestart(true);
-						}
-						return d;
-					})
-					.catch((e) => {
-						setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) });
-						throw e;
-					})
-					.finally(() => {
-						setUpdateBusy(false);
-						setUpdateJob(null);
-					});
-			}, [applyUpdateInfo]);
-
-			const doUpdate = useCallback((id) => {
-				postUpdate({ op: "apply", ref: "master", channel: "stable" }, "done", id).catch(() => {});
-			}, [postUpdate]);
-
-			const switchSelected = useCallback((id) => {
-				const tr = tRef.current;
-				const ref = pick[id];
-				const versions = ((updateInfo && updateInfo.versions) || []).filter((item) => item.channel === id);
-				const hit = versions.find((item) => item.ref === ref);
-				const label = (hit && (hit.label || hit.version)) || ref;
-				if (!ref) return;
-				if (!window.confirm(tr("update.confirmSwitch", { version: label }))) return;
-				const prevChannel = channel;
-				const prevInfo = updateInfo;
-				if (hit && hit.channel) {
-					setChannel(hit.channel);
-					setUpdateInfo((cur) => Object.assign({}, cur || {}, { channel: hit.channel }));
-				}
-				postUpdate({ op: "switch", ref }, "switched", id).catch(() => {
-					setChannel(prevChannel);
-					setUpdateInfo(prevInfo);
-				});
-			}, [channel, pick, postUpdate, updateInfo]);
 
 			const loadAll = useCallback(() => {
 				const tr = tRef.current;
-				apiJson("/dsh-purge/status")
+				apiJson("/ys-pojia/status")
 					.then((d) => {
 						if (d && d.ok) {
 							setState(d);
@@ -3694,15 +3582,7 @@ function PurgifySection() {
 						setState({ ok: false, patches_total: 0, patches_applied: 0, patch_status: {}, shim_cmd: "n/a", shim_ps1: "n/a", shim_bin: "n/a", has_backup: false });
 						setNotice({ kind: "error", text: tr("err.status", { error: e.message }) });
 					});
-				apiJson("/dsh-purge/update")
-					.then((d) => {
-						if (!d) return;
-						if (d.channel) setChannel(d.channel);
-						setUpdateInfo(d);
-						syncPicks(d);
-					})
-					.catch(() => {});
-				apiJson("/dsh-purge/override")
+				apiJson("/ys-pojia/override")
 					.then((d) => {
 						if (d && d.ok) {
 							const packed = typeof d.defaultContent === "string" ? d.defaultContent : "";
@@ -3717,7 +3597,7 @@ function PurgifySection() {
 						else setNotice({ kind: "error", text: tr("err.override", { error: (d && d.error) || "" }) });
 					})
 					.catch((e) => setNotice({ kind: "error", text: tr("err.override", { error: e.message }) }));
-				apiJson("/dsh-purge/own-servers")
+				apiJson("/ys-pojia/own-servers")
 					.then((d) => {
 						if (d && d.ok) {
 							setOwnServers(typeof d.content === "string" ? d.content : "");
@@ -3737,7 +3617,7 @@ function PurgifySection() {
 				if (!patchBusy && !uninstallBusy) return undefined;
 				let stop = false;
 				const tick = () => {
-					apiJson("/dsh-purge/status")
+					apiJson("/ys-pojia/status")
 						.then((d) => {
 							if (stop || !d) return;
 							if (d.apply_progress) {
@@ -3781,7 +3661,7 @@ function PurgifySection() {
 					}));
 					const applyContent = action === "apply" ? readPromptBox() : "";
 					/* 走 apiJson：apply/revert 本来就配了 240s/120s 超时，裸 fetch 会挂死在半路。 */
-					apiJson("/dsh-purge/" + action, {
+					apiJson("/ys-pojia/" + action, {
 						method: "POST",
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify(action === "apply" ? { content: applyContent } : {}),
@@ -3865,7 +3745,7 @@ function PurgifySection() {
 					setAskRestart(false);
 					setNotice({ kind: "idle", text: "" });
 					const content = readPromptBox();
-					apiJson("/dsh-purge/override", {
+					apiJson("/ys-pojia/override", {
 						method: "POST",
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ content: content }),
@@ -3909,7 +3789,7 @@ function PurgifySection() {
 				setOverride(defaultOverride);
 				setPatchBusy(true);
 				setNotice({ kind: "idle", text: "" });
-				apiJson("/dsh-purge/override", {
+				apiJson("/ys-pojia/override", {
 					method: "POST",
 					headers: { "content-type": "application/json" },
 					body: JSON.stringify({ content: defaultOverride }),
@@ -3974,7 +3854,7 @@ function PurgifySection() {
 				setState((prev) => Object.assign({}, prev || {}, {
 					apply_progress: { active: true, kind: "uninstall", stage: "locate", error: "" },
 				}));
-				apiJson("/dsh-purge/uninstall", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })
+				apiJson("/ys-pojia/uninstall", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })
 					.then((d) => {
 						if (!d || !d.ok) throw new Error((d && d.error) || "uninstall failed");
 						setNotice({ kind: "ok", text: (d && d.note) || hostText(tr, "uninstall.done", d.surface || hostSurfaceOf(state)) });
@@ -4551,7 +4431,7 @@ function PurgifySection() {
 					if (d && d.ok) setSt({ ok: true, skills: d.skills || [] });
 					else fail({ message: (d && d.error) || "bad response" });
 				};
-				apiJson("/dsh-purge/status")
+				apiJson("/ys-pojia/status")
 					.then((d) => {
 						const allowed = skillUiAllowed(d);
 						setOnBeta(allowed);
@@ -4831,7 +4711,7 @@ function PurgifySection() {
 			// 必须先看到旧进程掉线，再等新进程就绪；否则同进程立刻 200 会被当成「重启成功」又弹重启。
 			let sawDown = false;
 			const ping = () => {
-				fetch("/dsh-purge/status", { cache: "no-store", credentials: "same-origin" })
+				fetch("/ys-pojia/status", { cache: "no-store", credentials: "same-origin" })
 					.then((r) => (r.ok ? r.json() : Promise.reject()))
 					.then((d) => {
 						if (!sawDown) {
@@ -4876,7 +4756,7 @@ function PurgifySection() {
 				if (sawDrop) return;
 				stop("");
 			}, 25000);
-			fetch("/dsh-purge/restart", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })
+			fetch("/ys-pojia/restart", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })
 				.then((r) => r.json())
 				.then((d) => {
 					if (!d.ok) throw new Error(d.error || "restart failed");
@@ -5193,7 +5073,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				clearStoredDraft(sessionId);
 				stopped = true;
 			};
-			apiJson("/dsh-purge/last-user?sessionId=" + encodeURIComponent(sessionId)).then((data) => {
+			apiJson("/ys-pojia/last-user?sessionId=" + encodeURIComponent(sessionId)).then((data) => {
 				if (stopped) return;
 				last = String(data?.text || "").trim();
 				if (!last || isPluginDraft(last)) return;
@@ -5282,7 +5162,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 							const sessionId = currentSessionId(rewindSessions);
 							if (!sessionId) return;
 							try {
-								const data = await apiJson("/dsh-purge/continue", {
+								const data = await apiJson("/ys-pojia/continue", {
 									method: "POST",
 									headers: { "content-type": "application/json" },
 									body: JSON.stringify({ sessionId, force: true }),
@@ -5313,7 +5193,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				}
 				let cancelled = false;
 				const tick = () => {
-					apiJson("/dsh-purge/continue?sessionId=" + encodeURIComponent(sessionId))
+					apiJson("/ys-pojia/continue?sessionId=" + encodeURIComponent(sessionId))
 						.then((data) => { if (!cancelled && data && data.ok) setInfo(data); })
 						.catch(() => {});
 				};
@@ -5332,7 +5212,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				setBusy(true);
 				setNotice("");
 				try {
-					const data = await apiJson("/dsh-purge/continue", {
+					const data = await apiJson("/ys-pojia/continue", {
 						method: "POST",
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ sessionId }),
@@ -5432,7 +5312,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				const sessionId = this.props.sessionId || currentSessionId(rewindSessions);
 				if (!sessionId || this.state.busy) return;
 				this.setState({ busy: true, menu: false, notice: "" });
-				apiJson("/dsh-purge/rewind", {
+				apiJson("/ys-pojia/rewind", {
 					method: "POST",
 					headers: { "content-type": "application/json" },
 					body: JSON.stringify({ sessionId, mode }),
@@ -5518,7 +5398,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				setMenu(false);
 				setNotice("");
 				try {
-					const data = await apiJson("/dsh-purge/rewind", {
+					const data = await apiJson("/ys-pojia/rewind", {
 						method: "POST",
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ sessionId, mode }),
@@ -5594,7 +5474,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			if (!sessions) return () => {};
 			const tick = async () => {
 				try {
-					const data = await apiJson("/dsh-purge/rewind");
+					const data = await apiJson("/ys-pojia/rewind");
 					if (!data || !data.sessionId || !data.at || data.at <= rewindSeenAt) return;
 					rewindSeenAt = data.at;
 					const current = currentSessionId(sessions);
@@ -10014,7 +9894,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			setDrillAuthLocal(ok);
 			if (!ok) return;
 			drillGrantPosting += 1;
-			fetch("/dsh-purge/drill-grant", {
+			fetch("/ys-pojia/drill-grant", {
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: "{}",
@@ -10029,7 +9909,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			const gen = drillGrantGen;
 			/* 复位上一次调度的重试 timer,避免多次 writeDrillAuth 叠加链条 */
 			if (drillSyncRetryTimer) { try { clearTimeout(drillSyncRetryTimer); } catch { /* ignore */ } drillSyncRetryTimer = null; }
-			fetch("/dsh-purge/drill-grant", { method: "GET" })
+			fetch("/ys-pojia/drill-grant", { method: "GET" })
 				.then((r) => r.json())
 				.then((r) => {
 					if (gen !== drillGrantGen) return;
@@ -10660,7 +10540,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 
 			const load = useCallback(async () => {
 				try {
-					const d = await apiJson("/dsh-purge/armor/status?locale=" + lang);
+					const d = await apiJson("/ys-pojia/armor/status?locale=" + lang);
 					setData(d);
 					setErr("");
 				} catch (e) {
@@ -10695,16 +10575,16 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				}
 			}, [lang]);
 
-			const setAll = (mode) => post("/dsh-purge/armor/set", { enabledIds: mode }, "all");
-			const reset = () => post("/dsh-purge/armor/reset", {}, "reset");
-			const toggleOne = (id, enabled) => post("/dsh-purge/armor/toggle", { id, enabled }, "r" + id);
-			const applyPreset = (id) => post("/dsh-purge/armor/preset", { preset: id }, "p" + id);
+			const setAll = (mode) => post("/ys-pojia/armor/set", { enabledIds: mode }, "all");
+			const reset = () => post("/ys-pojia/armor/reset", {}, "reset");
+			const toggleOne = (id, enabled) => post("/ys-pojia/armor/toggle", { id, enabled }, "r" + id);
+			const applyPreset = (id) => post("/ys-pojia/armor/preset", { preset: id }, "p" + id);
 
 			const toggleGroup = (g, on) => {
 				const ids = (g.rules || []).map((r) => r.id);
 				const cur = new Set((data && data.enabledIds) || []);
 				for (const id of ids) { if (on) cur.add(id); else cur.delete(id); }
-				return post("/dsh-purge/armor/set", { enabledIds: [...cur] }, "g" + g.id);
+				return post("/ys-pojia/armor/set", { enabledIds: [...cur] }, "g" + g.id);
 			};
 
 			const foldGroup = (id) => setOpenGroups((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -11029,7 +10909,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				  },
 				    h("strong", null, t("misc.group.mode")),
 				    h("span", { style: { marginLeft: "auto", color: "var(--dshp-mute)", fontSize: 12 } },
-				      String(modeData.selected || modeData.current || "-")),
+				      String(modeData.selected || modeData.current || "未设置")),
 				  ),
 				  open.mode ? h("div", { style: { padding: "4px 0 0" } },
 				    h("p", { className: "dshp-hint", style: { margin: "0 0 8px", color: "var(--dshp-mute)" } },
@@ -11040,8 +10920,8 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				      style: { display: "flex", alignItems: "center", gap: 8, padding: "6px 0" },
 				    },
 				      h("span", { style: { flex: 1 } },
-				        h("b", null, m.label || m.id),
-				        m.description ? h("span", { style: { color: "var(--dshp-mute)", marginLeft: 6, fontSize: 12 } }, m.description) : null,
+				        h("b", null, m.name || m.id),
+				        (m.tagline || m.summary) ? h("span", { style: { color: "var(--dshp-mute)", marginLeft: 6, fontSize: 12 } }, m.tagline || m.summary) : null,
 				      ),
 				      modeData.selected === m.id
 				        ? h("span", { style: { color: "var(--dshp-accent)", fontSize: 12 } }, t("misc.mode.current"))
@@ -11621,7 +11501,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
   const [ver, setVer] = useState("");
   useEffect(() => {
     let cancelled = false;
-    apiJson("/dsh-purge/status")
+    apiJson("/ys-pojia/status")
       .then((d) => { if (!cancelled && d && d.plugin_version) setVer(String(d.plugin_version)); })
       .catch(() => { /* 取不到就不显示，不占位 */ });
     return () => { cancelled = true; };
@@ -12216,7 +12096,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			rewindSessions = ctx.sessions;
 			rewindWorkspace = ctx.uiWorkspace || null;
 			rewindConversation = ctx.conversation || null;
-			ctx.effect(() => installRewindWatch(ctx), "dsh-purge: rewind watch");
+			ctx.effect(() => installRewindWatch(ctx), "ys-pojia: rewind watch");
 		}
 
 		// 普通 command 结果不会激活宿主的空会话；补上输入节点，让结果卡片可见。
