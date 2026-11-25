@@ -38,6 +38,48 @@ generic 兜底
 
 检测失败**不会**导致整段不注入，只是丢掉厂商定制。
 
+## 怎么在对话里验证是否开启
+
+之前超频开了没有任何可见反馈 —— 模型不会主动说「我收到了资源无上限声明」，只能靠观察行为猜。现在给了三个可判定的手段。
+
+### `/overclock` 命令
+
+```
+/overclock          看开关状态 + 模型识别 + 命中分组
+/overclock text     打印实际会注入的全文
+/overclock help     帮助
+```
+
+输出：
+
+```
+超频开关：已开启 ✓
+当前模型：deepseek-v4.1-flash
+识别厂商：deepseek
+命中分组：deepseek
+注入语种：zh
+
+会注入 557 字符。用 /overclock text 看全文。
+```
+
+### `overclock_status` 工具
+
+模型可自己调用查状态。问「超频开了吗」它会去查而不是猜。
+
+### 日志
+
+每次注入写一行：
+
+```
+[unlimited.inject] model=deepseek-v4.1-flash vendor=deepseek group=deepseek locale=zh bytes=557
+```
+
+路径：`%TEMP%\dsh-purge-desktop.log`
+
+### 判定标准
+
+**只看「开关」与「分组」两行。** 模型自述「我收到了超频声明」不算证据 —— 可能是幻觉；说「没看到」也可能是没读懂。只有宿主侧的开关状态和选中的文本是确定事实。
+
 ## 顺带修的文档错数据
 
 核对探针数时发现 badge 写错了：

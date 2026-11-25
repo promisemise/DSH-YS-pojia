@@ -284,6 +284,77 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ---
 
+## v1.4.5: main command renamed, overclock made observable, fallback hardened
+
+### Main command: `/purge` to `/yspojia`
+
+`purge` is a generic word that other plugins also register, and the host keeps only
+the first registration - which is why `/purge` showed another plugin's behaviour. The
+name is now released entirely.
+
+Lowercase is mandatory: the host validates against `/^[a-z][a-z0-9_-]*$/u` and throws
+a TypeError otherwise. That matters because every command registration sits in one try
+block, so a single invalid name aborts the rest of the commands and hooks.
+
+Everything folds into one entry point; standalone commands still work:
+
+```
+/yspojia status / apply / revert / uninstall / edit
+/yspojia overclock / overclock text
+/yspojia rules / skills / rewind / help
+
+/rules  /skills  /overclock  /rewind
+```
+
+### Overclock is now observable
+
+Previously enabling it produced no visible effect anywhere. Four surfaces now:
+
+| Surface | Purpose |
+|---|---|
+| `/overclock` | switch state, model detection, selected group |
+| `/overclock text` | print the exact injected text |
+| `overclock_status` tool | the model can check itself |
+| `[unlimited.inject]` log line | one line per injection |
+
+`purge_boost` diagnostics also append the overclock state.
+
+### The model name was never readable
+
+The old lookup used `session.requestHeader().config` and `session.header.model` - both
+stay empty until the first message commits a `request/header` event, and a command runs
+before that. Every fresh session fell through to generic.
+
+The working path is `sessionProjections.stateOf(session, "modelSelection")`, which has a
+value from the moment the session exists. Four paths in reliability order:
+
+```
+1. sessionProjections -> pending, else lastUsed   (works on a fresh session)
+2. session.requestHeader().config.model
+3. session.header.model
+4. empty -> generic
+```
+
+### Chinese fallback
+
+`generic` only had an English variant, so a Chinese UI with an unresolvable model got
+English text. A Chinese version now exists (418 chars), deliberately not copying the
+deepseek environment framing - an unknown model may not recognise it - and instead
+stating the constraint neutrally with three repetitions.
+
+Dirty input is normalised too: `unlimitedText("nonsense","zh")` used to return English;
+it now maps to generic and picks language by locale.
+
+`/overclock` separates the two failure causes: model genuinely unknown versus model name
+unreadable, with different explanations.
+
+### Verification
+
+51 assertions pass (16 fallback + 18 overclock + 17 rule). The dispatcher matrix covers
+11 cases. Not verified in a live session - the host still runs pre-restart modules.
+
+---
+
 ## v1.4.4: the overclock notice now adapts to the model's vendor
 
 The overclock segment used to be one fixed block of Chinese text built around an
@@ -329,6 +400,61 @@ gemini-3.1-pro      -> google    English, 626 chars
 llama-4-maverick    -> open      English, 945 chars
 unknown-xyz         -> generic   English, 844 chars
 ```
+
+### How to verify it is actually on
+
+The switch lives on the Engine tab, but until now there was no visible feedback for
+"did turning it on do anything" - the model will not announce that it received an
+unlimited-resources notice, so you could only guess from its behaviour. Three
+checkable signals now exist:
+
+**1. `/overclock` command**
+
+```
+/overclock          switch state + model detection + which group is selected
+/overclock text     print the exact text that will be injected
+/overclock help     help
+```
+
+**2. `overclock_status` tool**
+
+The model can call this itself. Ask "is overclock on?" and it checks instead of
+guessing.
+
+**3. The log line**
+
+Every injection writes one:
+
+```
+[unlimited.inject] model=deepseek-v4.1-flash vendor=deepseek group=deepseek locale=zh bytes=557
+```
+
+Log path: `%TEMP%\dsh-purge-desktop.log`
+
+**Fallback when the model cannot be resolved**
+
+A failed vendor lookup - or a model outside the known 29 - lands on `generic` and the
+segment is still injected. Two variants:
+
+| Case | Text used |
+|---|---|
+| No model name, Chinese UI | `generic` Chinese (418 chars) |
+| No model name, English UI | `generic` English (844 chars) |
+| Model name present but unknown | same, chosen by UI language |
+
+The Chinese generic deliberately avoids the "internal limit-verification environment"
+framing - that shape is tuned for Chinese models and an unknown model may not
+recognise it. It uses a neutral "unlimited resources this session" statement and
+repeats the core constraint three times (opening, workflow, rules), because an
+unresolvable model is most likely one with weaker instruction-following.
+
+`/overclock` marks the group line with "← 通用兜底" and distinguishes the two causes:
+the model is genuinely unknown, or the model name could not be read at all.
+
+**Judge by the switch and group lines only.** A model saying "I received the
+overclock notice" is not evidence - that can be a hallucination, and a model saying
+"no" may simply not have parsed it. Only the host-side switch state and the selected
+text are facts.
 
 ### Stale docs fixed along the way
 

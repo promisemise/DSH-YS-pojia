@@ -12203,16 +12203,30 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 		}
 
 		// 普通 command 结果不会激活宿主的空会话；补上输入节点，让结果卡片可见。
+		/* 哪些命令名算「本插件的命令」。
+		 *
+		 * 主命令已从 `purge` 改成 `yspojia`（`purge` 是通用词，会和别家插件撞名）。
+		 * 这里同时列出子命令与别名：用户用 `/rules`、`/overclock` 这类独立命令时
+		 * 也该回显输入节点，否则结果卡片会因为没有输入节点而不显示。
+		 *
+		 * 不含 `purge` —— 那个名字现在可能属于别家插件，回显成我们的样式会误导。 */
+		const PURGE_COMMAND_NAMES = new Set([
+			"yspojia", "ys-pojia",
+			"rules", "ysp-rules",
+			"skills", "ysp-skills",
+			"overclock", "ysp-overclock",
+			"rewind", "ysp-rewind",
+		]);
 		const purgeCommandInputDefinition = {
 			kind: "dsh-purge-command-input",
 			target: "chat",
-			match: (event) => event.type === "command/run" && event.data.name === "purge"
+			match: (event) => event.type === "command/run" && PURGE_COMMAND_NAMES.has(String(event.data.name))
 				? { id: String(event.data.commandId), role: "start" } : null,
 			start: (_context, match) => ({
 				commandId: match.event.data.commandId,
 				seq: match.event.seq,
 				time: match.event.time,
-				text: `/purge${(match.event.data.args ?? "").trimEnd()}`,
+				text: `/${match.event.data.name}${(match.event.data.args ?? "").trimEnd()}`,
 			}),
 			update: (context) => context.state,
 			buildViewNode: (context) => context.state === undefined ? null : ({
@@ -12233,7 +12247,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 
 		function PurgeCommandInputView({ node }) {
 			return h("div", {
-				role: "group", "aria-label": "/purge", "data-command-input": "",
+				role: "group", "aria-label": "yspojia", "data-command-input": "",
 				style: { display: "flex", justifyContent: "flex-end", padding: "8px 24px" },
 			}, h("div", {
 				style: { whiteSpace: "pre-wrap", overflowWrap: "anywhere", maxWidth: "100%",

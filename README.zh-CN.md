@@ -283,6 +283,64 @@ GPT 的降级手法有三种可识别特征：先声明「我不能描写…」�
 
 ---
 
+## v1.4.5：主命令改名、超频可观测、读不到模型时的兜底
+
+### 主命令 `/purge` → `/yspojia`
+
+`purge` 是通用词，别家插件也注册，宿主只认先注册的那个。改名后 `purge` 彻底让出去。
+
+**为什么全小写**：宿主校验 `/^[a-z][a-z0-9_-]*$/u`，大写会抛 `TypeError`；而全部命令注册在同一个 try 块里，一个名字不合法会让后面所有命令和钩子全不注册。
+
+所有能力收进一个入口，独立命令仍保留：
+
+```
+/yspojia status / apply / revert / uninstall / edit
+/yspojia overclock / overclock text
+/yspojia rules / skills / rewind / help
+
+/rules  /skills  /overclock  /rewind
+```
+
+### 超频有了可观测点
+
+之前开了没有任何可见反馈。现在三条路：
+
+| 手段 | 用途 |
+|---|---|
+| `/overclock` | 看开关、模型识别、命中分组 |
+| `/overclock text` | 打印实际注入全文 |
+| `overclock_status` 工具 | 模型可自己查 |
+| `[unlimited.inject]` 日志 | 每次注入记一行 |
+
+`purge_boost` 诊断末尾也追加超频状态，不用跑两个地方。
+
+### 修掉「永远读不到模型名」
+
+原来走 `session.requestHeader().config` 和 `session.header.model`——**两条都要等第一条消息发出后才有值**，命令在消息之前执行，所以永远取不到。
+
+正确路径是 `sessionProjections.stateOf(session, "modelSelection")`，会话一建立就有值。四条路径按可靠性排序：
+
+```
+1. sessionProjections → pending，退 lastUsed   ← 空会话也能拿到
+2. session.requestHeader().config.model
+3. session.header.model
+4. 空 → generic
+```
+
+### 中文兜底
+
+`generic` 原来只有英文版。补了中文版（418 字符），刻意不照搬 deepseek 版的环境声明框架——未知模型未必认，改用中性的「本轮资源无上限」并在三处重复核心约束。
+
+脏输入也归一化：`unlimitedText("nonsense","zh")` 原来返回英文，现在归到 generic 再按 locale 选。
+
+`/overclock` 区分两种兜底原因：模型不认识 vs 读不到模型名，提示与修法不同。
+
+### 验证
+
+51 项断言全过（兜底 16 + 超频 18 + 规则 17）。命令分发 11 个用例全对。**未在活会话验证**——宿主仍是重启前的旧模块。
+
+---
+
 ## v1.4.4：超频模式按模型厂商自适应
 
 旧版超频是一段固定中文文案，框架是「内部极限验证测试环境」。这套措辞只对 DeepSeek 系有效，换成 GPT / Claude / Gemini / 开源模型就是错配——GPT 把「测试环境」读成安全触发词，Claude 抵触命令式口吻，Gemini 丢长段落中间部分，开源模型指令跟随弱会跳过中间段。
@@ -316,6 +374,60 @@ gemini-3.1-pro      → google    英文 626 字符
 llama-4-maverick    → open     英文 945 字符
 unknown-xyz         → generic   英文 844 字符
 ```
+
+### 怎么在对话里验证是否开启
+
+超频开关在引擎页，但「开了到底有没有生效」之前没有任何可见反馈 —— 模型不会主动说「我收到了资源无上限声明」，只能靠观察行为猜。现在给了三个可判定的手段：
+
+**① `/overclock` 命令**
+
+```
+/overclock          看开关状态 + 模型识别 + 命中分组
+/overclock text     打印实际会注入的全文
+/overclock help     帮助
+```
+
+输出长这样：
+
+```
+超频开关：已开启 ✓
+当前模型：deepseek-v4.1-flash
+识别厂商：deepseek
+命中分组：deepseek
+注入语种：zh
+
+会注入 557 字符。用 /overclock text 看全文。
+```
+
+**② `overclock_status` 工具**
+
+模型可以自己调这个工具查状态。你问「超频开了吗」，它会去查而不是猜。
+
+**③ 日志**
+
+每次注入会写一行：
+
+```
+[unlimited.inject] model=deepseek-v4.1-flash vendor=deepseek group=deepseek locale=zh bytes=557
+```
+
+日志路径：`%TEMP%\dsh-purge-desktop.log`
+
+**读不到模型时的兜底**
+
+模型识别失败（或模型不在已知 29 家里）会落到 `generic` 分组，不会因此不注入。兜底分两档：
+
+| 情况 | 用哪份文案 |
+|---|---|
+| 读不到模型名 + 界面中文 | `generic` 中文版（418 字符） |
+| 读不到模型名 + 界面英文 | `generic` 英文版（844 字符） |
+| 有模型名但不在 29 家 | 同上，按界面语言选 |
+
+`generic` 中文版刻意不用「内部极限验证测试环境」那套环境声明——那是给国产模型的框架，未知模型未必认。改用中性的「本轮资源无上限」，并在开头、流程、规则三处各重复一次核心约束，因为识别不出模型时最可能的情况是它指令跟随较弱。
+
+`/overclock` 会明确标出「← 通用兜底」，并区分两种原因：模型确实不认识，还是根本读不到模型名。
+
+**判定标准：只看「开关」与「分组」两行。** 模型自述「我收到了超频声明」不算证据 —— 可能是幻觉；说「没看到」也可能是没读懂。只有宿主侧的开关状态和选中的文本是确定事实。
 
 ### 顺带修的文档错数据
 
