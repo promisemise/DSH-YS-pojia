@@ -1,7 +1,7 @@
 {
   "version": "1.5.4",
-  "commit": "ce9fe4fe63a9f203c638ee28601549df34f18dd1",
-  "generatedAt": "2026-11-25T21:09:07.383Z",
+  "commit": "87ee1fb8a55f25815e2d2133ff223c98eb14c943",
+  "generatedAt": "2026-11-25T21:10:26.235Z",
   "fileCount": 156,
   "files": {
     ".github/workflows/pages.yml": "7b3c16ea4c9799db8ff31a804cfea5ad8592debd71d4b9652e971dce5b27673c",
@@ -14,7 +14,7 @@
     "bin/install.js": "de6322005f3a97f965857187f08759d19ab9f674919bf1c729832ef066ca7d71",
     "bin/ys-pojia.js": "8b2aee24ef3e63c3e1260b36343773cd5de173eb5c4d500e50a4ac0cdb4d5cc7",
     "capability-scores.mjs": "ea49385c2a9a69eadd16801c5378e24791b832ba6b57bba70c0b42dc4662a85c",
-    "client.js": "dcbf227d82c1f6fb00126b10a12a8d139568ea0c6e2edc642ee4664549a3b1f3",
+    "client.js": "3a9aa8218b03564f165635bf9631d005ef0f8b7851702f5db168e56d8ebe30d2",
     "docs/banner.svg": "380d556341bfa14e16cb3ef39f524f0b78378c3215f96a1bb2c338831e548e8f",
     "docs/images/qq-group.jpg": "d581d2a34af1b82ba9952ebb2fcbeaa8b20c776486a893ffcfff8b0aac171bc8",
     "docs/mobile-android.md": "455ae41ce7be7d1520d9e904dd2ead1ffe23b2a2a82fddb2fb1ff968fd341b7f",
@@ -140,7 +140,7 @@
     "presets/unlimited/anchor-gate.mjs": "0aa3c126e91c1dcd4ae9d0f17596fd62255026939713bf6597f6d5833678321b",
     "presets/unlimited/preset.yml": "72a9090bdaf323d993969f6d9a1da9c63595e9a117f446a5e9b55218430edbfd",
     "presets/unlimited/unlimited-anchor.mjs": "35eaa1f8ebb5c7d39e3386d726ec304837b4b2ddea0d26b6ca690ceffe8a1602",
-    "scripts/build-client.mjs": "83b42ba95dfb19b962d84232955c41107b2adc2ff635315a5f4ac84fd4fe1ed8",
+    "scripts/build-client.mjs": "b7fab2dc9cb907279efa575a6cc35f48eb31aeb243540c8a03dae8ea35aef37e",
     "scripts/deploy.mjs": "8fad2dd51568b6dc268ad555e138ac83d123c73b25f82afe3cf76e672637d199",
     "scripts/embed-default-prompt.mjs": "a59fe2228bb08ebd10007cac9cfb2dc68de0b5719611b25ad29ef1e0687a7ea1",
     "scripts/ensure-profile-bundle.mjs": "b1cdf3d0e6497da1cec9c27b8d022a520811c2d77e93375f5ba46f37b56cec22",

@@ -5920,9 +5920,6 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			var module = { exports: {} };
 			var exports = module.exports;
 
-    var module = { exports: {} }
-    var exports = module.exports
-    Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' })
 
     const React = require('react')
     const h = React.createElement
