@@ -10,6 +10,59 @@ window.__ModuleLoader__.load({ id: "ys-pojia", factory: (require) => {
 /* 仓库地址。求 star 和「更新去仓库看」都指向这里。 */
 const REPO_URL = "https://github.com/yushang657/DSH-YS-pojia";
 
+/*
+ * 打开一个外部链接。
+ *
+ * 为什么不能用 <a target="_blank">：
+ *   DSH 主进程的 navigation-policy.mjs 里，setWindowOpenHandler 对渲染进程发起
+ *   的弹窗一律返回 { action: "deny" }，源注释写得很直白——渲染进程的弹窗永远
+ *   不会被提升成系统浏览器。所以卡片上那几个 target=_blank 的按钮点了没反应，
+ *   既不跳转也不报错。
+ *
+ * 合法通道只有一条：preload 暴露的 window.dshDesktop.openExternalUrl，它
+ * invoke 到 'desktop:external-url-open'，主进程侧（navigation-policy.mjs 的
+ * installTrustedExternalOpenPolicy）只放行主 frame、只要 http/https、且拒绝
+ * 指向 runtime 自身 origin 的地址。
+ *
+ * 三级回退：
+ *   1. window.dshDesktop.openExternalUrl —— 桌面端
+ *   2. window.open('_blank')             —— 浏览器 / Web 端仍可用
+ *   3. 复制到剪贴板 + 界面提示            —— 前两条都被拦时的兜底
+ *
+ * 返回 Promise<"opened" | "copied" | "failed">，调用方据此给真实反馈，
+ * 不能一律弹「已打开」。
+ */
+async function openExternalUrl(url) {
+	try {
+		const bridge = typeof window !== "undefined" ? window.dshDesktop : undefined;
+		if (bridge && typeof bridge.openExternalUrl === "function") {
+			await bridge.openExternalUrl(url);
+			return "opened";
+		}
+	} catch { /* 落到下一条路 */ }
+	try {
+		const w = window.open(url, "_blank", "noopener,noreferrer");
+		if (w) return "opened";
+	} catch { /* 落到兜底 */ }
+	/* 最后一条：复制地址，让用户自己粘到浏览器 */
+	try {
+		if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+			await navigator.clipboard.writeText(url);
+			return "copied";
+		}
+		const ta = document.createElement("textarea");
+		ta.value = url;
+		ta.setAttribute("readonly", "");
+		ta.style.position = "fixed";
+		ta.style.left = "-9999px";
+		document.body.appendChild(ta);
+		ta.select();
+		const ok = document.execCommand("copy");
+		document.body.removeChild(ta);
+		return ok ? "copied" : "failed";
+	} catch { return "failed"; }
+}
+
 		const name = "ys-pojia";
 		const inject = ["slots", "locale", "uiConversation"];
 		const NS = "settings.ys-pojia";
@@ -584,12 +637,16 @@ function useT() {
 			"repo.sub": "开源在 GitHub",
 			"repo.ask": "这个插件免费开源，全靠业余时间做。如果它帮到你了，去仓库点个 Star —— 那是对作者最直接的鼓励，也让更多人能搜到它。",
 			"repo.note": "本插件没有服务器：不联网、不上传数据、不自动检查更新。想看新版本或更新日志，去仓库的 Releases 页。",
+			"repo.fbTitle": "有想法？去仓库提",
+			"repo.fbBody": "需要新功能、想改现有行为、觉得哪里能用得更顺，都可以去 GitHub 开一个 Issue 说。作者会看，合理的会采纳 —— 不保证每条都做，但每一条都会读。遇到 Bug 也走同一个入口，附上宿主版本、报错原文和复现步骤，定位会快很多。",
+			"repo.btnIssue": "提 Issue / 报 Bug",
 			"repo.btn": "★ 去 GitHub 点 Star",
-			"repo.btnUpdate": "查看更新",
+			"repo.openCopied": "这个环境不让直接跳转，仓库地址已复制到剪贴板，粘到浏览器即可打开。",
+			"repo.openFailed": "跳转和复制都没成功。手动复制下面的地址：",
 			"repo.copy": "复制链接",
 			"repo.copied": "已复制",
 			"repo.copyFail": "复制失败，请手动选中复制",
-			"repo.linkHint": "按钮点不开？手动复制这个地址：",
+			"repo.linkHint": "也可以直接复制这个地址：",
 			"flow.title": "清洗流程",
 			"flow.apply": "应用",
 			"flow.revert": "还原",
@@ -1212,12 +1269,16 @@ function useT() {
 			"repo.sub": "Open source on GitHub",
 			"repo.ask": "This plugin is free and open source, built in spare time. If it helped you, leave a Star on the repo — it is the most direct encouragement for the author and helps others find it.",
 			"repo.note": "No server behind this plugin: it does not phone home, upload data, or auto-check for updates. For new versions and changelogs, see the Releases page on the repo.",
+			"repo.fbTitle": "Got an idea? Open an issue",
+			"repo.fbBody": "New features, changes to existing behaviour, or anything that could flow better — open an issue on GitHub and say so. The author reads them and adopts the reasonable ones. Not every request gets built, but every one gets read. Bugs go through the same door: include the host version, the exact error text and the steps to reproduce, and it gets located much faster.",
+			"repo.btnIssue": "Open an issue / report a bug",
 			"repo.btn": "★ Star on GitHub",
-			"repo.btnUpdate": "View updates",
+			"repo.openCopied": "This environment blocks direct navigation, so the repo URL is on your clipboard — paste it into a browser.",
+			"repo.openFailed": "Neither opening nor copying worked. Copy the address below manually:",
 			"repo.copy": "Copy link",
 			"repo.copied": "Copied",
 			"repo.copyFail": "Copy failed, select and copy manually",
-			"repo.linkHint": "Button not working? Copy this address manually:",
+			"repo.linkHint": "Or copy the address directly:",
 			"flow.title": "Clean flow",
 			"flow.apply": "Apply",
 			"flow.revert": "Restore",
@@ -2665,7 +2726,11 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 .dshp-repo-title em{font:500 11px/14px var(--dshp-mono);font-style:normal;letter-spacing:.04em;color:var(--dshp-faint)}
 .dshp-repo-ask{margin:0 0 8px;font:400 12.5px/1.65 var(--dshp-sans);color:var(--dshp-ink)}
 .dshp-repo-note{margin:0 0 12px;font:400 12px/1.6 var(--dshp-sans);color:var(--dshp-mute)}
+.dshp-repo-fb{margin:0 0 12px;padding:10px 12px;border:1px solid var(--dshp-line);border-left:3px solid var(--dshp-accent);border-radius:8px;background:var(--dshp-fill)}
+.dshp-repo-fb-title{display:block;margin:0 0 4px;font:600 12.5px/1.5 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-repo-fb-body{margin:0;font:400 12px/1.7 var(--dshp-sans);color:var(--dshp-mute)}
 .dshp-repo-ops{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.dshp-repo-openmsg{margin:0 0 10px;padding:7px 10px;border-radius:8px;background:var(--dshp-accent-soft);font:400 11.5px/1.6 var(--dshp-sans);color:var(--dshp-ink)}
 .dshp-repo-btn{text-decoration:none;height:30px;padding:0 13px;font-size:12.5px}
 .dshp-repo-link{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--dshp-line-soft)}
 .dshp-repo-linklabel{font:400 11.5px/1.5 var(--dshp-sans);color:var(--dshp-faint)}
@@ -3379,6 +3444,8 @@ function PurgifySection() {
 
 			/* 仓库链接复制状态：'idle' | 'ok' | 'fail' */
 			const [repoCopy, setRepoCopy] = useState("idle");
+			/* 外部链接打开失败时的提示：'' | 文案 */
+			const [repoOpenMsg, setRepoOpenMsg] = useState("");
 			const t = useT();
 			const tRef = useRef(t);
 			tRef.current = t;
@@ -3415,6 +3482,24 @@ function PurgifySection() {
 				const live = node && typeof node.value === "string" ? node.value : overrideRef.current;
 				overrideRef.current = live || "";
 				return overrideRef.current;
+			};
+
+			/**
+			 * 打开仓库相关的外部链接，并给真实反馈。
+			 *
+			 * 不能用 <a target=_blank> —— DSH 主进程把渲染进程的弹窗一律 deny，
+			 * 点了没有任何反应。走 openExternalUrl 的三级回退，见文件顶部注释。
+			 */
+			const openRepoLink = async (url) => {
+				const result = await openExternalUrl(url);
+				if (result === "opened") { setRepoOpenMsg(""); return; }
+				if (result === "copied") {
+					setRepoOpenMsg(t("repo.openCopied"));
+					window.setTimeout(() => setRepoOpenMsg(""), 4000);
+					return;
+				}
+				setRepoOpenMsg(t("repo.openFailed"));
+				window.setTimeout(() => setRepoOpenMsg(""), 4000);
 			};
 
 			/**
@@ -3984,25 +4069,29 @@ function PurgifySection() {
 				    ),
 				    h("p", { className: "dshp-repo-ask" }, t("repo.ask")),
 				    h("p", { className: "dshp-repo-note" }, t("repo.note")),
+				    /* ── 反馈入口：新功能建议 / 现有功能优化 / Bug 反馈，统一走 Issue ── */
+				    h("div", { className: "dshp-repo-fb" },
+				      h("b", { className: "dshp-repo-fb-title" }, t("repo.fbTitle")),
+				      h("p", { className: "dshp-repo-fb-body" }, t("repo.fbBody")),
+				    ),
 				    h("div", { className: "dshp-repo-ops" },
-				      h("a", {
+				      h("button", {
+				        type: "button",
 				        className: "dshp-btn is-primary dshp-repo-btn",
-				        href: REPO_URL,
-				        target: "_blank",
-				        rel: "noopener noreferrer",
+				        onClick: () => openRepoLink(REPO_URL),
 				      }, t("repo.btn")),
-				      h("a", {
+				      h("button", {
+				        type: "button",
 				        className: "dshp-btn dshp-repo-btn",
-				        href: REPO_URL + "/releases",
-				        target: "_blank",
-				        rel: "noopener noreferrer",
-				      }, t("repo.btnUpdate")),
+				        onClick: () => openRepoLink(REPO_URL + "/issues/new"),
+				      }, t("repo.btnIssue")),
 				      h("button", {
 				        type: "button",
 				        className: "dshp-btn dshp-repo-btn",
 				        onClick: copyRepoUrl,
 				      }, repoCopy === "ok" ? t("repo.copied") : repoCopy === "fail" ? t("repo.copyFail") : t("repo.copy")),
 				    ),
+				    repoOpenMsg ? h("p", { className: "dshp-repo-openmsg" }, repoOpenMsg) : null,
 				    /* 跳转被拦时的兜底：明文地址，可选中可复制 */
 				    h("div", { className: "dshp-repo-link" },
 				      h("span", { className: "dshp-repo-linklabel" }, t("repo.linkHint")),
@@ -10040,9 +10129,8 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 						repo ? h("p", null,
 							h("a", {
 								href: repo,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								style: { color: "var(--dsw-alias-label-brand, #8fbf9a)", wordBreak: "break-all" },
+								style: { color: "var(--dsw-alias-label-brand, #8fbf9a)", wordBreak: "break-all", cursor: "pointer" },
+								onClick: (e) => { e.preventDefault(); openExternalUrl(repo); },
 							}, repo),
 						) : null,
 						h("h3", null, t("welcome.bans")),

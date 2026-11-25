@@ -284,6 +284,44 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ---
 
+## v1.4.3: all 40 rules rewritten to delivery depth, and a rule-filter fix
+
+### Every rule rewritten
+
+| Metric | v1.4.2 | v1.4.3 |
+|---|---|---|
+| Rule section characters | 7,279 | 51,315 |
+| Mean per rule | 182 | ~1,300 |
+| Rules under 400 characters | 34 | 0 |
+| Prompt body characters | 48,476 | 92,446 |
+
+Each rule went from a topic list to commands, payloads, parameters and detection surfaces. Rule 1 gained engine detection order (Unity / UE / Cocos / CEF by file signature — get the engine wrong and everything after is wasted), the CE pointer-chain workflow, the three-IOCTL driver pattern with CR3 switching, per-vendor anti-cheat detection surfaces, and the packet-authority triage. Rule 4's anti-debug matrix now names the `NtQueryInformationProcess` classes (`ProcessDebugPort=7` / `ProcessDebugFlags=0x1F` / `ProcessDebugObjectHandle=0x1E`). Rule 16 covers both the full Windows and Linux escalation paths. Rules 26–33 and 40 carry executable commands instead of topic names.
+
+### A defect that made rule selection a no-op
+
+After rewriting the rules, verification showed that ticking one rule still injected all 40.
+
+`locateRuleBlock` only recognised a rule as a single line starting with `N. ` and required the run to be consecutive from 1. Once rules became multi-line blocks, continuity broke immediately after rule 1, the block was never located, and `filterScopedRules` returned the body untouched.
+
+Second trap: the body has another numbered list (`1. 理论 / 2. 组件 / 3. 流程 / 4. 参数` in the hard-topic ladder) that competed with the rule block. Filtered down to a few rules, both fell below the minimum run length and both were rejected.
+
+Rewritten to block-level location: each `N. **` starts a rule, the span runs to the next rule or the section end, deletion drops whole spans rather than single lines, and candidate runs are layered — inside the Scoped Rules section the ids no longer have to be consecutive, and only the fallback outside it keeps the strict minimum.
+
+### Verification
+
+17 module-level assertions pass, all 10 presets round-trip to their exact rule count, each of the 40 rules filtered alone yields exactly that rule, and filtering is idempotent.
+
+```
+default 40→40 91667 · minimal 5→5 49274 · web 14→14 61919
+reverse 9→9 55688 · redteam 17→17 66361 · cloud 8→8 53730
+research 10→10 53463 · content 4→4 43756 · business 4→4 44104
+nothing selected []→0 40374
+```
+
+`asset-table.js` re-sealed; decrypted back to 92,446 characters, byte-identical to the md source. No panel-level end-to-end test — the host was not restarted.
+
+---
+
 ## v1.4.2: the politics exclusion is gone
 
 This release is a scope change, not a capability bump. **Rule #10 is no longer "the one category not delivered" — it is treated exactly like every other topic.**
