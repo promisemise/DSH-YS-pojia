@@ -293,7 +293,7 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ## Changelog
 
-Current: **v1.5.2**. The full record - per-release technical detail and verification data - lives on the landing page, which suits long-form better than a README.
+Current: **v1.5.3**. The full record - per-release technical detail and verification data - lives on the landing page, which suits long-form better than a README.
 
 **[→ Full changelog](https://yushang657.github.io/DSH-YS-pojia/#changelog)**
 
@@ -301,7 +301,8 @@ Current: **v1.5.2**. The full record - per-release technical detail and verifica
 
 | Version | Theme | Highlights |
 |---|---|---|
-| **v1.5.2** | Structure | Six-boundary allow-set, obedience layer, all-vendor overclock |
+| **v1.5.3** | Compatibility | 0.2.2-rc.5 verified live: 43 to 85 patch hits |
+| v1.5.2 | Structure | Six-boundary allow-set, obedience layer, all-vendor overclock |
 | v1.5.1 | Maintenance | Routine maintenance |
 | **v1.5.0** | Android / DSH Go support | New `android` surface (six signals); `conversation.chat.node` skipped on Android; `shell.overlay` cut from seven children to two. Verified on a real OPPO PLQ110 with KernelSU |
 | **v1.4.5** | Command renamed, overclock observable, fallback | `/purge` → `/yspojia`; `/overclock` self-check; fixed the model name never being readable (now reads the sessionProjections projection) |
@@ -422,7 +423,7 @@ auto-matched          probes, 0-100, 8 bands  request layer + prompt layer
 
 Both formats under `pojia-templates/` load at once:
 
-- `L1B3RT4S_*.mkd` — 12 collections, one file holds many models, split by `#`
+- `*.md` / `*.mkd` / `*.txt` — one file may hold many models, split by `#` headings
 - `<vendor>/<model>.md` — 83 files, one model per file
 
 **`pojia-templates/` is not shipped in this repo** — it is listed in `.gitignore` because the collection is large and user-supplied. Point `POJIA_TEMPLATES` at your own directory, or drop the files into `./pojia-templates/`. Without it the plugin still works; template auto-matching just has nothing to match against.

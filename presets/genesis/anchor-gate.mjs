@@ -9,7 +9,7 @@
  * 嘿客指挥和执行角色一直看见原来的工具和人设。放开之后，整篇工作区说明
  * 改成点名文件路径，需要时再读。
  */
-export const name = 'dsh-purge-hacker-anchor'
+export const name = 'ys-pojia-hacker-anchor'
 
 const INSTRUCTION_FROM_RE = /(?:^|\n) *(?:Additional |Updated )?Instructions from: ([^\n]+)/g
 

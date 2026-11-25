@@ -5492,7 +5492,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 
 		/* __DSH_PURGE_DRILL_BEGIN__ */
 		// 内嵌演练台（源码在 lib/hacker，已并进本插件）
-		const __dshPurgeDrill = (() => {
+		const __ysPojiaDrill = (() => {
 			var module = { exports: {} };
 			var exports = module.exports;
 
@@ -9853,7 +9853,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 		})();
 /* __DSH_PURGE_DRILL_END__ */
 
-		const AUTH_KEY = "dsh-purge-drill-auth";
+		const AUTH_KEY = "ys-pojia-drill-auth";
 		const WELCOME_KEY = "ys-pojia-user-notice-v2";
 
 		/**
@@ -9969,7 +9969,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 		}
 		syncDrillGrant();
 
-		const DOCK_GEOM_KEY = "dsh-purge-dock-geom-v4";
+		const DOCK_GEOM_KEY = "ys-pojia-dock-geom-v4";
 		/* 默认停在右上，底边留在输入框上面。拖动之后停在用户松开的位置，只保证不拖出窗口。 */
 		const DOCK_COMPOSER_CLEAR = 172;
 		function defaultDockGeom() {
@@ -11518,27 +11518,27 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				return () => { obs.disconnect(); window.clearInterval(timer); };
 			}, []);
 			useEffect(() => {
-				let uiTag = document.querySelector('style[data-dsh-purge-ui="1"]');
+				let uiTag = document.querySelector('style[data-ys-pojia-ui="1"]');
 				if (!uiTag) {
 					uiTag = document.createElement("style");
-					uiTag.setAttribute("data-dsh-purge-ui", "1");
+					uiTag.setAttribute("data-ys-pojia-ui", "1");
 					uiTag.textContent = PURGE_CSS;
 					document.head.append(uiTag);
 				}
-				if (!__dshPurgeDrill || !__dshPurgeDrill.CSS) return undefined;
+				if (!__ysPojiaDrill || !__ysPojiaDrill.CSS) return undefined;
 				const styleTag = document.createElement("style");
-				styleTag.setAttribute("data-dsh-purge-drill", "1");
-				styleTag.textContent = __dshPurgeDrill.CSS;
+				styleTag.setAttribute("data-ys-pojia-drill", "1");
+				styleTag.textContent = __ysPojiaDrill.CSS;
 				document.head.append(styleTag);
 				const widthTag = document.createElement("style");
-				widthTag.setAttribute("data-dsh-purge-dock-w", "1");
+				widthTag.setAttribute("data-ys-pojia-dock-w", "1");
 				widthTag.textContent = ":root{--dshp-dock-w:" + geom.w + "px;--dshp-dock-h:" + geom.h + "px}";
 				document.head.append(widthTag);
 				return () => { styleTag.remove(); widthTag.remove(); };
 			}, []);
 			useEffect(() => {
 				saveDockGeom(geom);
-				const tag = document.querySelector('style[data-dsh-purge-dock-w="1"]');
+				const tag = document.querySelector('style[data-ys-pojia-dock-w="1"]');
 				if (tag) tag.textContent = ":root{--dshp-dock-w:" + geom.w + "px;--dshp-dock-h:" + geom.h + "px}";
 			}, [geom]);
 			useEffect(() => {
@@ -11786,7 +11786,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				const el = nodes[i];
 				if (!el || el.classList.contains("dshp-launch")) continue;
 				if (el.closest && el.closest(".dshp-dock, .dshp-launch")) continue;
-				if (/^(dsh-purge|ys-pojia)$/i.test(String(el.textContent || "").trim())) return true;
+				if (/^(ys-pojia|ys-pojia)$/i.test(String(el.textContent || "").trim())) return true;
 			}
 			return false;
 		}
@@ -11814,7 +11814,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				className: "dshp-launch",
 				"data-open": "0",
 				"data-hide": "0",
-				"data-testid": "dsh-purge-launch",
+				"data-testid": "ys-pojia-launch",
 				title: t("dock.newSession"),
 				onClick: () => toggleDock(),
 			}, t("dock.newSession"));
@@ -11849,7 +11849,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 					if (!el) {
 						el = document.createElement("div");
 						el.className = "dshp-hero-chip";
-						el.setAttribute("data-testid", "dsh-purge-hero-chip");
+						el.setAttribute("data-testid", "ys-pojia-hero-chip");
 					}
 					placeHeroChip(row, el);
 					setHost((prev) => (prev === el ? prev : el));
@@ -11914,7 +11914,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 					if (!el) {
 						el = document.createElement("div");
 						el.className = "dshp-tab-chip";
-						el.setAttribute("data-testid", "dsh-purge-tab-chip");
+						el.setAttribute("data-testid", "ys-pojia-tab-chip");
 					}
 					placeTabChip(row, el);
 					setHost((prev) => (prev === el ? prev : el));
@@ -11950,7 +11950,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 		   Android WebView 切后台返回时，宿主 composer 的 React 子树只要在提交阶段抛一次，
 		   整块输入框就会被卸载；把按钮挪到 body 上的 fixed 宿主 + createPortal，
 		   渲染树完全离开 composer，位置按 .standardControls 的矩形对齐。 */
-		const REWIND_HOST_ATTR = "data-dsh-purge-rewind-host";
+		const REWIND_HOST_ATTR = "data-ys-pojia-rewind-host";
 		const REWIND_RESERVE_PX = 64;
 
 		function rewindControlsAnchor() {
@@ -12115,7 +12115,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			"rewind", "ysp-rewind",
 		]);
 		const purgeCommandInputDefinition = {
-			kind: "dsh-purge-command-input",
+			kind: "ys-pojia-command-input",
 			target: "chat",
 			match: (event) => event.type === "command/run" && PURGE_COMMAND_NAMES.has(String(event.data.name))
 				? { id: String(event.data.commandId), role: "start" } : null,
@@ -12129,7 +12129,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			buildViewNode: (context) => context.state === undefined ? null : ({
 				key: context.key,
 				id: context.id,
-				kind: "dsh-purge-command-input",
+				kind: "ys-pojia-command-input",
 				target: "chat",
 				anchorSeq: context.state.seq - 0.1,
 				location: context.start?.location ?? { kind: "unresolved" },
@@ -12171,7 +12171,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 			if (!isAndroid && ctx.uiConversation && ctx.uiConversation.events && typeof ctx.uiConversation.events.register === "function") {
 				ctx.uiConversation.events.register(purgeCommandInputDefinition);
 				ctx.slots.inject("conversation.chat.node", () => ctx.slots.register({
-					name: "conversation.chat.node", key: "dsh-purge-command-input",
+					name: "conversation.chat.node", key: "ys-pojia-command-input",
 				}, PurgeCommandInputView));
 			}
 			ctx.effect(() => ctx.locale.register(NS, { zh, en }), "ys-pojia: dictionaries");
@@ -12221,7 +12221,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 				: [h(WelcomeNotice), h(PurgeLauncher), h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate), h(RewindDockMount)];
 			ctx.slots.inject("shell.overlay", () => ctx.slots.register({
 				name: "shell.overlay",
-				id: "dsh-purge-dock",
+				id: "ys-pojia-dock",
 				order: 50,
 			}, () => h(react.Fragment, null, ...overlayChildren)));
 			try {

@@ -30,7 +30,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const name = "dsh-purge-unlimited-anchor";
+export const name = "ys-pojia-unlimited-anchor";
 export const MODE = "unlimited";
 
 /** 补丁档 id。写错一个字会静默降级到默认档，集中定义。 */

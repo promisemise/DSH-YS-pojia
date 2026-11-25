@@ -46,7 +46,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const name = "dsh-purge-genesis-anchor";
+export const name = "ys-pojia-genesis-anchor";
 export const MODE = "genesis";
 
 /** 宿主真实支持的推理档位（来自 dsh-llm-deepseek 的 z.union）。 */
