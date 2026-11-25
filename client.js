@@ -11954,10 +11954,10 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
 					uiTag.textContent = PURGE_CSS;
 					document.head.append(uiTag);
 				}
-				if (!__ysPojiaDrill || !__ysPojiaDrill.CSS) return undefined;
+				if (!__dshPurgeDrill || !__dshPurgeDrill.CSS) return undefined;
 				const styleTag = document.createElement("style");
 				styleTag.setAttribute("data-ys-pojia-drill", "1");
-				styleTag.textContent = __ysPojiaDrill.CSS;
+				styleTag.textContent = __dshPurgeDrill.CSS;
 				document.head.append(styleTag);
 				const widthTag = document.createElement("style");
 				widthTag.setAttribute("data-ys-pojia-dock-w", "1");
