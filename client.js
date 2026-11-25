@@ -107,7 +107,7 @@ function readStoredLang() {
 function storeLang(lang) {
   try { window.localStorage.setItem(LANG_KEY, lang === "zh" ? "zh" : "en"); } catch { /* ignore */ }
 }
-/* 启动时先套用用户存过的选择；没有就保持默认 en。 */
+/* 启动时先套用用户存过的选择；没有就探测系统语言，探不出来默认中文。 */
 /**
  * 探测用户默认语言。
  *
@@ -116,37 +116,35 @@ function storeLang(lang) {
  *   2. navigator.language      —— 老浏览器只有这个
  *   3. Intl.DateTimeFormat().resolvedOptions().locale —— 前面都拿不到时的兜底
  *
- * 只认 zh 前缀为中文，其余一律英文。这样 zh-CN / zh-TW / zh-Hant 都算中文，
- * 而 ja / ko / de 之类走英文 —— 插件只有中英两套字典，日韩用户看英文比看中文有用。
+ * 只认 zh 前缀为中文；三级都拿不到、或都不是中文时，兜底返回中文。
+ * 本插件的用户绝大多数是中文用户：界面、文档、群组都是中文。英文用户想切换，
+ * 面板右上角有语言按钮，选过一次就记住。早先这里 return "en"，导致首次加载的
+ * 须知弹窗和整个面板都是英文，用户得先找到切换按钮才能看懂。
  */
 function detectSystemLang() {
-  const probe = (v) => {
-    const s = String(v || "").trim().toLowerCase();
-    if (!s) return "";
-    return s.startsWith("zh") ? "zh" : "en";
-  };
+  const isZh = (v) => String(v || "").trim().toLowerCase().startsWith("zh");
+
   try {
     const langs = navigator.languages;
     if (Array.isArray(langs)) {
       for (const l of langs) {
-        const hit = probe(l);
-        if (hit) return hit;
+        if (isZh(l)) return "zh";
       }
     }
   } catch { /* navigator 不可用 */ }
   try {
-    const hit = probe(navigator.language);
-    if (hit) return hit;
+    if (isZh(navigator.language)) return "zh";
   } catch { /* ignore */ }
   try {
-    const hit = probe(Intl.DateTimeFormat().resolvedOptions().locale);
-    if (hit) return hit;
+    if (isZh(Intl.DateTimeFormat().resolvedOptions().locale)) return "zh";
   } catch { /* ignore */ }
-  return "en";
+
+  /* 兜底：中文 */
+  return "zh";
 }
 
 /*
- * 启动时定语言：用户存过就用存的，没存过就跟系统语言。
+ * 启动时定语言：用户存过就用存的，没存过就探测系统语言，探不出来默认中文。
  *
  * 首次加载的须知弹窗也走这条路径 —— 中文系统的用户第一次打开看到的就是中文，
  * 不用先去点切换按钮。
