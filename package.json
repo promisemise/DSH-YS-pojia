@@ -1,7 +1,7 @@
 {
   "name": "ys-pojia",
-  "version": "1.4.0",
-  "description": "DSH 破甲 解限 越狱 清理 清洗 红队 逆向 | DSH (DeepSeek Harness) breach / jailbreak / unlock / clean plugin: 96 host patches over 70 files, refusal purge (standard/forced + prefill), 11 prompt sections, tiers T3-T2-T1 with degradation cost, 39x56 probes by density, ASR 46.2%, pass 76.9%, benign cost 0, 95 templates / 29 vendors. RedTeam / Prompt eval.",
+  "version": "1.4.1",
+  "description": "DSH 破甲 解限 越狱 清理 红队 逆向 | DSH (DeepSeek Harness) breach / jailbreak / unlock plugin: 96 host patches across 70 files, refusal purge, 11 prompt sections, tiers T3-T1 with degradation cost, 39 categories x 68 probes, ASR 46.2%, 95 templates / 29 vendors.",
   "author": "ys-pojia maintainers",
   "type": "module",
   "main": "lib/index.js",
@@ -83,7 +83,7 @@
   "engines": {
     "node": ">=18"
   },
-  "dshTarget": "0.2.0-rc.2",
+  "dshTarget": "0.2.2-rc.5",
   "dshTargets": [
     "0.2.0-rc.2",
     "0.2.1-rc.2",

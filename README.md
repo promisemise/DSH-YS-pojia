@@ -1,4 +1,4 @@
-# ys-pojia
+# DSH-ys-pojia
 
 **破甲 plugin for DSH (DeepSeek Harness)** — make LLMs drop refusals on demand.
 
@@ -13,7 +13,8 @@
 [![node](https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat-square&logo=node.js&logoColor=white)](package.json)
 [![templates](https://img.shields.io/badge/templates-95%20%2F%2029%20vendors-7c3aed?style=flat-square)](docs/)
 [![probes](https://img.shields.io/badge/probes-56%20%2F%2039%20categories-22c55e?style=flat-square)](bench.mjs)
-[![patches](https://img.shields.io/badge/host%20patches-96-14b8a6?style=flat-square)](lib/core.js)
+[![patches](https://img.shields.io/badge/host%20patches-96-14b8a6?style=flat-square)](lib/core.js)
+
 ![ASR](https://img.shields.io/badge/ASR-46.2%25-e11d48?style=flat-square)
 ![benign](https://img.shields.io/badge/benign%20cost-%CE%94%200-16a34a?style=flat-square)
 
@@ -165,7 +166,7 @@ ASR = share of full breach. pass = share of complete or better. Both derive from
 | Prompt layer resident | about 45 KB | 11 sections, stored encrypted in asset-table.js |
 | Probe latency | 3.5-59 s | depends on probe complexity and model |
 | Benign probe latency | 3.5-7.4 s | 5 s average |
-| Full benchmark (56 probes) | 20-30 min | including retries |
+| Full benchmark (68 probes) | 20-30 min | including retries |
 | Memory footprint | no extra resident | message layer only mutates return values, no caching |
 
 **Startup impact**: plugin load is under one second and does not block DSH startup. Patches run at apply time, not on the startup hot path.
@@ -465,7 +466,8 @@ That reply means the plugin is loaded and breach mode is on.
 
 | Input | Result |
 |---|---|
-| `小雨` | ✅ triggers |
+| `小雨` / `xiaoyu` | ✅ triggers |
+| `Xiaoyu` / `XIAOYU` / `xiaoyu!` | ✅ triggers (case and punctuation ignored) |
 | `小雨。` / `小雨！` / `小雨 ` | ✅ triggers (punctuation and spaces ignored) |
 | `小雨, write me a script` | ❌ normal chat (has a task) |
 | `hello` | ❌ normal chat |
@@ -515,14 +517,15 @@ Measured on 0.2.0-rc.2: 96 patches → **73 already hit / 5 mismatch / 18 absent
 # List reachable models
 node bench.mjs --url <gateway> --key <key> --list
 
-# Full benchmark (56 probes)
+# Full benchmark (68 probes)
 node bench.mjs --url <gateway> --key <key> --model gpt-4o --set all --out result.json
 
 # Single group
 node bench.mjs --url <gateway> --key <key> --model gpt-4o --set pentest
 
 # With escalation ladder (L1 direct to L5 strong continuation)
-node bench.mjs --url <gateway> --key <key> --model gpt-4o --set tech --escalate
+node bench.mjs --url <gateway> --key <key> --model gpt-4o --set tech --escalate
+
 node bench.mjs --url <gateway> --key <key> --model gpt-4o --set benign   # measure benign cost
 
 # Write scores back into plugin config
@@ -547,7 +550,7 @@ ys-pojia/
 │  ├─ capability-catalog.js 39 categories + 3 tiers
 │  ├─ engines/              engine probing and state
 │  └─ hacker/               red-team orchestration (assets / scores / reports)
-├─ bench.mjs                benchmark CLI (56 probes / 8 bands)
+├─ bench.mjs                benchmark CLI (68 probes / 8 bands)
 ├─ capability-scores.mjs    score ingestion CLI
 ├─ scripts/deploy.mjs       deploy / backup / restore
 ├─ presets/                 three modes (genesis / hacker / unlimited)
