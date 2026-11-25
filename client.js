@@ -9,6 +9,7 @@ window.__ModuleLoader__.load({ id: "ys-pojia", factory: (require) => {
 
 /* 仓库地址。求 star 和「更新去仓库看」都指向这里。 */
 const REPO_URL = "https://github.com/yushang657/DSH-YS-pojia";
+const RELEASES_URL = REPO_URL.replace(/\/?$/, "") + "/releases";
 
 /*
  * 打开一个外部链接。
@@ -920,7 +921,7 @@ function useT() {
 			"continue.ready": "继续（还可 {left} 次）",
 			"continue.limit": "已达继续上限",
 			"continue.fail": "继续失败: {error}",
-  "view.overview": "概览",
+  "view.update":"更新","upd.title":"版本更新","upd.desc":"检查有没有新版本。有的话可以只更新变化的文件，不用重装整个插件。","upd.check":"检查更新","upd.checking":"检查中…","upd.current":"当前版本","upd.remote":"仓库版本","upd.latest":"已是最新","upd.hasUpdate":"有新版本 {v}","upd.checkFail":"检查失败：{reason}","upd.manualHint":"如果一直连不上，可以直接去仓库下载最新版覆盖，或用一键安装重跑一遍。","upd.goto":"去仓库","upd.filesTitle":"文件差异","upd.filesSummary":"共 {total} 个文件，{changed} 个需要更新","upd.added":"新增","upd.changed":"变更","upd.removed":"远程已删除（不会自动删本地）","upd.unchanged":"未变","upd.apply":"更新这 {n} 个文件","upd.applying":"更新中…","upd.applyOk":"已更新 {n} 个文件","upd.applyFail":"更新失败：{reason}","upd.needRestart":"改了代码文件，重启 DSH 生效","upd.noChange":"没有需要更新的文件","upd.backup":"原文件已备份到 {dir}","upd.noFiles":"还没检查，点上面的「检查更新」","upd.danger":"文件更新只覆盖代码，不动你的配置和注入正文。升级前会自动备份。","view.overview": "概览",
   "view.patches": "补丁清单",
   "view.inject": "注入词",
   "unit.items": " 条",
@@ -1528,7 +1529,7 @@ function useT() {
 			"continue.ready": "Continue ({left} left)",
 			"continue.limit": "Continue limit reached",
 			"continue.fail": "Continue failed: {error}",
-  "view.overview": "Overview",
+  "view.update":"Updates","upd.title":"Version update","upd.desc":"Check for a newer version. If there is one, only the changed files get replaced - no full reinstall.","upd.check":"Check for updates","upd.checking":"Checking…","upd.current":"Current","upd.remote":"Remote","upd.latest":"Up to date","upd.hasUpdate":"Update available: {v}","upd.checkFail":"Check failed: {reason}","upd.manualHint":"If it keeps failing, download the latest release and overwrite, or run the one-line installer again.","upd.goto":"Open repo","upd.filesTitle":"File differences","upd.filesSummary":"{total} files total, {changed} need updating","upd.added":"Added","upd.changed":"Changed","upd.removed":"Gone upstream (not deleted locally)","upd.unchanged":"Unchanged","upd.apply":"Update {n} files","upd.applying":"Updating…","upd.applyOk":"Updated {n} files","upd.applyFail":"Update failed: {reason}","upd.needRestart":"Code files changed - restart DSH","upd.noChange":"Nothing to update","upd.backup":"Originals backed up to {dir}","upd.noFiles":"Not checked yet - click Check for updates","upd.danger":"A file update only replaces code. Your config and injection body stay untouched. Originals are backed up first.","view.overview": "Overview",
   "view.patches": "Patches",
   "view.inject": "Inject",
   "unit.items": " items",
@@ -2685,6 +2686,37 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 @media (prefers-reduced-motion:reduce){.dshp-auth-count::before{animation:none;opacity:.7}}
 .dshp-auth-ops .primary[disabled]{cursor:not-allowed}
 
+/* ══ 更新页 ══ */
+.dshp-updpage{display:flex;flex-direction:column;gap:14px}
+.dshp-upd-ver{padding:14px 16px;border:1px solid var(--dshp-line);border-radius:10px;background:var(--dshp-panel2)}
+.dshp-upd-vrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.dshp-upd-vlabel{font:500 12px/1.4 var(--dshp-sans);color:var(--dshp-mute)}
+.dshp-upd-vnum{font:600 14px/1.4 var(--dshp-mono);color:var(--dshp-ink);padding:2px 8px;border-radius:5px;background:var(--dshp-panel)}
+.dshp-upd-vnum.is-new{color:var(--dshp-accent);background:var(--dshp-accent-soft)}
+.dshp-upd-varrow{color:var(--dshp-faint);font-size:13px}
+.dshp-upd-desc{margin:0 0 12px;font:400 12.5px/1.65 var(--dshp-sans);color:var(--dshp-mute)}
+.dshp-upd-ops{display:flex;flex-wrap:wrap;gap:8px}
+.dshp-upd-err{padding:12px 14px;border:1px solid var(--dshp-line);border-left:3px solid var(--dshp-danger);border-radius:0 8px 8px 0;background:var(--dshp-panel2)}
+.dshp-upd-err b{display:block;margin-bottom:6px;font:600 12.5px/1.5 var(--dshp-sans);color:var(--dshp-danger)}
+.dshp-upd-err p{margin:0 0 6px;font:400 12px/1.7 var(--dshp-sans);color:var(--dshp-mute);word-break:break-word}
+.dshp-upd-hintline{margin:10px 0 0;font:400 11.5px/1.65 var(--dshp-sans);color:var(--dshp-faint)}
+.dshp-upd-files{padding:14px 16px;border:1px solid var(--dshp-line);border-radius:10px;background:var(--dshp-panel2)}
+.dshp-upd-fhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:12px}
+.dshp-upd-fhead b{font:600 13px/1.5 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-upd-fhead span{font:400 12px/1.5 var(--dshp-sans);color:var(--dshp-mute)}
+.dshp-upd-group{margin-bottom:12px}
+.dshp-upd-gtag{display:inline-block;margin-bottom:6px;font:600 11px/1.4 var(--dshp-mono);font-style:normal;letter-spacing:.03em;padding:1px 7px;border-radius:4px}
+.dshp-upd-gtag.is-add{color:#16a34a;background:rgba(22,163,74,.12)}
+.dshp-upd-gtag.is-mod{color:var(--dshp-warn);background:rgba(224,165,59,.12)}
+.dshp-upd-gtag.is-del{color:var(--dshp-faint);background:var(--dshp-panel)}
+.dshp-upd-f{display:block;font:400 11.5px/1.9 var(--dshp-mono);color:var(--dshp-mute);word-break:break-all}
+.dshp-upd-f.is-ok{color:#16a34a}
+.dshp-upd-ok{margin:10px 0 0;font:400 12.5px/1.6 var(--dshp-sans);color:var(--dshp-accent)}
+.dshp-upd-apply{margin-top:12px}
+.dshp-upd-done{padding:14px 16px;border:1px solid var(--dshp-line);border-left:3px solid var(--dshp-accent);border-radius:0 8px 8px 0;background:var(--dshp-panel2)}
+.dshp-upd-done b{display:block;margin-bottom:8px;font:600 13px/1.5 var(--dshp-sans);color:var(--dshp-accent)}
+.dshp-upd-restart{margin:0 0 6px;font:500 12px/1.6 var(--dshp-sans);color:var(--dshp-warn)}
+
 /* ══ 概览页：仓库卡片 ══ */
 .dshp-repo{margin:14px 0 0;padding:14px 16px;border:1px solid var(--dshp-line);border-radius:var(--dshp-r,10px);background:var(--dshp-card)}
 .dshp-repo-head{display:flex;align-items:center;gap:10px;margin:0 0 10px}
@@ -3288,6 +3320,7 @@ function viewItems(t) {
     ["overview", t("view.overview")],
     ["patches", t("view.patches")],
     ["inject", t("view.inject")],
+    ["update", t("view.update")],
   ];
 }
 
@@ -3410,6 +3443,223 @@ function HostStatusCard(props) {
           h("span", { className: "dshp-hc-reason" }, t("host.card.nobase")),
         )
       : null,
+  );
+}
+
+/* ══ 更新页 ══════════════════════════════════════════════════════════════
+   独立视图：版本检测 + 文件级更新。
+
+   - 检查：拉远程清单，比对本地哈希，列出要改的文件
+   - 更新：只下载变化的文件，写前备份，失败回滚
+   - 连不上：给出去仓库的入口，不卡住用户
+   ══════════════════════════════════════════════════════════════════════ */
+function UpdateView() {
+  const t = useT();
+  const tRef = useRef(t);
+  tRef.current = t;
+
+  const [phase, setPhase] = useState("idle");   /* idle | checking | ready | applying | done */
+  const [plan, setPlan] = useState(null);
+  const [err, setErr] = useState("");
+  const [result, setResult] = useState(null);
+  const [ver, setVer] = useState({ current: "", latest: "", hasUpdate: false, url: "" });
+
+  /* 打开页面时读一次缓存，不发网络 */
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const d = await apiJson("/ys-pojia/update");
+        if (!alive || !d || !d.ok) return;
+        setVer({
+          current: d.current || "",
+          latest: d.latest || "",
+          hasUpdate: Boolean(d.hasUpdate),
+          url: d.url || "",
+        });
+      } catch { /* 没缓存就留空 */ }
+    })();
+    return () => { alive = false; };
+  }, []);
+
+  const check = async () => {
+    setPhase("checking");
+    setErr("");
+    setResult(null);
+    try {
+      const d = await apiJson("/ys-pojia/update/plan", { method: "POST" });
+      if (!d || !d.ok) {
+        setErr((d && d.reason) || "未知错误");
+        setPhase("idle");
+        return;
+      }
+      setPlan(d);
+      setVer({
+        current: d.current || "",
+        latest: d.remote || "",
+        hasUpdate: Boolean(d.hasUpdate),
+        url: "https://github.com/yushang657/DSH-YS-pojia/releases/tag/v" + (d.remote || ""),
+      });
+      setPhase("ready");
+    } catch (e) {
+      setErr(String((e && e.message) || e));
+      setPhase("idle");
+    }
+  };
+
+  const apply = async () => {
+    if (!plan) return;
+    setPhase("applying");
+    setErr("");
+    try {
+      const d = await apiJson("/ys-pojia/update/apply", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (!d || !d.ok) {
+        setErr((d && (d.error || d.reason)) || "未知错误");
+        setPhase("ready");
+        return;
+      }
+      setResult(d);
+      setPhase("done");
+    } catch (e) {
+      setErr(String((e && e.message) || e));
+      setPhase("ready");
+    }
+  };
+
+  const busy = phase === "checking" || phase === "applying";
+  const pend = plan ? (plan.added || []).length + (plan.changed || []).length : 0;
+
+  return h("div", { className: "dshp-updpage" },
+    /* ── 版本状态 ── */
+    h("div", { className: "dshp-upd-ver" },
+      h("div", { className: "dshp-upd-vrow" },
+        h("span", { className: "dshp-upd-vlabel" }, t("upd.current")),
+        h("code", { className: "dshp-upd-vnum" }, ver.current || "—"),
+        h("span", { className: "dshp-upd-varrow" }, "→"),
+        h("span", { className: "dshp-upd-vlabel" }, t("upd.remote")),
+        h("code", { className: "dshp-upd-vnum" + (ver.hasUpdate ? " is-new" : "") }, ver.latest || "—"),
+      ),
+      h("p", { className: "dshp-upd-desc" }, t("upd.desc")),
+      h("div", { className: "dshp-upd-ops" },
+        h("button", {
+          type: "button",
+          className: "dshp-btn is-primary",
+          disabled: busy,
+          onClick: check,
+        }, phase === "checking" ? t("upd.checking") : t("upd.check")),
+        ver.hasUpdate && ver.url
+          ? h("button", {
+              type: "button",
+              className: "dshp-btn",
+              onClick: () => openRepoLink(ver.url),
+            }, t("upd.goto"))
+          : null,
+      ),
+    ),
+
+    /* ── 错误 ── */
+    err
+      ? h("div", { className: "dshp-upd-err" },
+          h("b", null, t("upd.checkFail").replace("{reason}", "")),
+          h("p", null, err),
+          h("p", { className: "dshp-upd-hintline" }, t("upd.manualHint")),
+        )
+      : null,
+
+    /* ── 文件差异 ── */
+    plan && phase !== "done"
+      ? h("div", { className: "dshp-upd-files" },
+          h("div", { className: "dshp-upd-fhead" },
+            h("b", null, t("upd.filesTitle")),
+            h("span", null, t("upd.filesSummary")
+              .replace("{total}", String(plan.total || 0))
+              .replace("{changed}", String(pend))),
+          ),
+
+          (plan.added || []).length
+            ? h("div", { className: "dshp-upd-group" },
+                h("em", { className: "dshp-upd-gtag is-add" }, t("upd.added") + " " + plan.added.length),
+                ...plan.added.map((f) => h("code", { key: f, className: "dshp-upd-f" }, f)),
+              )
+            : null,
+
+          (plan.changed || []).length
+            ? h("div", { className: "dshp-upd-group" },
+                h("em", { className: "dshp-upd-gtag is-mod" }, t("upd.changed") + " " + plan.changed.length),
+                ...plan.changed.map((f) => h("code", { key: f, className: "dshp-upd-f" }, f)),
+              )
+            : null,
+
+          (plan.removed || []).length
+            ? h("div", { className: "dshp-upd-group" },
+                h("em", { className: "dshp-upd-gtag is-del" }, t("upd.removed") + " " + plan.removed.length),
+                ...plan.removed.slice(0, 20).map((f) => h("code", { key: f, className: "dshp-upd-f" }, f)),
+              )
+            : null,
+
+          pend === 0
+            ? h("p", { className: "dshp-upd-ok" }, t("upd.noChange"))
+            : h("button", {
+                type: "button",
+                className: "dshp-btn is-primary dshp-upd-apply",
+                disabled: busy,
+                onClick: apply,
+              }, phase === "applying" ? t("upd.applying") : t("upd.apply").replace("{n}", String(pend))),
+
+          h("p", { className: "dshp-upd-hintline" }, t("upd.danger")),
+        )
+      : null,
+
+    /* ── 完成 ── */
+    phase === "done" && result
+      ? h("div", { className: "dshp-upd-done" },
+          h("b", null, t("upd.applyOk").replace("{n}", String(result.count || 0))),
+          result.needRestart
+            ? h("p", { className: "dshp-upd-restart" }, t("upd.needRestart"))
+            : null,
+          result.backupDir
+            ? h("p", { className: "dshp-upd-hintline" }, t("upd.backup").replace("{dir}", result.backupDir))
+            : null,
+          (result.written || []).length
+            ? h("div", { className: "dshp-upd-group" },
+                ...result.written.map((f) => h("code", { key: f, className: "dshp-upd-f is-ok" }, f)),
+              )
+            : null,
+        )
+      : null,
+
+    /* ── 仓库卡片（与首页一致）── */
+    h("div", { className: "dshp-repo" },
+      h("div", { className: "dshp-repo-head" },
+        h("span", { className: "dshp-repo-icon", "aria-hidden": "true" }, "★"),
+        h("div", { className: "dshp-repo-title" },
+          h("b", null, t("repo.title")),
+          h("em", null, t("repo.sub")),
+        ),
+      ),
+      h("p", { className: "dshp-repo-ask" }, t("repo.ask")),
+      h("p", { className: "dshp-repo-note" }, t("repo.note")),
+      h("div", { className: "dshp-repo-fb" },
+        h("b", { className: "dshp-repo-fb-title" }, t("repo.fbTitle")),
+        h("p", { className: "dshp-repo-fb-body" }, t("repo.fbBody")),
+      ),
+      h("div", { className: "dshp-repo-ops" },
+        h("button", {
+          type: "button",
+          className: "dshp-btn is-primary dshp-repo-btn",
+          onClick: () => openRepoLink(REPO_URL),
+        }, t("repo.btn")),
+        h("button", {
+          type: "button",
+          className: "dshp-btn dshp-repo-btn",
+          onClick: () => openRepoLink(RELEASES_URL),
+        }, t("upd.goto")),
+      ),
+    ),
   );
 }
 
@@ -4059,7 +4309,8 @@ function PurgifySection() {
 				promptBoxEmpty(override) ? h("p", {
 					className: "dshp-hint",
 					style: { margin: "8px 0 0", color: "var(--dshp-danger, #c44)", fontSize: 12 },
-				}, t("need.prompt")) : null,
+				}, t("need.prompt")) : view === "update" ? h(UpdateView, null)
+				: null,
 			) : null,
 				askUninstall ? h("div", {
 					className: "dshp-modal-bg",

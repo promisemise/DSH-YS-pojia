@@ -31,7 +31,8 @@
     "cordis.patch.yml",
     "README.md",
     "README.en.md",
-    "LICENSE"
+    "LICENSE",
+    "version-manifest.json"
   ],
   "scripts": {
     "embed-prompt": "node scripts/embed-default-prompt.mjs",
@@ -43,7 +44,8 @@
     "status": "node scripts/deploy.mjs status",
     "armor": "node scripts/embed-default-prompt.mjs && node scripts/ensure-profile-bundle.mjs",
     "install": "node bin/install.js",
-    "install:dry": "node bin/install.js --dry-run"
+    "install:dry": "node bin/install.js --dry-run",
+    "gen:manifest": "node scripts/gen-manifest.mjs"
   },
   "license": "Apache-2.0",
   "keywords": [
