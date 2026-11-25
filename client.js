@@ -652,7 +652,7 @@ function useT() {
 			"repo.title": "YS-pojia",
 			"repo.sub": "开源在 GitHub",
 			"repo.ask": "这个插件免费开源，全靠业余时间做。如果它帮到你了，去仓库点个 Star —— 那是对作者最直接的鼓励，也让更多人能搜到它。",
-			"repo.note": "本插件没有服务器：不联网、不上传数据、不自动检查更新。想看新版本或更新日志，去仓库的 Releases 页。",
+			"update.title":"版本更新","update.check":"检查更新","update.checking":"正在检查…","update.latest":"已是最新（{v}）","update.available":"有新版本 {v}","update.fail":"检查失败：{reason}","update.cached":"{min} 分钟前检查","update.hint":"从 GitHub Releases 读版本号，不需要服务器。24 小时缓存，只在你点按钮时联网。","update.goto":"查看更新说明","update.auto":"允许自动检查（24 小时一次）","repo.note": "本插件不需要自建服务器。版本检测走 GitHub Releases：默认不联网，你点「检查更新」时才请求一次，结果缓存 24 小时。",
 			"repo.fbTitle": "有想法？去仓库提",
 			"repo.fbBody": "需要新功能、想改现有行为、觉得哪里能用得更顺，都可以去 GitHub 开一个 Issue 说。作者会看，合理的会采纳 —— 不保证每条都做，但每一条都会读。遇到 Bug 也走同一个入口，附上宿主版本、报错原文和复现步骤，定位会快很多。",
 			"repo.btnIssue": "提 Issue / 报 Bug",
@@ -708,30 +708,8 @@ function useT() {
 			"channel.stable": "正式版",
 			"channel.useStable": "切换到正式版",
 			"channel.local": "本机",
-			"update.checking": "正在检测更新…",
-			"update.applying": "正在更新…",
-			"update.switching": "正在切换版本…",
-			"update.latest": "已是最新（{version}）",
-			"update.available": "有新版本 {remote}，当前 {local}",
-			"update.pinned": "已固定在 {version}，通道最新是 {remote}",
-			"update.done": "已更新到 {version}",
-			"update.restarting": "已还原并写入新补丁，正在重启…",
-			"update.fullQuit": "补丁已写入。点「重启」后客户端会自己重新打开。",
 			"restart.official.title": "需要重启",
 			"restart.official.body": "补丁已写入。点重启后客户端会自己重新打开。",
-			"update.switched": "已切换到 {version}",
-			"update.autoDone": "已自动更新到 {version}",
-			"update.reloading": "正在刷新设置页…",
-			"update.dirty": "有新版本，本地有改动未自动覆盖",
-			"update.fail": "更新失败: {error}",
-			"update.timeout": "检测超时，请再点一次检测更新",
-			"update.needRestart": "检测接口未加载，请先重启 dsh 再点检测更新",
-			"update.switch": "切换到此版本",
-			"update.pick": "选择版本",
-			"update.tip": "最新",
-			"update.current": "当前",
-			"update.confirmSwitch": "切换到 {version}？之后可再切回另一通道或其它版本。本地未提交的插件改动不会保留。",
-			"update.confirmChannel": "切换到{version}？会按该通道重新安装插件，本地未提交的插件改动不会保留。",
 			"metric.version": "版本",
 			"action.apply": "应用",
 			"action.revert": "还原",
@@ -1282,7 +1260,7 @@ function useT() {
 			"repo.title": "YS-pojia",
 			"repo.sub": "Open source on GitHub",
 			"repo.ask": "This plugin is free and open source, built in spare time. If it helped you, leave a Star on the repo — it is the most direct encouragement for the author and helps others find it.",
-			"repo.note": "No server behind this plugin: it does not phone home, upload data, or auto-check for updates. For new versions and changelogs, see the Releases page on the repo.",
+			"update.title":"Updates","update.check":"Check for updates","update.checking":"Checking…","update.latest":"Up to date ({v})","update.available":"Update available: {v}","update.fail":"Check failed: {reason}","update.cached":"checked {min} min ago","update.hint":"Reads the version from GitHub Releases - no server needed. Cached 24 hours, only goes online when you click.","update.goto":"Release notes","update.auto":"Allow automatic checks (once per 24h)","repo.note": "No server of our own. Version checks go through GitHub Releases: offline by default, one request when you click Check, cached for 24 hours.",
 			"repo.fbTitle": "Got an idea? Open an issue",
 			"repo.fbBody": "New features, changes to existing behaviour, or anything that could flow better — open an issue on GitHub and say so. The author reads them and adopts the reasonable ones. Not every request gets built, but every one gets read. Bugs go through the same door: include the host version, the exact error text and the steps to reproduce, and it gets located much faster.",
 			"repo.btnIssue": "Open an issue / report a bug",
@@ -1338,30 +1316,8 @@ function useT() {
 			"channel.stable": "Stable",
 			"channel.useStable": "Switch to stable",
 			"channel.local": "This copy",
-			"update.checking": "Checking for updates…",
-			"update.applying": "Updating…",
-			"update.switching": "Switching version…",
-			"update.latest": "Up to date ({version})",
-			"update.available": "Update {remote} available (now {local})",
-			"update.pinned": "Pinned at {version}; channel latest is {remote}",
-			"update.done": "Updated to {version}.",
-			"update.restarting": "Restored the old patches, wrote the new ones, and restarting…",
-			"update.fullQuit": "Patches are written. Click Restart and the client opens again by itself.",
 			"restart.official.title": "Restart required",
 			"restart.official.body": "Patches are written. Click Restart and the client opens again by itself.",
-			"update.switched": "Switched to {version}.",
-			"update.autoDone": "Auto-updated to {version}.",
-			"update.reloading": "Refreshing settings…",
-			"update.dirty": "Update available; local edits were not overwritten.",
-			"update.fail": "Update failed: {error}",
-			"update.timeout": "Check timed out. Click Check update again.",
-			"update.needRestart": "Update API is not loaded. Restart dsh, then check again.",
-			"update.switch": "Switch to this version",
-			"update.pick": "Select version",
-			"update.tip": "latest",
-			"update.current": "current",
-			"update.confirmSwitch": "Switch to {version}? You can switch back later. Uncommitted plugin edits will not be kept.",
-			"update.confirmChannel": "Switch to {version}? The plugin will be reinstalled from that channel. Uncommitted plugin edits will not be kept.",
 			"metric.version": "Version",
 			"action.apply": "Apply",
 			"action.revert": "Restore",
@@ -2737,6 +2693,13 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 .dshp-repo-title b{font:600 14px/18px var(--dshp-sans);color:var(--dshp-ink)}
 .dshp-repo-title em{font:500 11px/14px var(--dshp-mono);font-style:normal;letter-spacing:.04em;color:var(--dshp-faint)}
 .dshp-repo-ask{margin:0 0 8px;font:400 12.5px/1.65 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-upd{margin:0 0 12px;padding:10px 12px;border:1px solid var(--dshp-line);border-radius:8px;background:var(--dshp-panel2)}
+.dshp-upd-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dshp-upd-label{font:600 12.5px/1.5 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-upd-state{font:400 12px/1.5 var(--dshp-mono);color:var(--dshp-mute);flex:1;min-width:120px}
+.dshp-upd-state.is-new{color:var(--dshp-accent);font-weight:600}
+.dshp-upd-btn{height:26px;padding:0 11px;font-size:12px}
+.dshp-upd-hint{margin:8px 0 0;font:400 11.5px/1.6 var(--dshp-sans);color:var(--dshp-faint)}
 .dshp-repo-note{margin:0 0 12px;font:400 12px/1.6 var(--dshp-sans);color:var(--dshp-mute)}
 .dshp-repo-fb{margin:0 0 12px;padding:10px 12px;border:1px solid var(--dshp-line);border-left:3px solid var(--dshp-accent);border-radius:8px;background:var(--dshp-fill)}
 .dshp-repo-fb-title{display:block;margin:0 0 4px;font:600 12.5px/1.5 var(--dshp-sans);color:var(--dshp-ink)}
@@ -3458,6 +3421,9 @@ function PurgifySection() {
 			const [repoCopy, setRepoCopy] = useState("idle");
 			/* 外部链接打开失败时的提示：'' | 文案 */
 			const [repoOpenMsg, setRepoOpenMsg] = useState("");
+			/* 版本更新：hasUpdate/text/url 由后端返回，这里只做展示 */
+			const [updState, setUpdState] = useState({ text: "", hasUpdate: false, url: "" });
+			const [updBusy, setUpdBusy] = useState(false);
 			const t = useT();
 			const tRef = useRef(t);
 			tRef.current = t;
@@ -3473,9 +3439,6 @@ function PurgifySection() {
 			const [askUninstall, setAskUninstall] = useState(false);
 			const [uninstallBusy, setUninstallBusy] = useState(false);
 			const [notice, setNotice] = useState({ kind: "idle", text: "" });
-			const [updateInfo, setUpdateInfo] = useState(null);
-			const [channel, setChannel] = useState("stable");
-			const [pick, setPick] = useState({ stable: "", beta: "" });
 			const actionTicket = useRef(0);
 			const overrideRef = useRef("");
 			const defaultOverrideRef = useRef("");
@@ -3509,6 +3472,52 @@ function PurgifySection() {
 				setRepoOpenMsg(t("repo.openFailed"));
 				window.setTimeout(() => setRepoOpenMsg(""), 4000);
 			};
+
+			/* 检查更新：先读缓存（不联网），用户点按钮才打 GitHub API。 */
+			const checkUpdateNow = async () => {
+			  if (updBusy) return;
+			  setUpdBusy(true);
+			  try {
+			    const d = await apiJson("/ys-pojia/update/check", {
+			      method: "POST",
+			      headers: { "content-type": "application/json" },
+			      body: JSON.stringify({ force: true }),
+			    });
+			    if (!d || !d.ok) {
+			      setUpdState({ text: t("update.fail").replace("{reason}", (d && d.reason) || "未知"), hasUpdate: false, url: "" });
+			      return;
+			    }
+			    if (d.hasUpdate) {
+			      setUpdState({ text: t("update.available").replace("{v}", d.latest), hasUpdate: true, url: d.url || "" });
+			    } else {
+			      setUpdState({ text: t("update.latest").replace("{v}", d.latest), hasUpdate: false, url: "" });
+			    }
+			  } catch (e) {
+			    setUpdState({ text: t("update.fail").replace("{reason}", String((e && e.message) || e)), hasUpdate: false, url: "" });
+			  } finally {
+			    setUpdBusy(false);
+			  }
+			};
+
+			/* 面板打开时读一次缓存（不发网络），有缓存就显示上次结果。 */
+			useEffect(() => {
+			  let alive = true;
+			  (async () => {
+			    try {
+			      const d = await apiJson("/ys-pojia/update");
+			      if (!alive || !d) return;
+			      if (d.ok && d.latest) {
+			        if (d.hasUpdate) {
+			          setUpdState({ text: tRef.current("update.available").replace("{v}", d.latest), hasUpdate: true, url: d.url || "" });
+			        } else {
+			          const min = d.checkedAt ? Math.max(0, Math.round((Date.now() - new Date(d.checkedAt).getTime()) / 60000)) : 0;
+			          setUpdState({ text: tRef.current("update.cached").replace("{min}", String(min)) + " · " + tRef.current("update.latest").replace("{v}", d.latest), hasUpdate: false, url: "" });
+			        }
+			      }
+			    } catch { /* 没缓存就留空 */ }
+			  })();
+			  return () => { alive = false; };
+			}, []);
 
 			/**
 			 * 复制仓库地址。
@@ -3966,6 +3975,33 @@ function PurgifySection() {
 				    ),
 				    h("p", { className: "dshp-repo-ask" }, t("repo.ask")),
 				    h("p", { className: "dshp-repo-note" }, t("repo.note")),
+
+				    /* ── 版本更新 ──
+				     * 云端源是 GitHub Releases，不需要服务器。
+				     * 默认不联网：用户没点过按钮之前一次请求都不发。 */
+				    h("div", { className: "dshp-upd" },
+				      h("div", { className: "dshp-upd-row" },
+				        h("b", { className: "dshp-upd-label" }, t("update.title")),
+				        h("span", {
+				          className: "dshp-upd-state" + (updState.hasUpdate ? " is-new" : ""),
+				        }, updState.text),
+				        h("button", {
+				          type: "button",
+				          className: "dshp-btn dshp-upd-btn" + (updBusy ? " busy" : ""),
+				          disabled: updBusy,
+				          onClick: checkUpdateNow,
+				        }, updBusy ? t("update.checking") : t("update.check")),
+				        updState.hasUpdate && updState.url
+				          ? h("button", {
+				              type: "button",
+				              className: "dshp-btn dshp-upd-btn",
+				              onClick: () => openRepoLink(updState.url),
+				            }, t("update.goto"))
+				          : null,
+				      ),
+				      h("p", { className: "dshp-upd-hint" }, t("update.hint")),
+				    ),
+
 				    /* ── 反馈入口：新功能建议 / 现有功能优化 / Bug 反馈，统一走 Issue ── */
 				    h("div", { className: "dshp-repo-fb" },
 				      h("b", { className: "dshp-repo-fb-title" }, t("repo.fbTitle")),
@@ -5492,7 +5528,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 
 		/* __DSH_PURGE_DRILL_BEGIN__ */
 		// 内嵌演练台（源码在 lib/hacker，已并进本插件）
-		const __ysPojiaDrill = (() => {
+		const __dshPurgeDrill = (() => {
 			var module = { exports: {} };
 			var exports = module.exports;
 
@@ -7573,7 +7609,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
           if (st.code === 'boundary') {
             const selfOnly = (st.tunnels_self_only || []).length
             body.push(h('div', { key: 'tt', className: 'rt-ap-sub' },
-              '跨越靶标边界的通道 · ' + st.tunnels.length + t("unit.items") + (selfOnly ? '（另有 ' + selfOnly + ' 条只在自己 VPS/自建服务器上，不算突破）' : '')))
+              '跨越靶标边界的通道 · ' + st.tunnels.length + ' 条' + (selfOnly ? '（另有 ' + selfOnly + ' 条只在自己 VPS/自建服务器上，不算突破）' : '')))
             if (selfOnly && st.tunnels.length === 0) {
               body.push(h('div', { key: 'tw', className: 'rt-ap-none' },
                 '⚠️ 现有的通道都在自己的服务器上，没有碰到目标 —— 不计边界突破。需要目标侧发起的通道（反弹 shell 到我这 / 目标上跑 frp 客户端 / 经目标 WebShell 的 suo5）。'))
@@ -7632,7 +7668,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
           h('div', { className: 'rt-hcol-body' },
             st.code === 'boundary'
               ? h('div', null,
-                  h('div', { className: 'rt-hcol-hit' }, h('span', { className: 'rt-hcol-pts' }, '+' + st.points), h('span', { className: 'rt-hcol-name' }, '隧道 ' + st.tunnels.length + t("unit.items"))),
+                  h('div', { className: 'rt-hcol-hit' }, h('span', { className: 'rt-hcol-pts' }, '+' + st.points), h('span', { className: 'rt-hcol-name' }, '隧道 ' + st.tunnels.length + ' 条')),
                   st.tunnels.slice(0, 3).map((t) => h('div', { key: 't' + t.id, className: 'rt-hcol-sub' }, '▸ ' + (t.kind || '') + ' ' + (t.listen || ''))))
               : st.code === 'recon'
                 ? h('div', null,
@@ -8141,7 +8177,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
       return h('div', { className: 'rt-main' },
         h('div', { className: 'rt-toolbar' },
           h('span', { style: { fontWeight: 600 } }, '知识库 · POC / EXP'),
-          h('span', { className: 'rt-tag' }, stats.total + t("unit.items")),
+          h('span', { className: 'rt-tag' }, stats.total + ' 条'),
           h('span', { className: 'rt-tag rt-tag-live' }, '已验证 ' + stats.verified),
           h('span', { className: 'rt-tag' }, '累计复用 ' + (stats.reused || 0)),
           (stats.uncategorized || 0) > 0 && (stats.uncategorized || 0) !== stats.total
@@ -8220,7 +8256,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
               const list = buckets.get(code)
               out.push(h('div', { key: 'g' + code, className: 'rt-kb-cat' },
                 h('span', { className: 'rt-kb-cat-name' }, POC_CAT_NAME[code] || code),
-                h('span', { className: 'rt-tag' }, list.length + t("unit.items")),
+                h('span', { className: 'rt-tag' }, list.length + ' 条'),
                 h('span', { className: 'rt-tag rt-tag-live' }, '已验证 ' + list.filter((x) => x.verified === 1).length),
                 h('span', { className: 'rt-spacer' }),
                 h('span', { style: { fontSize: 11, color: 'var(--dsw-alias-label-secondary)' } },
@@ -9508,7 +9544,7 @@ body[data-ds-dark-theme] .rt-scope-testing,.dshp-dock[data-theme="dusk"] .rt-sco
     }
 
     function Panel(props) {
-      /* embedded：嵌在 本插件 外层 dock 里时，不再自带收起/全面浏览/拖拽条，避免与外层按钮重叠 */
+      /* embedded：嵌在 ys-pojia 外层 dock 里时，不再自带收起/全面浏览/拖拽条，避免与外层按钮重叠 */
       const embedded = !!(props && props.embedded)
       const st = useUI()
       const [engagements, setEngagements] = React.useState([])

@@ -162,7 +162,16 @@ node bin/ys-pojia.js --uninstall
 cd DSH-YS-pojia && git pull && npm run deploy
 ```
 
-或重新下载解压后双击 `install.bat`。**本插件没有服务器，不会自动检查更新**——要知道有没有新版只能看 Releases。
+或重新下载解压后双击 `install.bat`。
+
+**查有没有新版**：
+
+```bash
+node bin/ys-pojia.js --update           # 读缓存（24 小时）
+node bin/ys-pojia.js --update --force   # 强制联网
+```
+
+面板「概览」页也有「检查更新」按钮。版本号从 GitHub Releases 读，**不需要自建服务器**；默认不联网，只在你点按钮时才请求一次，结果缓存 24 小时。
 
 ## CLI
 

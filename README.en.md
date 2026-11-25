@@ -164,9 +164,18 @@ the panel header shows a version number.
 cd DSH-YS-pojia && git pull && npm run deploy
 ```
 
-Or download the ZIP again, extract, and double-click `install.bat`. **There is no update
-server and no in-app update check** — Releases is the only place to see whether a new
-version exists.
+Or download the ZIP again, extract, and double-click `install.bat`.
+
+**Check for a new version**:
+
+```bash
+node bin/ys-pojia.js --update           # reads the 24h cache
+node bin/ys-pojia.js --update --force   # force a network check
+```
+
+The panel overview page has a "Check for updates" button too. The version comes from GitHub
+Releases - **no server of our own is involved**. It stays offline until you click, then
+caches the result for 24 hours.
 
 ## CLI
 
