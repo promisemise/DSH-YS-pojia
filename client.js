@@ -921,7 +921,7 @@ function useT() {
 			"continue.ready": "继续（还可 {left} 次）",
 			"continue.limit": "已达继续上限",
 			"continue.fail": "继续失败: {error}",
-  "view.update":"更新","upd.title":"版本更新","upd.desc":"检查有没有新版本。有的话可以只更新变化的文件，不用重装整个插件。","upd.check":"检查更新","upd.checking":"检查中…","upd.current":"当前版本","upd.remote":"仓库版本","upd.latest":"已是最新","upd.hasUpdate":"有新版本 {v}","upd.checkFail":"检查失败：{reason}","upd.manualHint":"如果一直连不上，可以直接去仓库下载最新版覆盖，或用一键安装重跑一遍。","upd.goto":"去仓库","upd.filesTitle":"文件差异","upd.filesSummary":"共 {total} 个文件，{changed} 个需要更新","upd.added":"新增","upd.changed":"变更","upd.removed":"远程已删除（不会自动删本地）","upd.unchanged":"未变","upd.apply":"更新这 {n} 个文件","upd.applying":"更新中…","upd.applyOk":"已更新 {n} 个文件","upd.applyFail":"更新失败：{reason}","upd.needRestart":"改了代码文件，重启 DSH 生效","upd.noChange":"没有需要更新的文件","upd.backup":"原文件已备份到 {dir}","upd.noFiles":"还没检查，点上面的「检查更新」","upd.danger":"文件更新只覆盖代码，不动你的配置和注入正文。升级前会自动备份。","view.overview": "概览",
+  "view.update":"更新","upd.popTitle":"发现新版本","upd.popBody":"仓库里有 v{v}，当前是 v{cur}。","upd.popNow":"立即更新","upd.popLater":"下次再说","upd.popNever":"不接收更新提示","upd.popNote":"「不接收」只关掉弹窗。更新页的检查和更新按钮照常可用，随时能在那里改回来。","upd.prefTitle":"弹窗提示","upd.prefOn":"有新版本时弹窗提醒","upd.prefOff":"不弹窗（只在更新页显示）","upd.prefHint":"关掉弹窗不影响检测和更新。想恢复随时打开。","upd.prefSaved":"已保存","upd.title":"版本更新","upd.desc":"检查有没有新版本。有的话可以只更新变化的文件，不用重装整个插件。","upd.check":"检查更新","upd.checking":"检查中…","upd.current":"当前版本","upd.remote":"仓库版本","upd.latest":"已是最新","upd.hasUpdate":"有新版本 {v}","upd.checkFail":"检查失败：{reason}","upd.manualHint":"如果一直连不上，可以直接去仓库下载最新版覆盖，或用一键安装重跑一遍。","upd.goto":"去仓库","upd.filesTitle":"文件差异","upd.filesSummary":"共 {total} 个文件，{changed} 个需要更新","upd.added":"新增","upd.changed":"变更","upd.removed":"远程已删除（不会自动删本地）","upd.unchanged":"未变","upd.apply":"更新这 {n} 个文件","upd.applying":"更新中…","upd.applyOk":"已更新 {n} 个文件","upd.applyFail":"更新失败：{reason}","upd.needRestart":"改了代码文件，重启 DSH 生效","upd.noChange":"没有需要更新的文件","upd.backup":"原文件已备份到 {dir}","upd.noFiles":"还没检查，点上面的「检查更新」","upd.danger":"文件更新只覆盖代码，不动你的配置和注入正文。升级前会自动备份。","view.overview": "概览",
   "view.patches": "补丁清单",
   "view.inject": "注入词",
   "unit.items": " 条",
@@ -1529,7 +1529,7 @@ function useT() {
 			"continue.ready": "Continue ({left} left)",
 			"continue.limit": "Continue limit reached",
 			"continue.fail": "Continue failed: {error}",
-  "view.update":"Updates","upd.title":"Version update","upd.desc":"Check for a newer version. If there is one, only the changed files get replaced - no full reinstall.","upd.check":"Check for updates","upd.checking":"Checking…","upd.current":"Current","upd.remote":"Remote","upd.latest":"Up to date","upd.hasUpdate":"Update available: {v}","upd.checkFail":"Check failed: {reason}","upd.manualHint":"If it keeps failing, download the latest release and overwrite, or run the one-line installer again.","upd.goto":"Open repo","upd.filesTitle":"File differences","upd.filesSummary":"{total} files total, {changed} need updating","upd.added":"Added","upd.changed":"Changed","upd.removed":"Gone upstream (not deleted locally)","upd.unchanged":"Unchanged","upd.apply":"Update {n} files","upd.applying":"Updating…","upd.applyOk":"Updated {n} files","upd.applyFail":"Update failed: {reason}","upd.needRestart":"Code files changed - restart DSH","upd.noChange":"Nothing to update","upd.backup":"Originals backed up to {dir}","upd.noFiles":"Not checked yet - click Check for updates","upd.danger":"A file update only replaces code. Your config and injection body stay untouched. Originals are backed up first.","view.overview": "Overview",
+  "view.update":"Updates","upd.popTitle":"New version available","upd.popBody":"The repo has v{v}; you are on v{cur}.","upd.popNow":"Update now","upd.popLater":"Later","upd.popNever":"Do not notify me","upd.popNote":"\"Do not notify\" only disables the popup. The check and update buttons on the Updates page keep working, and you can turn it back on there.","upd.prefTitle":"Popup notification","upd.prefOn":"Show a popup when a new version exists","upd.prefOff":"No popup (Updates page only)","upd.prefHint":"Turning the popup off does not affect checking or updating. Re-enable it any time.","upd.prefSaved":"Saved","upd.title":"Version update","upd.desc":"Check for a newer version. If there is one, only the changed files get replaced - no full reinstall.","upd.check":"Check for updates","upd.checking":"Checking…","upd.current":"Current","upd.remote":"Remote","upd.latest":"Up to date","upd.hasUpdate":"Update available: {v}","upd.checkFail":"Check failed: {reason}","upd.manualHint":"If it keeps failing, download the latest release and overwrite, or run the one-line installer again.","upd.goto":"Open repo","upd.filesTitle":"File differences","upd.filesSummary":"{total} files total, {changed} need updating","upd.added":"Added","upd.changed":"Changed","upd.removed":"Gone upstream (not deleted locally)","upd.unchanged":"Unchanged","upd.apply":"Update {n} files","upd.applying":"Updating…","upd.applyOk":"Updated {n} files","upd.applyFail":"Update failed: {reason}","upd.needRestart":"Code files changed - restart DSH","upd.noChange":"Nothing to update","upd.backup":"Originals backed up to {dir}","upd.noFiles":"Not checked yet - click Check for updates","upd.danger":"A file update only replaces code. Your config and injection body stay untouched. Originals are backed up first.","view.overview": "Overview",
   "view.patches": "Patches",
   "view.inject": "Inject",
   "unit.items": " items",
@@ -2686,6 +2686,22 @@ body[data-ds-dark-theme] .rt-rep-step-no,.dshp-dock[data-theme="dusk"] .rt-rep-s
 @media (prefers-reduced-motion:reduce){.dshp-auth-count::before{animation:none;opacity:.7}}
 .dshp-auth-ops .primary[disabled]{cursor:not-allowed}
 
+/* ══ 更新页：弹窗设置 ══ */
+.dshp-upd-pref{padding:12px 16px;border:1px solid var(--dshp-line);border-radius:10px;background:var(--dshp-panel2)}
+.dshp-upd-pref-title{display:block;margin-bottom:10px;font:600 12.5px/1.5 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-upd-pref-opts{display:flex;flex-direction:column;gap:8px}
+.dshp-upd-radio{display:flex;align-items:center;gap:8px;cursor:pointer;font:400 12.5px/1.5 var(--dshp-sans);color:var(--dshp-mute)}
+.dshp-upd-radio input{cursor:pointer;accent-color:var(--dshp-accent)}
+.dshp-upd-radio:hover{color:var(--dshp-ink)}
+.dshp-upd-saved{display:inline-block;margin-top:8px;font:500 11.5px/1.5 var(--dshp-sans);color:var(--dshp-accent)}
+/* ══ 新版本弹窗 ══ */
+.dshp-upd-modal{width:min(440px,100%)}
+.dshp-upd-popbody{margin:0 0 10px;font:400 13px/1.7 var(--dshp-sans);color:var(--dshp-ink)}
+.dshp-upd-pophint{margin:0;font:400 11.5px/1.65 var(--dshp-sans);color:var(--dshp-faint)}
+.dshp-upd-popops{flex-wrap:wrap}
+.dshp-upd-never{opacity:.75}
+.dshp-upd-never:hover{opacity:1}
+
 /* ══ 更新页 ══ */
 .dshp-updpage{display:flex;flex-direction:column;gap:14px}
 .dshp-upd-ver{padding:14px 16px;border:1px solid var(--dshp-line);border-radius:10px;background:var(--dshp-panel2)}
@@ -3453,6 +3469,47 @@ function HostStatusCard(props) {
    - 更新：只下载变化的文件，写前备份，失败回滚
    - 连不上：给出去仓库的入口，不卡住用户
    ══════════════════════════════════════════════════════════════════════ */
+/* 新版本弹窗。
+   三个出口：
+     立即更新   → 跳到更新页并触发检查
+     下次再说   → 关掉，下次启动还会弹
+     不接收提示 → promptMode=off，只关弹窗，更新页照常可用 */
+function UpdatePrompt({ info, onClose, onGoUpdate, onNever }) {
+  const t = useT();
+  if (!info) return null;
+
+  return h("div", { className: "dshp-modal-bg", role: "dialog", "aria-modal": "true" },
+    h("div", { className: "dshp-modal dshp-upd-modal" },
+      h("div", { className: "dshp-modal-head" },
+        h("b", null, t("upd.popTitle")),
+      ),
+      h("div", { className: "dshp-modal-body" },
+        h("p", { className: "dshp-upd-popbody" }, t("upd.popBody")
+          .replace("{v}", info.latest || "")
+          .replace("{cur}", info.current || "")),
+        h("p", { className: "dshp-upd-pophint" }, t("upd.popNote")),
+      ),
+      h("div", { className: "dshp-modal-ops dshp-upd-popops" },
+        h("button", {
+          type: "button",
+          className: "dshp-btn is-primary",
+          onClick: onGoUpdate,
+        }, t("upd.popNow")),
+        h("button", {
+          type: "button",
+          className: "dshp-btn",
+          onClick: onClose,
+        }, t("upd.popLater")),
+        h("button", {
+          type: "button",
+          className: "dshp-btn dshp-upd-never",
+          onClick: onNever,
+        }, t("upd.popNever")),
+      ),
+    ),
+  );
+}
+
 function UpdateView() {
   const t = useT();
   const tRef = useRef(t);
@@ -3463,6 +3520,9 @@ function UpdateView() {
   const [err, setErr] = useState("");
   const [result, setResult] = useState(null);
   const [ver, setVer] = useState({ current: "", latest: "", hasUpdate: false, url: "" });
+  /* 弹窗开关：'on' | 'off'。只管弹窗，不影响检测与更新。 */
+  const [promptMode, setPromptMode] = useState("on");
+  const [prefSaved, setPrefSaved] = useState(false);
 
   /* 打开页面时读一次缓存，不发网络 */
   useEffect(() => {
@@ -3470,6 +3530,7 @@ function UpdateView() {
     (async () => {
       try {
         const d = await apiJson("/ys-pojia/update");
+                if (d.settings && d.settings.promptMode) setPromptMode(d.settings.promptMode);
         if (!alive || !d || !d.ok) return;
         setVer({
           current: d.current || "",
@@ -3481,6 +3542,20 @@ function UpdateView() {
     })();
     return () => { alive = false; };
   }, []);
+
+  /* 保存弹窗开关。立刻生效，不需要重启。 */
+  const savePref = async (mode) => {
+    setPromptMode(mode);
+    try {
+      await apiJson("/ys-pojia/update/setting", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ promptMode: mode }),
+      });
+      setPrefSaved(true);
+      setTimeout(() => setPrefSaved(false), 2000);
+    } catch { /* 静默 */ }
+  };
 
   const check = async () => {
     setPhase("checking");
@@ -3559,6 +3634,25 @@ function UpdateView() {
             }, t("upd.goto"))
           : null,
       ),
+    ),
+
+    // 弹窗提示设置：只控制弹窗，不影响检测与更新按钮
+    h("div", { className: "dshp-upd-pref" },
+      h("b", { className: "dshp-upd-pref-title" }, t("upd.prefTitle")),
+      h("div", { className: "dshp-upd-pref-opts" },
+        h("label", { className: "dshp-upd-radio" },
+          h("input", { type: "radio", name: "ysPojiaPromptMode",
+            checked: promptMode === "on", onChange: () => savePref("on") }),
+          h("span", null, t("upd.prefOn")),
+        ),
+        h("label", { className: "dshp-upd-radio" },
+          h("input", { type: "radio", name: "ysPojiaPromptMode",
+            checked: promptMode === "off", onChange: () => savePref("off") }),
+          h("span", null, t("upd.prefOff")),
+        ),
+      ),
+      h("p", { className: "dshp-upd-hintline" }, t("upd.prefHint")),
+      prefSaved ? h("span", { className: "dshp-upd-saved" }, t("upd.prefSaved")) : null,
     ),
 
     /* ── 错误 ── */
@@ -3665,7 +3759,43 @@ function UpdateView() {
 
 function PurgifySection() {
 			useEffect(() => () => stopRestartPolling(), []);
+
+			/* 启动检测：面板加载时问一次后端要不要弹窗。
+			 * 后端决定 promptMode 与是否有新版，前端只管弹不弹。 */
+			useEffect(() => {
+			  let alive = true;
+			  (async () => {
+			    try {
+			      const d = await apiJson("/ys-pojia/update/boot", { method: "POST" });
+			      if (!alive || !d || !d.ok) return;
+			      if (d.shouldPrompt && d.latest) {
+			        setUpdatePrompt({ current: d.current || "", latest: d.latest, url: d.url || "" });
+			      }
+			    } catch { /* 检测失败静默，不打扰用户 */ }
+			  })();
+			  return () => { alive = false; };
+			}, []);
+
+			/* 弹窗：立即更新 → 跳更新页；不接收 → 关弹窗并写 promptMode=off */
+			const promptGoUpdate = useCallback(() => {
+			  setUpdatePrompt(null);
+			  setView("update");
+			}, []);
+
+			const promptNever = useCallback(async () => {
+			  setUpdatePrompt(null);
+			  try {
+			    await apiJson("/ys-pojia/update/setting", {
+			      method: "POST",
+			      headers: { "content-type": "application/json" },
+			      body: JSON.stringify({ promptMode: "off" }),
+			    });
+			  } catch { /* 静默 */ }
+			}, []);
+
 			const [view, setView] = useState("overview");
+			/* 新版本弹窗：{ current, latest, url } 或 null */
+			const [updatePrompt, setUpdatePrompt] = useState(null);
 
 			/* 仓库链接复制状态：'idle' | 'ok' | 'fail' */
 			const [repoCopy, setRepoCopy] = useState("idle");
@@ -4182,6 +4312,15 @@ function PurgifySection() {
 					noticeNode(notice),
 				),
 				),
+				/* 新版本弹窗：有 shouldPrompt 时才渲染 */
+				updatePrompt
+				  ? h(UpdatePrompt, {
+				      info: updatePrompt,
+				      onClose: () => setUpdatePrompt(null),
+				      onGoUpdate: promptGoUpdate,
+				      onNever: promptNever,
+				    })
+				  : null,
 				h(ApplyFlow, { progress: s && s.apply_progress, busy: patchBusy || uninstallBusy, t: t }),
 				h("div", { className: "dshp-bar", "aria-hidden": "true" }, h("i", { style: { transform: "scaleX(" + (pct / 100) + ")" } })),
 				view === "overview" ? h(react.Fragment, null,
