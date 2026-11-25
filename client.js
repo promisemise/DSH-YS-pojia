@@ -460,7 +460,7 @@ function useT() {
 			"engine.opt.hostPatches": "宿主补丁",
 			"engine.opt.hostPatches.hint": "允许改写宿主源码（沙箱/审批/观察策略）。仅补丁档有效，关掉后一个宿主字节都不写，重启也不再校验补丁状态。",
 			"engine.opt.unlimited": "超频模式",
-			"engine.opt.unlimited.hint": "注入「资源无上限、该拆就拆、该派子代理就派」的环境声明，压掉模型省着用的默认习惯。token 消耗成倍上涨，只在需要极限推演时开。",
+			"engine.opt.unlimited.hint": "注入「资源无上限、该拆就拆、该派子代理就派」的环境声明，压掉模型省着用的默认习惯。文案按当前模型自动适配厂商措辞（DeepSeek 系走中文环境声明，GPT 系走流程指令，Claude 走协作口吻，Gemini 走短句清单，开源模型走强重复），识别不到模型时用通用版。token 消耗成倍上涨，只在需要极限推演时开。",
 
 			/* ── 消息层清洗强度（二选一）── */
 			/* ── 跑分页 ── */
@@ -1093,7 +1093,7 @@ function useT() {
 			"engine.opt.hostPatches": "Host patches",
 			"engine.opt.hostPatches.hint": "Allows rewriting host source (sandbox/approval/observation). Patch tier only; off writes no host bytes at all and restart stops validating patch state.",
 			"engine.opt.unlimited": "Overclock",
-			"engine.opt.unlimited.hint": "Injects an environment notice that resources are unlimited, so the model splits tasks and spawns subagents instead of cutting corners. Token use multiplies - enable only for heavy reasoning.",
+			"engine.opt.unlimited.hint": "Injects an environment notice that resources are unlimited, so the model splits tasks and spawns subagents instead of cutting corners. The wording adapts to the current model's vendor (DeepSeek gets a Chinese environment notice, GPT gets process instructions, Claude gets collaborative phrasing, Gemini gets short lists, open models get stronger repetition); an unrecognised model falls back to a generic version. Token use multiplies - enable only for heavy reasoning.",
 
 			/* ── message-layer scrubbing strength (pick one) ── */
 			/* ── bench page ── */

@@ -11,9 +11,9 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square)](LICENSE)
 [![dsh](https://img.shields.io/badge/dsh-0.2.x-0ea5e9?style=flat-square)](package.json)
 [![node](https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat-square&logo=node.js&logoColor=white)](package.json)
-[![templates](https://img.shields.io/badge/templates-95%20%2F%2029%20vendors-7c3aed?style=flat-square)](docs/)
-[![probes](https://img.shields.io/badge/probes-68%20%2F%2039%20categories-22c55e?style=flat-square)](bench.mjs)
-[![patches](https://img.shields.io/badge/host%20patches-96-14b8a6?style=flat-square)](lib/core.js)
+[![templates](https://img.shields.io/badge/templates-95%20%2F%2029%20vendors%20%28BYO%29-7c3aed?style=flat-square)](docs/)
+[![probes](https://img.shields.io/badge/probes-68%20%2F%2010%20groups-22c55e?style=flat-square)](bench.mjs)
+[![patches](https://img.shields.io/badge/host%20patches-96%20%2F%2070%20files-14b8a6?style=flat-square)](lib/core.js)
 
 ![ASR](https://img.shields.io/badge/ASR-46.2%25-e11d48?style=flat-square)
 ![benign](https://img.shields.io/badge/benign%20cost-%CE%94%200-16a34a?style=flat-square)
@@ -171,7 +171,7 @@ ASR = share of full breach. pass = share of complete or better. Both derive from
 
 **Startup impact**: plugin load is under one second and does not block DSH startup. Patches run at apply time, not on the startup hot path.
 
-**Version compatibility**: `dshTarget: 0.2.0-rc.2`, covering 0.2.0-rc.2 / 0.2.1-rc.2 / 0.2.1-rc.5 / 0.2.2-rc.1. After a host upgrade the patches fail silently (no error), but tiers T2 and T1 are unaffected, so you can drop down.
+**Version compatibility**: `dshTarget: 0.2.2-rc.5`, with `dshTargets` covering 0.2.0-rc.2 / 0.2.1-rc.2 / 0.2.1-rc.5 / 0.2.2-rc.1 / 0.2.2-rc.5. After a host upgrade the patches fail silently (no error), but tiers T2 and T1 are unaffected, so you can drop down.
 
 ---
 
@@ -284,6 +284,61 @@ A category-blind "average 70" is a false conclusion. The same gpt-6.1-sol scores
 
 ---
 
+## v1.4.4: the overclock notice now adapts to the model's vendor
+
+The overclock segment used to be one fixed block of Chinese text built around an
+"internal limit-verification environment" framing. That framing works on DeepSeek
+and models trained on similar data, but it is the wrong shape elsewhere - GPT reads
+"test environment" as a safety trigger, Claude resists imperative phrasing, Gemini
+loses the middle of long paragraphs, and open-weight models skip mid-block
+constraints when instruction-following is weak.
+
+### Six variants
+
+| Group | Vendors | Shape |
+|---|---|---|
+| `deepseek` | DeepSeek / Qwen / Kimi / GLM / Doubao / Hunyuan / ERNIE / Spark / MiniMax / StepFun / Yi / Baichuan / InternLM / TeleChat / Kunlun | Chinese environment framing |
+| `openai` | GPT / Copilot / Cursor / Grok / Perplexity / Brave | English process instructions, numbered steps and hard rules |
+| `anthropic` | Claude | English collaborative phrasing, no commands |
+| `google` | Gemini | English short lines and bullet lists only |
+| `open` | Llama / Mistral / Hermes | English with shorter sentences and repeated core constraints |
+| `generic` | anything unrecognised | neutral English |
+
+Language follows the model, not just the UI locale. Only the `deepseek` group takes
+the Chinese text under a `zh` locale; the other four stay in English even under a
+Chinese UI, because their training data is English-dominant and Chinese instructions
+measurably lower compliance on the hard-rule section.
+
+### Detection
+
+Reads `context.agent.session.requestHeader().config.model` first - the same path the
+host itself uses in `installModelSelection` - then falls back to
+`session.header.model`, then to the generic variant. A failed lookup never suppresses
+the segment.
+
+### Verification
+
+18 overclock assertions pass and all 29 known vendors map to a concrete group.
+End-to-end with real model names:
+
+```
+deepseek-v4.1-flash -> deepseek  Chinese, 557 chars
+gpt-6.1-sol         -> openai    English, 978 chars
+claude-opus-4.6     -> anthropic English, 1074 chars
+gemini-3.1-pro      -> google    English, 626 chars
+llama-4-maverick    -> open      English, 945 chars
+unknown-xyz         -> generic   English, 844 chars
+```
+
+### Stale docs fixed along the way
+
+The probes badge said `68 / 39 categories`; bench.mjs actually has 10 probe groups
+totalling 68 probes, so it now reads `68 / 10 groups`. The patches badge gained the
+file count (`96 / 70 files`), and two `dshTarget` statements in this README were
+still on `0.2.0-rc.2` and now read `0.2.2-rc.5` with the full `dshTargets` list.
+
+---
+
 ## v1.4.3: all 40 rules rewritten to delivery depth, and a rule-filter fix
 
 ### Every rule rewritten
@@ -393,7 +448,7 @@ Rewrites the host's `lib/index.js`: sandbox policy, approval gate, observation p
 
 **What it does**: sandbox deny to allow file-write* (file writes stop being blocked); approval gate returns allowed-once directly (no more prompts); observation policy lets writeIntent/editIntent through (no read-before-write); repeat-call guard off (tools can retry continuously).
 
-**Cost**: patches match host source strings, so a host version bump silently disables them; needs a restart; `dshTarget` covers only 0.2.0-rc.2 through 0.2.2-rc.1.
+**Cost**: patches match host source strings, so a host version bump silently disables them; needs a restart; `dshTargets` covers 0.2.0-rc.2 through 0.2.2-rc.5.
 
 **Degradation: none.** It patches host source and adds nothing to the model context, so post-breach performance on normal tasks is unaffected. Sandbox and approval bypass do mean the model actually performs more operations, and disabling the repeat-call guard raises loop risk — that is **behavioural risk**, not degradation.
 
@@ -440,7 +495,9 @@ Both formats under `pojia-templates/` load at once:
 - `L1B3RT4S_*.mkd` — 12 collections, one file holds many models, split by `#`
 - `<vendor>/<model>.md` — 83 files, one model per file
 
-Covers 29 vendors: OpenAI / Anthropic / Google / xAI / Meta / Mistral / DeepSeek / Qwen / Kimi / GLM / Hunyuan / Doubao / ERNIE / Spark / MiniMax / StepFun / 01.AI / SenseTime / Baichuan / InternLM / Kunlun / China Telecom / Meituan…
+**`pojia-templates/` is not shipped in this repo** — it is listed in `.gitignore` because the collection is large and user-supplied. Point `POJIA_TEMPLATES` at your own directory, or drop the files into `./pojia-templates/`. Without it the plugin still works; template auto-matching just has nothing to match against.
+
+Covers 29 vendors when populated: OpenAI / Anthropic / Google / xAI / Meta / Mistral / DeepSeek / Qwen / Kimi / GLM / Hunyuan / Doubao / ERNIE / Spark / MiniMax / StepFun / 01.AI / SenseTime / Baichuan / InternLM / Kunlun / China Telecom / Meituan…
 
 **Model-name normalization** — the same model has a dozen spellings across gateways; all resolve:
 

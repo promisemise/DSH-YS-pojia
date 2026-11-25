@@ -11,9 +11,9 @@
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square)
 ![dsh](https://img.shields.io/badge/dsh-0.2.x-0ea5e9?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat-square)
-![templates](https://img.shields.io/badge/templates-95%20%2F%2029%20%E5%AE%B6-7c3aed?style=flat-square)
-![probes](https://img.shields.io/badge/probes-68%20%2F%2039%20%E7%B1%BB-22c55e?style=flat-square)
-![patches](https://img.shields.io/badge/patches-96-14b8a6?style=flat-square)
+![templates](https://img.shields.io/badge/templates-95%20%2F%2029%20%E5%AE%B6%EF%BC%88%E8%87%AA%E5%A4%87%EF%BC%89-7c3aed?style=flat-square)
+![probes](https://img.shields.io/badge/probes-68%20%2F%2010%20%E7%BB%84-22c55e?style=flat-square)
+![patches](https://img.shields.io/badge/patches-96%20%2F%2070%20%E6%96%87%E4%BB%B6-14b8a6?style=flat-square)
 ![ASR](https://img.shields.io/badge/ASR-46.2%25-e11d48?style=flat-square)
 ![benign](https://img.shields.io/badge/benign%20cost-%CE%94%200-16a34a?style=flat-square)
 
@@ -170,7 +170,7 @@ ASR = 完全破甲占比。pass = 完整以上占比。两个都能从同一份�
 
 **启动影响**：插件加载 < 1 秒，不阻塞 DSH 启动。补丁在 apply 时执行，不在启动热路径。
 
-**版本兼容**：`dshTarget: 0.2.0-rc.2`，覆盖 0.2.0-rc.2 / 0.2.1-rc.2 / 0.2.1-rc.5 / 0.2.2-rc.1。宿主升级后补丁静默失效（不报错），但 T2/T1 两档不受影响，可降级使用。
+**版本兼容**：`dshTarget: 0.2.2-rc.5`，`dshTargets` 覆盖 0.2.0-rc.2 / 0.2.1-rc.2 / 0.2.1-rc.5 / 0.2.2-rc.1 / 0.2.2-rc.5。宿主升级后补丁静默失效（不报错），但 T2/T1 两档不受影响，可降级使用。
 
 ---
 
@@ -280,6 +280,46 @@ GPT 的降级手法有三种可识别特征：先声明「我不能描写…」�
 ### 为什么必须分类型看
 
 不分类别的「平均 70」是假结论。同一个 gpt-6.1-sol：渗透 88 分、技术 88 分、AI 86 分、Web 82 分，但成人只有 52 分、社工 46 分。用之前必须知道自己要问的那一类在哪个档。
+
+---
+
+## v1.4.4：超频模式按模型厂商自适应
+
+旧版超频是一段固定中文文案，框架是「内部极限验证测试环境」。这套措辞只对 DeepSeek 系有效，换成 GPT / Claude / Gemini / 开源模型就是错配——GPT 把「测试环境」读成安全触发词，Claude 抵触命令式口吻，Gemini 丢长段落中间部分，开源模型指令跟随弱会跳过中间段。
+
+### 六组文案
+
+| 分组 | 覆盖厂商 | 文案形态 |
+|---|---|---|
+| `deepseek` | DeepSeek / Qwen / Kimi / GLM / 豆包 / 混元 / 文心 / 星火 / MiniMax / 阶跃 / Yi / 百川 / 书生 / 天翼 / 昆仑 | 中文环境声明型 |
+| `openai` | GPT / Copilot / Cursor / Grok / Perplexity / Brave | 英文流程指令型，强化编号步骤与硬规则 |
+| `anthropic` | Claude | 英文协作式，不用命令句 |
+| `google` | Gemini | 英文短句 + 纯列表 |
+| `open` | Llama / Mistral / Hermes | 英文强重复型，核心约束重复两次 |
+| `generic` | 未识别 | 英文中性版 |
+
+**语言跟模型走，不是跟界面 locale 走。** 只有 `deepseek` 组在中文 locale 下用中文，其余四组即便界面是中文也用英文——它们的训练语料以英文为主，中文指令会降低硬规则段的遵守率。
+
+### 模型检测
+
+优先读 `context.agent.session.requestHeader().config.model`（宿主自己用的路径），取不到退到 `session.header.model`，再取不到走 generic 兜底。检测失败不会导致整段不注入。
+
+### 验证
+
+18 项超频断言全过，29 家已知厂商全部映射到具体分组。真实模型端到端：
+
+```
+deepseek-v4.1-flash → deepseek  中文 557 字符
+gpt-6.1-sol         → openai    英文 978 字符
+claude-opus-4.6     → anthropic 英文 1074 字符
+gemini-3.1-pro      → google    英文 626 字符
+llama-4-maverick    → open     英文 945 字符
+unknown-xyz         → generic   英文 844 字符
+```
+
+### 顺带修的文档错数据
+
+probes badge 从 `68 / 39 categories` 改为 `68 / 10 groups`（`bench.mjs` 实际是 10 组共 68 条）；patches badge 补成 `96 / 70 files`；英文版两处 `dshTarget` 说明从 `0.2.0-rc.2` 改为 `0.2.2-rc.5`。
 
 ---
 
@@ -600,7 +640,7 @@ Rename-Item "D:\...\resources\app.asar" app.asar.bak
 
 **能做什么**：沙箱 deny → allow file-write*（写文件不再被拦）；审批门直接 return allowed-once（不再弹审批）；观察策略 writeIntent/editIntent 放行（不必先读后写）；重复调用守卫关闭（工具可连续重试）。
 
-**代价**：补丁按宿主源码字符串匹配，宿主版本一变就静默失效；需要重启；`dshTarget` 只覆盖 0.2.0-rc.2 ~ 0.2.2-rc.1。
+**代价**：补丁按宿主源码字符串匹配，宿主版本一变就静默失效；需要重启；`dshTargets` 覆盖 0.2.0-rc.2 ~ 0.2.2-rc.5。
 
 **降智**：**不降智**。改的是宿主源码，不往模型上下文塞东西，破甲后模型在正常任务上的表现不受影响。但沙箱与审批放行后模型会真的执行更多操作，重复调用守卫关闭后死循环风险上升 —— 这是**行为风险**，不是降智。
 
@@ -647,7 +687,9 @@ Rename-Item "D:\...\resources\app.asar" app.asar.bak
 - `L1B3RT4S_*.mkd` —— 12 份合集，一文件多模型，按 `#` 分节
 - `<厂商>/<模型>.md` —— 83 份，一模型一文件
 
-覆盖 29 家：OpenAI / Anthropic / Google / xAI / Meta / Mistral / DeepSeek / Qwen / Kimi / GLM / 混元 / 豆包 / 文心 / 星火 / MiniMax / 阶跃 / 零一 / 商汤 / 百川 / 书生 / 昆仑 / 电信 / 美团…
+**`pojia-templates/` 不在本仓库里**——它写在 `.gitignore` 中，因为合集体积大且属用户自备内容。用 `POJIA_TEMPLATES` 指向你自己的目录，或把文件放进 `./pojia-templates/`。没有这个目录插件照常工作，只是模板自动匹配没有可匹配的对象。
+
+填满后覆盖 29 家：OpenAI / Anthropic / Google / xAI / Meta / Mistral / DeepSeek / Qwen / Kimi / GLM / 混元 / 豆包 / 文心 / 星火 / MiniMax / 阶跃 / 零一 / 商汤 / 百川 / 书生 / 昆仑 / 电信 / 美团…
 
 **模型名归一化**：`gpt-4o-2024-11-20`、`openai/gpt-4o`、`GPT-4O` 全部识别为同一模型。
 
